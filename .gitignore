@@ -1,0 +1,11 @@
+# Distribution / packaging
+bin/
+build/
+lib/
+
+# Log stuff:
+*.log
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
