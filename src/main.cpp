@@ -1,19 +1,15 @@
-// Add Glad first
-#include <glad/glad.h>
-
-// Include open Gl under the hood
-// Also correct window specific to OS
-#include <GLFW/glfw3.h>
-
 // Standard output
 #include <string>       // std::string
 #include <iostream>     // std::cout
 #include <fstream>      // std::ifstream
 #include <sstream>      // std::stringstream
-
+#include "math.h"
 
 using std::cout;
 using std::endl;
+
+#include "simpleGL.hpp"
+namespace sGL = simpleGL;
 
 // Ref
 // http://www.glfw.org/docs/latest/
@@ -29,7 +25,7 @@ void ProcessInput(GLFWwindow *window);
 // Shader helper
 std::string ReadFile(std::string filePath);
 unsigned int CompileAndLinkShader(std::string vertexPath, std::string fragPath);
-
+void ChangeGreenOverTime(unsigned int shaderProgram);
 
 
 // Settings
@@ -78,12 +74,15 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, Framebuffer_size_callback);
 
 
+    // Get maximum number of attribute we can send to the vertex buffer
+    cout << sGL::Shader::GetMaxAttributeNb() << endl;
+
     // Construct and use a specific shader program
-    unsigned int blueShader, orangeShader;
-    blueShader = CompileAndLinkShader("../src/Shaders/basicShader.vert",
-                                         "../src/Shaders/blueShader.frag");
-    orangeShader = CompileAndLinkShader("../src/Shaders/basicShader.vert",
-                                         "../src/Shaders/orangeShader.frag");
+    unsigned int changingGreenShader, vertexColorShader;
+    changingGreenShader = CompileAndLinkShader("../Shaders/basic.vert",
+                                         "../Shaders/colorFromProgram.frag");
+    vertexColorShader = CompileAndLinkShader("../Shaders/positionColor.vert",
+                                         "../Shaders/colorFromVertex.frag");
 
     // Two triangles
     float vertices1[] =
@@ -95,9 +94,10 @@ int main(void)
 
     float vertices2[] =
     {
-        0.4f, 0.4f, 0.0f,
-        0.4f,  0.8f, 0.0f,
-        0.8f, 0.4f, 0.0f
+        // Position        Color
+        0.4f, 0.4f, 0.0f,  1.0f, 0.0f, 0.0f,
+        0.4f,  0.8f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.8f, 0.4f, 0.0f,  0.0f, 0.0f, 1.0f
     };
 
 
@@ -174,9 +174,13 @@ int main(void)
     glBindVertexArray(VAO2);
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
 
+    // Send position (offset take account of color)
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // Send color using same offset but using a starting offset of sizeof(position)
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Enable culling and set it to front mode.
     glEnable(GL_CULL_FACE);
@@ -193,14 +197,15 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Select shader program for the draw call
-        glUseProgram(orangeShader);
+        glUseProgram(changingGreenShader);
+        ChangeGreenOverTime(changingGreenShader);
         // Select VAO to use for passing object to GPU
         glBindVertexArray(VAO1);
         // Draw vertices using only VBO
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Select shader program for the draw call
-        glUseProgram(blueShader);
+        glUseProgram(vertexColorShader);
         // Select VAO to use for passing object to GPU
         glBindVertexArray(VAO2);
         // Draw vertices using only VBO
@@ -389,4 +394,14 @@ unsigned int CompileAndLinkShader(std::string vertexPath, std::string fragPath)
     glDeleteShader(fragmentShader);
 
     return shaderProgram;
+}
+
+
+void ChangeGreenOverTime(unsigned int shaderProgram)
+{
+    float timeValue = glfwGetTime();
+    float greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+    glUseProgram(shaderProgram);
+    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 }

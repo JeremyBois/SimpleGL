@@ -124,26 +124,24 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 
 
 # ------------------------------------------------------------------------------
-# Where to find sources
+# Create a executable target
 # ------------------------------------------------------------------------------
 file(
     GLOB
     binary_SOURCES
+    src/OpenGL/*
+    src/Utility/*
     src/*
     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
 )
 
-
-# ------------------------------------------------------------------------------
-# Create a executable target
-# ------------------------------------------------------------------------------
 add_executable(
-    OpenGl-Tuto1 ${binary_SOURCES}
+    SimpleGL ${binary_SOURCES}
 )
 
 # Command to add include directories for a specifc target (replace include_directories)
 # See https://learnopengl.com/Getting-started/Creating-a-window for GLAD
-target_include_directories(OpenGl-Tuto1
+target_include_directories(SimpleGL
     PRIVATE
         ${GLFW_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}/extern/KHR
@@ -152,7 +150,7 @@ target_include_directories(OpenGl-Tuto1
         BEFORE ${PROJECT_SOURCE_DIR}/include
 )
 
-set_target_properties(OpenGl-Tuto1
+set_target_properties(SimpleGL
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
@@ -160,14 +158,14 @@ set_target_properties(OpenGl-Tuto1
 )
 
 
-target_link_libraries(OpenGl-Tuto1
+target_link_libraries(SimpleGL
     ${OPENGL_gl_LIBRARY}
     ${GLFW_x11_LIBRARY}
     ${GLFW_LIBRARIES}
 )
 
-target_compile_definitions(OpenGl-Tuto1
-    PUBLIC
+target_compile_definitions(SimpleGL
+    PRIVATE
         fexceptions
         Wall
         Wextra
@@ -175,108 +173,123 @@ target_compile_definitions(OpenGl-Tuto1
 
 
 
-# # ------------------------------------------------------------------------------
-# # Create a static and shared library target.
-# # ------------------------------------------------------------------------------
-# file(
-#     GLOB
-#     library_SOURCES
-#     src/*
-#     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
-# )
-
-# # Static
-# add_library(OpenGl_lib_static STATIC ${library_SOURCES})
-
-# target_include_directories(OpenGl_lib_static
-#     PUBLIC ${PROJECT_SOURCE_DIR}/include
-#     PRIVATE
-#         ${GLFW_INCLUDE_DIRS}
-#         ${PROJECT_SOURCE_DIR}/extern/KHR
-#         ${PROJECT_SOURCE_DIR}/extern/GLAD/include
-# )
-
-# set_target_properties(OpenGl_lib_static
-#     PROPERTIES
-#     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-#     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
-# )
-
-# target_link_libraries(OpenGl_lib_static
-#     ${OPENGL_gl_LIBRARY}
-#     ${GLFW_x11_LIBRARY}
-#     ${GLFW_LIBRARIES}
-# )
-
-# # Read only alias
-# add_library(OpenGL::static_lib ALIAS OpenGl_lib_static)
+# ------------------------------------------------------------------------------
+# Create a static and shared library target.
+# ------------------------------------------------------------------------------
+# Allow the developer to select if Dynamic or Static libraries are built
+OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+set (LIB_TYPE STATIC)  # Set the LIB_TYPE variable to STATIC
+set (MY_LIB_NAME SimpleGL_Static)
+if (BUILD_SHARED_LIBS)
+    set (LIB_TYPE SHARED)  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
+    set (MY_LIB_NAME SimpleGL_Shared)
+endif (BUILD_SHARED_LIBS)
+message(status " *** Library will be build as: ${OPENGL_gl_LIBRARY}")
 
 
-# # Dynamic
-# add_library(OpenGl_lib_shared SHARED ${library_SOURCES})
+file(
+    GLOB
+    library_SOURCES
+    src/OpenGL/*
+    src/Utility/*
+    src/*
+    ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
+)
 
-# target_include_directories(OpenGl_lib_shared
-#     PUBLIC ${PROJECT_SOURCE_DIR}/include
-#     PRIVATE
-#         ${GLFW_INCLUDE_DIRS}
-#         ${PROJECT_SOURCE_DIR}/extern/KHR
-#         ${PROJECT_SOURCE_DIR}/extern/GLAD/include
-# )
-
-# set_target_properties(OpenGl_lib_shared
-#     PROPERTIES
-#     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-#     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
-# )
-
-# target_link_libraries(OpenGl_lib_shared
-#     ${OPENGL_gl_LIBRARY}
-#     ${GLFW_x11_LIBRARY}
-#     ${GLFW_LIBRARIES}
-# )
-
-# # Read only alias
-# add_library(OpenGL::shared_lib ALIAS OpenGl_lib_shared)
+add_library(${MY_LIB_NAME} ${LIB_TYPE} ${library_SOURCES})
 
 
-# # ------------------------------------------------------------------------------
-# # Link library to another binary (for example lib == engine and exe == game)
-# # A better idea will be to create another CMakeLists.txt in the Game folder...
-# # ------------------------------------------------------------------------------
+# See https://cmake.org/pipermail/cmake/2016-May/063400.html
+if (BUILD_SHARED_LIBS)
+    # Shared library
+    target_include_directories(${MY_LIB_NAME}
+        PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/include
+        PRIVATE
+            ${GLFW_INCLUDE_DIRS}
+            ${PROJECT_SOURCE_DIR}/extern/KHR
+            ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+    )
 
-# file(
-#     GLOB
-#     game_binary_SOURCES
-#     samples/Game/src/*
-# )
+    # Set pre processor command for Shared lib export
+    target_compile_definitions(${MY_LIB_NAME}
+    PRIVATE
+        SIMPLEGL_SHARED="USED"
+        SIMPLEGL_SHARED_EXPORTS="USED"
+    )
 
-# add_executable(
-#     OpenGl-Game ${game_binary_SOURCES}
-# )
+else()
+    # Static library
+    target_include_directories(${MY_LIB_NAME}
+        PUBLIC BEFORE ${PROJECT_SOURCE_DIR}/include
+        PUBLIC
+            ${GLFW_INCLUDE_DIRS}
+            ${PROJECT_SOURCE_DIR}/extern/KHR
+            ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+    )
+endif()
 
-# # Command to add include directories (replace include_directories)
-# # See https://learnopengl.com/Getting-started/Creating-a-window for GLAD
-# target_include_directories(OpenGl-Game
-#     PRIVATE
-#         BEFORE ${PROJECT_SOURCE_DIR}/samples/Game/include
-# )
+set_target_properties(${MY_LIB_NAME}
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
+)
 
-# set_target_properties(OpenGl-Game
-#     PROPERTIES
-#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/samples/Game/bin/${CMAKE_BUILD_TYPE}"
-# )
+target_link_libraries(${MY_LIB_NAME}
+    ${OPENGL_gl_LIBRARY}
+    ${GLFW_x11_LIBRARY}
+    ${GLFW_LIBRARIES}
+)
 
-# # Using dynamic lib
-# target_link_libraries(OpenGl-Game
-#     OpenGL::shared_lib
-# )
+# Read only alias
+add_library(OpenGL::lib ALIAS ${MY_LIB_NAME})
 
-# # # Using static lib
-# # target_link_libraries(OpenGl-Game
-# #     PRIVATE OpenGL::static_lib
-# # )
 
+# ------------------------------------------------------------------------------
+# Link library to another binary (for example lib == engine and exe == game)
+# A better idea will be to create another CMakeLists.txt in the Game folder
+# but a new Sublime project will have to be created ...
+# ------------------------------------------------------------------------------
+
+file(
+    GLOB
+    game_binary_SOURCES
+    samples/Game/src/*
+)
+
+add_executable(
+    OpenGl-Game ${game_binary_SOURCES}
+)
+
+# See https://cmake.org/pipermail/cmake/2016-May/063400.html
+if (BUILD_SHARED_LIBS)
+    # Shared lib need to know includes directories
+    message(status " *** Using shared library: GLFW, GLAD and SimpleGl headers will be included.")
+    target_include_directories(OpenGl-Game
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/include
+            ${GLFW_INCLUDE_DIRS}
+            ${PROJECT_SOURCE_DIR}/extern/KHR
+            ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+            ${PROJECT_SOURCE_DIR}/samples/Game/include
+    )
+
+    # Set pre processor command for Shared lib import
+    target_compile_definitions(OpenGl-Game
+    PRIVATE
+        SIMPLEGL_SHARED="USED"
+    )
+endif()
+
+
+set_target_properties(OpenGl-Game
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/samples/Game/bin/${CMAKE_BUILD_TYPE}"
+)
+
+# Using dynamic or static lib based on previous flag (see ${MY_LIB_NAME})
+target_link_libraries(OpenGl-Game
+    PRIVATE OpenGL::lib
+)
 
 
