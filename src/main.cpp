@@ -79,10 +79,10 @@ int main(void)
 
     // Construct and use a specific shader program
     unsigned int changingGreenShader, vertexColorShader;
-    changingGreenShader = CompileAndLinkShader("../Shaders/basic.vert",
-                                         "../Shaders/colorFromProgram.frag");
-    vertexColorShader = CompileAndLinkShader("../Shaders/positionColor.vert",
-                                         "../Shaders/colorFromVertex.frag");
+    changingGreenShader = CompileAndLinkShader("../shaders/basic.vert",
+                                         "../shaders/colorFromProgram.frag");
+    vertexColorShader = CompileAndLinkShader("../shaders/positionColor.vert",
+                                         "../shaders/colorFromVertex.frag");
 
     // Two triangles
     float vertices1[] =

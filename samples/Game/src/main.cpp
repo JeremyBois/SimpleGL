@@ -16,8 +16,8 @@ int main(void)
     GameM->Init(800, 600, "My OpenGl window");
 
     // Test implementation of shaders (OpenGl must be init first)
-    sGL::Shader myShader = sGL::Shader("../Shaders/basic.vert",
-                                       "../Shaders/colorFromProgram.frag");
+    sGL::Shader myShader = sGL::Shader("../shaders/basic.vert",
+                                       "../shaders/colorFromProgram.frag");
 
 
     GameM->GetWindow().Update();
