@@ -81,8 +81,9 @@ int main(void)
     unsigned int changingGreenShader, vertexColorShader;
     changingGreenShader = CompileAndLinkShader("../shaders/basic.vert",
                                          "../shaders/colorFromProgram.frag");
-    vertexColorShader = CompileAndLinkShader("../shaders/positionColor.vert",
-                                         "../shaders/colorFromVertex.frag");
+
+    sGL::Shader gl_shader = sGL::Shader("../shaders/positionColor.vert",
+                                        "../shaders/colorFromVertex.frag");
 
     // Two triangles
     float vertices1[] =
@@ -205,7 +206,8 @@ int main(void)
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Select shader program for the draw call
-        glUseProgram(vertexColorShader);
+        // glUseProgram(vertexColorShader);
+        gl_shader.Use();
         // Select VAO to use for passing object to GPU
         glBindVertexArray(VAO2);
         // Draw vertices using only VBO

@@ -12,7 +12,7 @@ namespace simpleGL
     {
     public:
         Shape2D();
-        ~Shape2D();
+        virtual ~Shape2D();
     };
 }
 #endif

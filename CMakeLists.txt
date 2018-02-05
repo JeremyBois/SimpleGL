@@ -129,6 +129,7 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 file(
     GLOB
     binary_SOURCES
+    src/Interface/*
     src/OpenGL/*
     src/Utility/*
     src/*
@@ -190,6 +191,7 @@ message(status " *** Library will be build as: ${OPENGL_gl_LIBRARY}")
 file(
     GLOB
     library_SOURCES
+    src/Interface/*
     src/OpenGL/*
     src/Utility/*
     src/*

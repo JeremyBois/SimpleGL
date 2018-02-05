@@ -2,13 +2,14 @@
 #define __NODEMANAGER__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
+#include "Interface/INodeManager.hpp"
 #include "Node.hpp"
 
 
 namespace simpleGL
 {
-    // Define a common entry to control nodes tree.
-    class SIMPLEGL_API NodeManager
+    // Implemenation of the Node manager interface
+    class SIMPLEGL_API NodeManager: public INodeManager
     {
     private:
         Node* m_pRoot;
@@ -19,10 +20,10 @@ namespace simpleGL
         NodeManager();
         ~NodeManager();
 
-        void AddNode(Node* _pNode, Node* _pParent);
-        void Draw();
-        void Update();
-        void Clear();
+        virtual void AddNode(Node* _pNode, Node* _pParent=nullptr);
+        virtual void Draw();
+        virtual void Update();
+        virtual void Clear();
     };
 }
 

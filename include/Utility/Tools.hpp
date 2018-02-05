@@ -17,5 +17,11 @@ namespace simpleGL
 
         template<typename T> static void SafeDelete(T*& a) {delete a; a = nullptr;};
     };
+
+
+    struct SIMPLEGL_API GL_COLOR3
+    {
+        GLfloat r, g, b;
+    };
 }
 #endif

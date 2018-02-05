@@ -4,30 +4,36 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 
 #include "OpenGL/Window.hpp"
-#include "NodeManager.hpp"
+#include "Interface/INodeManager.hpp"
+#include "Interface/NullNodeManager.hpp"
 
 namespace simpleGL
 {
-    // Singleton representing the global interface for the game.
+    // Service locator to provide a global access for different stuff
+    // Only Window is an internal service and must be created explicitly using Init().
+    // Other can be provide but are not required.
     class SIMPLEGL_API GameManager
     {
     private:
         GameManager();
 
-        Window*      m_pWindow;
-        NodeManager* m_pNodeManager;
+        // Window as an internal service
+        static Window* s_pWindowService;
+
+        // Node manager as a service
+        static INodeManager*   s_pNodeService;
+        static NullNodeManager s_nullNodeManager;
+
 
     public:
-        GameManager(GameManager const&) = delete;    // C++ 11
-        void operator=(GameManager const&) = delete; // C++ 11
 
-        void Init(unsigned int _windowWidth, unsigned int _windowHeight, std::string _windowName);
+        static void Init(unsigned int _windowWidth, unsigned int _windowHeight, std::string _windowName);
 
-        // Provide unique access to specific stuff
-        inline Window&      GetWindow() {return *m_pWindow;}
-        inline NodeManager& GetNodeManager() {return *m_pNodeManager;}
+        static inline INodeManager& GetNodeMgr() {return *s_pNodeService;}
+        static inline Window&       GetWindow() {return *s_pWindowService;}
 
-        static GameManager* Instance();
+
+        static void Provide(INodeManager* _service);
 
     };
 }

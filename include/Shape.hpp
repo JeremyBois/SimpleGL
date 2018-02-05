@@ -13,12 +13,17 @@ namespace simpleGL
     {
     protected:
         Shader* m_pShader;
+        Shader  m_baseShader;
 
     public:
         Shape();
-        ~Shape();
+        virtual ~Shape();
 
-        virtual void SetShader(Shader* _pShader);
+        void    SetShader(Shader* _pShader);
+        Shader& GetShader() const;
+        void    UseDefault();
+
+        virtual void Draw() = 0;
     };
 }
 #endif

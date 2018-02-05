@@ -2,12 +2,12 @@
 #define __WINDOW__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
-
+#include "Interface/IWindow.hpp"
 
 namespace simpleGL
 {
     // @TODO-FIX Should be LOCAL not API
-    class SIMPLEGL_API Window
+    class SIMPLEGL_API Window: public IWindow
     {
     private:
         unsigned int m_width, m_height;
@@ -34,12 +34,12 @@ namespace simpleGL
         Window(unsigned int _width, unsigned int _height, std::string _name);
         ~Window();
 
-        bool Init();
-        bool Update();
-        bool Quit();
-        void Render();
+        virtual bool Init();
+        virtual bool Update();
+        virtual bool Quit();
+        virtual void Render();
 
-        inline GLFWwindow* GetWindow() const {return m_pWindow;}
+        virtual inline const GLFWwindow& GetWindow() const {return *m_pWindow;}
     };
 }
 #endif

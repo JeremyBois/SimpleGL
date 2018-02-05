@@ -15,6 +15,7 @@
 
 // SimpleGL PRIVATE API (SIMPLEGL_SHARED set when build as a shared lib)
 #include "Utility/StreamUtility.hpp"
+#include "Utility/Tools.hpp"
 #include "Shape.hpp"
 #include "Shape2D.hpp"
 

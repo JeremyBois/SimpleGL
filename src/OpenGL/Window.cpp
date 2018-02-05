@@ -79,10 +79,8 @@ namespace simpleGL
             // @TODO Handles inputs using external class
             ProcessInput();
 
-            // Recursive call to draw of all nodes.
-            GameManager::Instance()->GetNodeManager().Update();
+            GameManager::GetNodeMgr().Update();
 
-            // Rendering
             Render();
 
             // Event pool (keyboard, mouse, ...)
@@ -102,7 +100,7 @@ namespace simpleGL
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Recursive call to draw of all nodes.
-        GameManager::Instance()->GetNodeManager().Draw();
+        GameManager::GetNodeMgr().Draw();
 
         // Swap buffer
         glfwSwapBuffers(m_pWindow);

@@ -15,10 +15,12 @@ namespace simpleGL
         void ConstructProgram(std::string vertexPath, std::string fragPath);
 
     public:
+        Shader() {};  // Allows lazy initialization
         Shader(std::string vertexPath, std::string fragPath);
         ~Shader();
 
         void Use();
+        unsigned int ID() const {return m_id;}
 
         // Unifrom functions
         void SetBool(const std::string &name, bool value) const;
