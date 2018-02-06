@@ -36,11 +36,11 @@ namespace simpleGL
             glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
             std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
-        else
-        {
-            std::cout << "*** Vertex Shader definition ***" << std::endl;
-            std::cout << vertexShaderString << std::endl;
-        }
+        // else
+        // {
+        //     std::cout << "*** Vertex Shader definition ***" << std::endl;
+        //     std::cout << vertexShaderString << std::endl;
+        // }
 
         // Load an compile fragment shader
         unsigned int fragmentShader;
@@ -56,11 +56,11 @@ namespace simpleGL
             glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
             std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
-        else
-        {
-            std::cout << "*** Fragment Shader definition ***" << std::endl;
-            std::cout << fragShaderString << std::endl;
-        }
+        // else
+        // {
+        //     std::cout << "*** Fragment Shader definition ***" << std::endl;
+        //     std::cout << fragShaderString << std::endl;
+        // }
 
         // Create a shader program that link vertex and fragment together
         m_id = glCreateProgram();

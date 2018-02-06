@@ -17,17 +17,19 @@ namespace simpleGL
 
         static const int m_sizeData = 18;
         static const int m_sizeVertices = 3;
+        static const int m_sizePos = 3;
         static const int m_sizeColor = 3;
 
         float m_vertices[m_sizeData];
 
-        void ToGPU();
+        void SendData();
 
     public:
         Triangle();
         ~Triangle();
 
-        void Create();
+        void Create(float _pos[3], float _colors[3]);
+        void Create(float _pos[3]);
         virtual void Draw();
         virtual void Init() {};
         virtual void Update(){};

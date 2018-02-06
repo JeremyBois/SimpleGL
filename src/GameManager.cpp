@@ -19,12 +19,6 @@ namespace simpleGL
         s_pNodeService = &s_nullNodeManager;
     }
 
-    // GameManager* GameManager::Instance()
-    // {
-    //     static GameManager instance_;
-    //     return &instance_;
-    // }
-
     void GameManager::Provide(INodeManager* _service)
     {
         if (_service == nullptr)
@@ -36,16 +30,4 @@ namespace simpleGL
             s_pNodeService = _service;
         }
     }
-
-    //  void GameManager::Provide(IWindow* _service)
-    // {
-    //     if (_service == nullptr)
-    //     {
-    //         s_pWindowService = nullptr;
-    //     }
-    //     else
-    //     {
-    //         s_pWindowService = _service;
-    //     }
-    // }
 }

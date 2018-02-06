@@ -4,40 +4,51 @@
 
 namespace simpleGL
 {
-    // 3 * (m_sizeVertices + m_sizeColor)
-    // const int Triangle::m_sizeData = 18;
-    // const int Triangle::m_sizeVertices = 3;
-    // const int Triangle::m_sizeColor = 3;
-
     Triangle::Triangle()
-    {
-        // glGenVertexArrays(1, &m_VAO);
-        // glGenBuffers(1, &m_VBO);
-    }
-
-    void Triangle::Create()
-    {
-        float temp[] =
-        {
-            // Position        Color
-            0.4f, 0.4f, 0.0f,  1.0f, 0.0f, 0.0f,
-            0.4f,  0.8f, 0.0f, 0.0f, 1.0f, 0.0f,
-            0.8f, 0.4f, 0.0f,  0.0f, 0.0f, 1.0f
-        };
-
-        for (int i = 0; i < m_sizeVertices; ++i)
-        {
-            m_vertices[i] = temp[i];
-        }
-
-        ToGPU();
-    }
-
-    void Triangle::ToGPU()
     {
         glGenVertexArrays(1, &m_VAO);
         glGenBuffers(1, &m_VBO);
+    }
 
+    void Triangle::Create(float _pos[m_sizeVertices * m_sizePos])
+    {
+        int shiftV = m_sizePos + m_sizeColor;
+
+        // Construct the array (pos + color)
+        for (int i = 0; i < m_sizeVertices; ++i)
+        {
+            for (int vert = 0; vert < m_sizePos; ++vert)
+            {
+                m_vertices[(i * shiftV) + vert] = _pos[(i * m_sizePos) + vert];
+                // Each vertex are white
+                m_vertices[m_sizePos + (i * shiftV) + vert] = 1.0f;
+            }
+        }
+
+        SendData();
+    }
+
+
+    void Triangle::Create(float _pos[m_sizeVertices * m_sizePos],
+                          float _colors[m_sizeVertices * m_sizeColor])
+    {
+        int shiftV = m_sizePos + m_sizeColor;
+
+        // Construct the array (pos + color)
+        for (int i = 0; i < m_sizeVertices; ++i)
+        {
+            for (int vert = 0; vert < m_sizePos; ++vert)
+            {
+                m_vertices[(i * shiftV) + vert] = _pos[(i * m_sizePos) + vert];
+                m_vertices[m_sizePos + (i * shiftV) + vert] = _colors[(i * m_sizePos) + vert];
+            }
+        }
+
+        SendData();
+    }
+
+    void Triangle::SendData()
+    {
         // Store inside the first VAO
         glBindVertexArray(m_VAO);
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -50,16 +61,16 @@ namespace simpleGL
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        // // Send position (offset take account of color)
-        // glVertexAttribPointer(0, m_sizeVertices, GL_FLOAT, GL_FALSE,
-        //                       (m_sizeVertices + m_sizeColor) * sizeof(float),
-        //                       (void*)0);
-        // glEnableVertexAttribArray(0);
-        // // Send color using same offset but using a starting offset to discard position
-        // glVertexAttribPointer(1, m_sizeColor, GL_FLOAT, GL_FALSE,
-        //                      (m_sizeVertices + m_sizeColor) * sizeof(float),
-        //                      (void*)(m_sizeVertices * sizeof(float)));
-        // glEnableVertexAttribArray(1);
+        // Send position (offset take account of color)
+        glVertexAttribPointer(0, m_sizePos, GL_FLOAT, GL_FALSE,
+                              (m_sizePos + m_sizeColor) * sizeof(float),
+                              (void*)0);
+        glEnableVertexAttribArray(0);
+        // Send color using same offset but using a starting offset to discard position
+        glVertexAttribPointer(1, m_sizeColor, GL_FLOAT, GL_FALSE,
+                             (m_sizePos + m_sizeColor) * sizeof(float),
+                             (void*)(m_sizePos * sizeof(float)));
+        glEnableVertexAttribArray(1);
     }
 
     void Triangle::Draw()
