@@ -256,7 +256,7 @@ add_library(OpenGL::lib ALIAS ${MY_LIB_NAME})
 file(
     GLOB
     game_binary_SOURCES
-    samples/Game/src/*
+    ${PROJECT_SOURCE_DIR}/samples/Game/src/*
 )
 
 add_executable(
@@ -280,6 +280,11 @@ if (BUILD_SHARED_LIBS)
     target_compile_definitions(OpenGl-Game
     PRIVATE
         SIMPLEGL_SHARED="USED"
+    )
+else()
+    target_include_directories(OpenGl-Game
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/samples/Game/include
     )
 endif()
 
