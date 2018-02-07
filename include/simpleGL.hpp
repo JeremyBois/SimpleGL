@@ -18,7 +18,6 @@
 // SimpleGL PUBLIC API for OpenGl specific
 #include "OpenGL/Triangle.hpp"
 #include "OpenGL/Shader.hpp"
-#include "OpenGL/Window.hpp"
 
 
 #endif

@@ -9,7 +9,7 @@
 namespace simpleGL
 {
     // Abstract class for any shape
-    class SIMPLEGL_LOCAL Shape: public GameObject
+    class SIMPLEGL_API Shape: public GameObject
     {
     protected:
         Shader* m_pShader;

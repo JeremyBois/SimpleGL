@@ -6,8 +6,8 @@
 
 namespace simpleGL
 {
-    // @TODO-FIX Should be LOCAL not API
-    class SIMPLEGL_API Window: public IWindow
+    // @TODO should manage time (delta)
+    class SIMPLEGL_LOCAL Window: public IWindow
     {
     private:
         unsigned int m_width, m_height;
