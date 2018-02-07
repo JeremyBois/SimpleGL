@@ -4,13 +4,8 @@
 
 namespace simpleGL
 {
-    bool NodeManager::instantiated_ = false;
-
     NodeManager::NodeManager()
     {
-        assert(!instantiated_);
-        instantiated_ = true;
-
         m_pRoot = new Node();
         m_pRoot->SetName("Root");
     }
@@ -21,7 +16,6 @@ namespace simpleGL
         {
             delete m_pRoot;
         }
-        instantiated_ = false;
     }
 
 
@@ -37,7 +31,7 @@ namespace simpleGL
         }
     }
 
-    void NodeManager::Draw()
+    void NodeManager::Render()
     {
         if (m_pRoot != nullptr)
         {

@@ -1,10 +1,18 @@
 #ifndef __SIMPLEGL__HPP
 #define __SIMPLEGL__HPP
 
-// SimpleGL PUBLIC API
+// PUBLIC API
+
+// Managers
 #include "GameManager.hpp"
-#include "Node.hpp"
 #include "NodeManager.hpp"
+#include "SceneFSM.hpp"
+
+// Base
+#include "Node.hpp"
+
+// Interface prototype
+#include "Interface/IScene.hpp"
 
 
 // SimpleGL PUBLIC API for OpenGl specific
@@ -12,11 +20,5 @@
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Window.hpp"
 
-
-// SimpleGL PRIVATE API (SIMPLEGL_SHARED set when build as a shared lib)
-#include "Utility/StreamUtility.hpp"
-#include "Utility/Tools.hpp"
-#include "Shape.hpp"
-#include "Shape2D.hpp"
 
 #endif
