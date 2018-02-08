@@ -14,7 +14,14 @@ namespace simpleGL
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
-        // Construct the array (pos + color)
+        GL_UV2 tempUV[] =
+        {
+            {0.0f, 0.0f},
+            {0.0f, 1.0f},
+            {1.0f, 0.0f}
+        };
+
+        // Construct the array (pos + color + UV)
         for (int i = 0; i < m_sizeVertices; ++i)
         {
             // Pos
@@ -29,8 +36,8 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 2] = 0.0f;
 
             // UV
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = 0.0f;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = 1.0f;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].tv;
         }
 
         SendData();
