@@ -2,14 +2,23 @@
 
 #include "math.h"
 
+
+using POS3 = simpleGL::GL_POS3;
+using COLOR3 = simpleGL::GL_COLOR3;
+
+
 StartingScene::StartingScene()
 {
     m_pContainer =  new simpleGL::NodeManager();
     m_pFirstNode =  new simpleGL::Node();
 
-    // Test implementation of shaders (OpenGl must be init first)
-    m_pColorShader =  simpleGL::Shader("../shaders/basic.vert",
-                                          "../shaders/colorFromProgram.frag");
+    // Compile shader
+    m_colorShader =  simpleGL::Shader("../shaders/basic.vert",
+                                      "../shaders/colorFromProgram.frag");
+
+    // Get a texture
+    m_textureWall.Load("../data/images/wall.jpg");
+    // m_textureWall.Load("../data/images/container.jpg");
 
 }
 
@@ -39,32 +48,32 @@ bool StartingScene::OnInit()
     m_pTriangles[0] = new simpleGL::Triangle();
     m_pTriangles[1] = new simpleGL::Triangle();
 
-    float pos1[] =
+    POS3 pos1[]
     {
-        // Position
-        0.4f, 0.4f, 0.0f,
-        0.4f,  0.8f, 0.0f,
-        0.8f, 0.4f, 0.0f
+        {0.4f, 0.4f, 0.0f},
+        {0.4f,  0.8f, 0.0f},
+        {0.8f, 0.4f, 0.0f}
     };
 
-    float pos2[] =
+    POS3 pos2[]
     {
-        -0.8f, -0.8f, 0.0f,
-        -0.8f,  -0.4f, 0.0f,
-        -0.4f, -0.8f, 0.0f
+        {-0.8f, -0.8f, 0.0f},
+        {-0.8f,  -0.4f, 0.0f},
+        {-0.4f, -0.8f, 0.0f},
     };
 
-    float color1[] =
+    COLOR3 color1[]
     {
-        // Color
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f},
     };
 
     m_pTriangles[0]->Create(pos1, color1);
+    m_pTriangles[0]->LinkTexture(&m_textureWall);
+
     m_pTriangles[1]->Create(pos2);
-    m_pTriangles[1]->SetShader(&m_pColorShader);
+    m_pTriangles[1]->LinkShader(&m_colorShader);
 
     // Populate container
     m_pFirstNode->AddGameObject(m_pTriangles[0]);
@@ -74,13 +83,14 @@ bool StartingScene::OnInit()
 
 bool StartingScene::OnUpdate()
 {
-    ChangeGreenOverTime(m_pColorShader);
+    ChangeGreenOverTime(m_colorShader);
 }
 
 bool StartingScene::OnQuit()
 {
-    // Game Manager reset to null if none exist
-    // delete m_pContainer;
+    // Game Manager reset service to null if
+    delete m_pContainer;
+    m_pContainer = nullptr;
     delete m_pFirstNode;
     return true;
 }

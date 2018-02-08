@@ -12,7 +12,8 @@ private:
     simpleGL::NodeManager*  m_pContainer;
     simpleGL::Triangle*     m_pTriangles[2];
 
-    simpleGL::Shader        m_pColorShader;
+    simpleGL::Shader        m_colorShader;
+    simpleGL::Texture       m_textureWall;
 
 
     void ChangeGreenOverTime(simpleGL::Shader& _shader);
