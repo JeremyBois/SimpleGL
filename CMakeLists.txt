@@ -123,54 +123,56 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 
 
 
-# ------------------------------------------------------------------------------
-# Create a executable target
-# ------------------------------------------------------------------------------
-file(
-    GLOB
-    binary_SOURCES
-    src/Interface/*
-    src/OpenGL/*
-    src/Utility/*
-    src/*
-    ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
-)
+# # ------------------------------------------------------------------------------
+# # Create a executable target
+# # ------------------------------------------------------------------------------
+# file(
+#     GLOB
+#     binary_SOURCES
+#     src/Interface/*
+#     src/OpenGL/*
+#     src/Utility/*
+#     src/*
+#     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
+#     ${PROJECT_SOURCE_DIR}/extern/STB/src/*    // From stb_image
+# )
 
-add_executable(
-    SimpleGL ${binary_SOURCES}
-)
+# add_executable(
+#     SimpleGL ${binary_SOURCES}
+# )
 
-# Command to add include directories for a specifc target (replace include_directories)
-# See https://learnopengl.com/Getting-started/Creating-a-window for GLAD
-target_include_directories(SimpleGL
-    PRIVATE
-        ${GLFW_INCLUDE_DIRS}
-        ${PROJECT_SOURCE_DIR}/extern/KHR
-        ${PROJECT_SOURCE_DIR}/extern/GLAD/include
-    PRIVATE
-        BEFORE ${PROJECT_SOURCE_DIR}/include
-)
+# # Command to add include directories for a specifc target (replace include_directories)
+# # See https://learnopengl.com/Getting-started/Creating-a-window for GLAD
+# target_include_directories(SimpleGL
+#     PRIVATE
+#         ${GLFW_INCLUDE_DIRS}
+#         ${PROJECT_SOURCE_DIR}/extern/KHR
+#         ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+#         ${PROJECT_SOURCE_DIR}/extern/STB/include
+#     PRIVATE
+#         BEFORE ${PROJECT_SOURCE_DIR}/include
+# )
 
-set_target_properties(SimpleGL
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
-)
+# set_target_properties(SimpleGL
+#     PROPERTIES
+#     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
+#     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
+#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
+# )
 
 
-target_link_libraries(SimpleGL
-    ${OPENGL_gl_LIBRARY}
-    ${GLFW_x11_LIBRARY}
-    ${GLFW_LIBRARIES}
-)
+# target_link_libraries(SimpleGL
+#     ${OPENGL_gl_LIBRARY}
+#     ${GLFW_x11_LIBRARY}
+#     ${GLFW_LIBRARIES}
+# )
 
-target_compile_definitions(SimpleGL
-    PRIVATE
-        fexceptions
-        Wall
-        Wextra
-)
+# target_compile_definitions(SimpleGL
+#     PRIVATE
+#         fexceptions
+#         Wall
+#         Wextra
+# )
 
 
 
@@ -195,7 +197,8 @@ file(
     src/OpenGL/*
     src/Utility/*
     src/*
-    ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
+    ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   #[[ From GLAD (http://glad.dav1d.de/) ]]
+    ${PROJECT_SOURCE_DIR}/extern/STB/src/*    #[[ From stb_image (https://github.com/nothings/stb) ]]
 )
 
 add_library(${MY_LIB_NAME} ${LIB_TYPE} ${library_SOURCES})
@@ -210,6 +213,7 @@ if (BUILD_SHARED_LIBS)
             ${GLFW_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+            ${PROJECT_SOURCE_DIR}/extern/STB/include
     )
 
     # Set pre processor command for Shared lib export
@@ -227,6 +231,7 @@ else()
             ${GLFW_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+            ${PROJECT_SOURCE_DIR}/extern/STB/include
     )
 endif()
 
@@ -266,13 +271,14 @@ add_executable(
 # See https://cmake.org/pipermail/cmake/2016-May/063400.html
 if (BUILD_SHARED_LIBS)
     # Shared lib need to know includes directories
-    message(status " *** Using shared library: GLFW, GLAD and SimpleGl headers will be included.")
+    message(status " *** Using shared library: GLFW, GLAD, stb_image, and SimpleGl headers will be included.")
     target_include_directories(OpenGl-Game
         PRIVATE
             ${PROJECT_SOURCE_DIR}/include
             ${GLFW_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
+            ${PROJECT_SOURCE_DIR}/extern/STB/include
             ${PROJECT_SOURCE_DIR}/samples/Game/include
     )
 
