@@ -8,7 +8,7 @@ namespace simpleGL
     // @TODO Must be implement using an interface ?
     // Abstract class for any game object (sprite, text, shape, ...)
     // Define minimal interface to implement for all
-    class SIMPLEGL_LOCAL GameObject
+    class SIMPLEGL_API GameObject
     {
     public:
         GameObject();

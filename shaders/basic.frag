@@ -1,10 +1,21 @@
 #version 330 core
 
-out vec4 FragColor;
 in vec3 vertexColor;
+in vec2 texCoord;
+
+uniform sampler2D tex0;
+
+out vec4 FragColor;
 
 void main()
 {
-    // Color from vertex
-    FragColor = vec4(vertexColor.xyz, 1.0f);
+    vec4 t0 = texture2D(tex0, texCoord);
+    vec4 t1 = vec4(vertexColor.xyz, t0.a);
+
+    // Multiplication
+    FragColor = t0 * t1;
+
+    // Alpha blend
+    // https://en.wikipedia.org/wiki/Alpha_compositing
+    // FragColor = mix(t0, t1, t1.a);
 }

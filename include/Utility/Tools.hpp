@@ -22,6 +22,25 @@ namespace simpleGL
     struct SIMPLEGL_API GL_COLOR3
     {
         GLfloat r, g, b;
+        static int _nbElements;
+    };
+
+    struct SIMPLEGL_API GL_COLOR4
+    {
+        GLfloat r, g, b, a;
+        static int _nbElements;
+    };
+
+    struct SIMPLEGL_API GL_POS3
+    {
+        GLfloat x, y, z;
+        static int _nbElements;
+    };
+
+    struct SIMPLEGL_API GL_UV2
+    {
+        GLfloat tu, tv;
+        static int _nbElements;
     };
 }
 #endif

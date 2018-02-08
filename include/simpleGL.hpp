@@ -8,8 +8,11 @@
 #include "NodeManager.hpp"
 #include "SceneFSM.hpp"
 
+
 // Base
 #include "Node.hpp"
+#include "Utility/Tools.hpp"
+
 
 // Interface prototype
 #include "Interface/IScene.hpp"
@@ -18,6 +21,7 @@
 // SimpleGL PUBLIC API for OpenGl specific
 #include "OpenGL/Triangle.hpp"
 #include "OpenGL/Shader.hpp"
+#include "OpenGL/Texture.hpp"
 
 
 #endif

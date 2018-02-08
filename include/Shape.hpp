@@ -4,6 +4,7 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "GameObject.hpp"
 #include "OpenGL/Shader.hpp"
+#include "OpenGL/Texture.hpp"
 
 
 namespace simpleGL
@@ -12,16 +13,23 @@ namespace simpleGL
     class SIMPLEGL_API Shape: public GameObject
     {
     protected:
-        Shader* m_pShader;
         Shader  m_baseShader;
+
+        // Flyweight pattern
+        Shader* m_pShader;
+        Texture* m_pTexture;
 
     public:
         Shape();
         virtual ~Shape();
 
-        void    SetShader(Shader* _pShader);
-        Shader& GetShader() const;
-        void    UseDefault();
+        void     LinkShader(Shader* _pShader);
+        void     LinkTexture(Texture* _pTexture);
+
+        Texture& GetTexture() const;
+        Shader&  GetShader() const;
+
+        void     UseDefaultShader();
 
         virtual void Draw() = 0;
     };
