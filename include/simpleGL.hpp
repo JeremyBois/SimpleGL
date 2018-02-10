@@ -19,7 +19,8 @@
 
 
 // SimpleGL PUBLIC API for OpenGl specific
-#include "OpenGL/Triangle.hpp"
+#include "OpenGL/2D/Triangle.hpp"
+#include "OpenGL/2D/Quad.hpp"
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"
 

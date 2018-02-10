@@ -22,14 +22,18 @@ namespace simpleGL
         ~Texture();
 
         // Getter
-        inline int GetWidth() {return m_width;}
-        inline int GetHeight() {return m_height;}
-        inline int GetNbrChannels() {return m_nbChannels;}
+        inline int GetID() const {return m_id;}
+        inline int GetWidth() const {return m_width;}
+        inline int GetHeight() const {return m_height;}
+        inline int GetNbrChannels() const {return m_nbChannels;}
+        void Get(GLenum _param, GLint* _container);
+        void Get(GLenum _param, GLfloat* _container);
 
         // Setter
-        void Load(std::string _path);
-        void Use();
+        void Load(std::string _path, bool _hasAlpha=false, bool _reverseY=false);
+        void Use(GLenum _unit=GL_TEXTURE0);
         void Set(GLenum _param, const GLint* _values);
+        void Set(GLenum _param, const GLint _value);
         void SetBorderColor(GL_COLOR4 _color);
 
 

@@ -1,16 +1,16 @@
-#include "OpenGL/Triangle.hpp"
+#include "OpenGL/2D/Quad.hpp"
 
 #include "Utility/Tools.hpp"
 
 namespace simpleGL
 {
-    Triangle::Triangle()
+    Quad::Quad()
     {
         glGenVertexArrays(1, &m_VAO);
         glGenBuffers(1, &m_VBO);
     }
 
-    void Triangle::Create(GL_POS3 _pos[m_sizeVertices])
+    void Quad::Create(GL_POS3 _pos[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
@@ -18,6 +18,7 @@ namespace simpleGL
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
+            {1.0f, 1.0f},
             {1.0f, 0.0f}
         };
 
@@ -26,14 +27,15 @@ namespace simpleGL
         {
             // Pos
             int tempShift = (i * shiftV);
+
             m_vertices[tempShift + 0] = _pos[i].x;
             m_vertices[tempShift + 1] = _pos[i].y;
             m_vertices[tempShift + 2] = _pos[i].z;
 
-            // Color (black as default to only see texture if added)
-            m_vertices[m_sizePos + tempShift + 0] = 0.0f;
-            m_vertices[m_sizePos + tempShift + 1] = 0.0f;
-            m_vertices[m_sizePos + tempShift + 2] = 0.0f;
+            // Default to white color
+            m_vertices[m_sizePos + tempShift + 0] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 1] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 2] = 1.0f;
 
             // UV
             m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
@@ -44,7 +46,7 @@ namespace simpleGL
     }
 
 
-    void Triangle::Create(GL_POS3 _pos[m_sizeVertices],
+    void Quad::Create(GL_POS3 _pos[m_sizeVertices],
                           GL_COLOR3 _colors[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
@@ -53,6 +55,7 @@ namespace simpleGL
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
+            {1.0f, 1.0f},
             {1.0f, 0.0f}
         };
 
@@ -78,7 +81,7 @@ namespace simpleGL
         SendData();
     }
 
-    void Triangle::SendData()
+    void Quad::SendData()
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
@@ -106,23 +109,16 @@ namespace simpleGL
         glEnableVertexAttribArray(2);
     }
 
-    void Triangle::Draw()
+    void Quad::Draw()
     {
-        // Select shader program for the draw call
-        m_pShader->Use();
-
-        // Set associate texture if exist
-        if (m_pTexture)
-        {
-            m_pTexture->Use();
-        }
+        Shape2D::Draw();
 
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, m_sizeVertices);
     }
 
-    Triangle::~Triangle()
+    Quad::~Quad()
     {
         glDeleteVertexArrays(1, &m_VAO);
         glDeleteBuffers(1, &m_VBO);

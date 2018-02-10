@@ -39,6 +39,7 @@ namespace simpleGL
 
     struct SIMPLEGL_API GL_UV2
     {
+        // In OpenGl doc: u = s   v = t
         GLfloat tu, tv;
         static int _nbElements;
     };

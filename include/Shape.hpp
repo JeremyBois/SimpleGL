@@ -6,9 +6,12 @@
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"
 
+#include <map>
 
 namespace simpleGL
 {
+    typedef std::map<GLenum, Texture*> TexUnitMap;
+
     // Abstract class for any shape
     class SIMPLEGL_API Shape: public GameObject
     {
@@ -17,21 +20,26 @@ namespace simpleGL
 
         // Flyweight pattern
         Shader* m_pShader;
-        Texture* m_pTexture;
+
+        // Maintain a collection of texture for each unit
+        TexUnitMap m_pTextureMap;
 
     public:
         Shape();
         virtual ~Shape();
 
+        // Shader
         void     LinkShader(Shader* _pShader);
-        void     LinkTexture(Texture* _pTexture);
-
-        Texture& GetTexture() const;
         Shader&  GetShader() const;
-
         void     UseDefaultShader();
 
-        virtual void Draw() = 0;
+        // Texture
+        void     LinkTexture(Texture* _pTexture, GLenum _unit=GL_TEXTURE0);
+        Texture& GetTexture(GLenum _unit=GL_TEXTURE0) const;
+        void     UnLinkTexture(GLenum _unit);
+        void     UnLinkAllTextures();
+
+        virtual void Draw();
     };
 }
 #endif

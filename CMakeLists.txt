@@ -131,6 +131,7 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 #     binary_SOURCES
 #     src/Interface/*
 #     src/OpenGL/*
+#     src/OpenGL/2D/*
 #     src/Utility/*
 #     src/*
 #     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
@@ -195,6 +196,7 @@ file(
     library_SOURCES
     src/Interface/*
     src/OpenGL/*
+    src/OpenGL/2D/*
     src/Utility/*
     src/*
     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   #[[ From GLAD (http://glad.dav1d.de/) ]]

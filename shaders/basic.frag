@@ -14,8 +14,4 @@ void main()
 
     // Multiplication
     FragColor = t0 * t1;
-
-    // Alpha blend
-    // https://en.wikipedia.org/wiki/Alpha_compositing
-    // FragColor = mix(t0, t1, t1.a);
 }
