@@ -174,12 +174,15 @@ namespace simpleGL
             {
                 case GL_LINE:
                     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+                    cout << "Drawing mode now: POINT" << endl;
                     break;
                 case GL_POINT:
                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                    cout << "Drawing mode now: FILL" << endl;
                     break;
                 case GL_FILL:
                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    cout << "Drawing mode now: LINE" << endl;
                     break;
             }
         }
@@ -192,12 +195,15 @@ namespace simpleGL
             {
                 case GL_BACK:
                     glCullFace(GL_FRONT);
+                    cout << "Culling now: FRONT" << endl;
                     break;
                 case GL_FRONT:
                     glCullFace(GL_FRONT_AND_BACK);
+                    cout << "Culling now: FRONT AND BACK" << endl;
                     break;
                 case GL_FRONT_AND_BACK:
                     glCullFace(GL_BACK);
+                    cout << "Culling now: BACK" << endl;
                     break;
             }
         }
