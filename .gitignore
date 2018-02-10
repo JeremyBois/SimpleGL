@@ -2,6 +2,7 @@
 bin/
 build/
 lib/
+examples/
 
 # Log stuff:
 *.log
