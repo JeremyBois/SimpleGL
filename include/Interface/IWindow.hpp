@@ -16,7 +16,7 @@ namespace simpleGL
         virtual void Render() = 0;
 
         // A constant reference
-        virtual const GLFWwindow& GetWindow() const = 0;
+        virtual GLFWwindow& GetGLFWwindow() const = 0;
     };
 }
 #endif

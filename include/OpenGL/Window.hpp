@@ -6,7 +6,6 @@
 
 namespace simpleGL
 {
-    // @TODO should manage time (delta)
     class SIMPLEGL_LOCAL Window: public IWindow
     {
     private:
@@ -17,8 +16,13 @@ namespace simpleGL
 
         // We only one a single instance but no singleton
         static bool instantiated_;
+
+        // Callback to handle keys as events
+        static void Key_callback(GLFWwindow* window, int _key, int _scancode, int _action, int _mods);
         static void Framebuffer_size_callback(GLFWwindow* _window, int _width, int _height);
 
+        // Contains handler for debug keys
+        static void DebugKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);
 
     protected:
         int const m_versionMajor = 3;
@@ -26,9 +30,13 @@ namespace simpleGL
         int const m_profile = GLFW_OPENGL_CORE_PROFILE;
 
         std::string m_name;
-        float m_clearColor[4];
+        float       m_clearColor[4];
 
         GLFWwindow* m_pWindow;
+
+
+        // Callback handler
+        GLFWkeyfun m_pUserKeyCallback;
 
     public:
         Window(unsigned int _width, unsigned int _height, std::string _name);
@@ -39,7 +47,17 @@ namespace simpleGL
         virtual bool Quit();
         virtual void Render();
 
-        virtual inline const GLFWwindow& GetWindow() const {return *m_pWindow;}
+        virtual int GetKey(int _key);
+
+        void AttachKeyEventCallback(GLFWkeyfun _callback);
+
+        // glfwSetWindowUserPointer and glfwGetWindowUserPointer
+        // can be used to set and get specific chunk of data
+        // see https://tinyurl.com/ychsjpa8
+        // void  RegisterPointer(void* _pointer);
+        // void* AccessPointer();
+
+        virtual inline GLFWwindow& GetGLFWwindow() const {return *m_pWindow;}
     };
 }
 #endif

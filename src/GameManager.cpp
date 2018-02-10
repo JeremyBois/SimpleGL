@@ -60,6 +60,9 @@ namespace simpleGL
         {
             s_pNodeService = &s_nullNodeManager;
         }
+
+        GameManager::GetSceneMgr().Update();
+        GameManager::GetNodeMgr().Update();
     }
 
     void GameManager::Start()
@@ -68,5 +71,17 @@ namespace simpleGL
         s_pNodeService->Init();
         s_pWindowService->Update();
         s_pWindowService->Quit();
+    }
+
+    void GameManager::Quit()
+    {
+        GameManager::GetNodeMgr().Clear();
+        GameManager::GetSceneMgr().Quit();
+    }
+
+    void GameManager::Render()
+    {
+        GameManager::GetSceneMgr().Render();
+        GameManager::GetNodeMgr().Render();
     }
 }

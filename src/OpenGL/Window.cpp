@@ -14,6 +14,8 @@ namespace simpleGL
         assert(!instantiated_);
         instantiated_ = true;
 
+        m_pUserKeyCallback = nullptr;
+
         m_clearColor[0] = 0.2f;
         m_clearColor[1] = 0.2f;
         m_clearColor[2] = 0.2f;
@@ -45,7 +47,7 @@ namespace simpleGL
         {
             std::cerr << "Failed to create GLFW window" << std::endl;
             glfwTerminate();
-            return false;
+            exit(EXIT_FAILURE);
         }
         glfwMakeContextCurrent(m_pWindow);
 
@@ -69,6 +71,10 @@ namespace simpleGL
 
         SetDefaultFlag();
 
+
+        // Register a callback for keys inputs
+        glfwSetKeyCallback(m_pWindow, Key_callback);
+
         return true;
     }
 
@@ -76,13 +82,9 @@ namespace simpleGL
     {
         while (!glfwWindowShouldClose(m_pWindow))
         {
-            // @TODO Handles inputs using external class
             ProcessInput();
 
             GameManager::Update();
-            // @TODO Should be called by GameManager ??
-            GameManager::GetSceneMgr().Update();
-            GameManager::GetNodeMgr().Update();
 
             Render();
 
@@ -93,9 +95,9 @@ namespace simpleGL
 
     bool Window::Quit()
     {
-        GameManager::GetNodeMgr().Clear();
-        GameManager::GetSceneMgr().Quit();
+        GameManager::Quit();
 
+        glfwDestroyWindow(m_pWindow);
         glfwTerminate();
         return true;
     }
@@ -106,8 +108,7 @@ namespace simpleGL
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Recursive call to draw of all nodes.
-        GameManager::GetSceneMgr().Render();
-        GameManager::GetNodeMgr().Render();
+        GameManager::Render();
 
         // Swap buffer
         glfwSwapBuffers(m_pWindow);
@@ -126,16 +127,46 @@ namespace simpleGL
         glViewport(0, 0, _width, _height);
     }
 
-    void Window::ProcessInput()
+    void Window::Key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
     {
-        if (glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        if (_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
         {
             // Send close event.
-            glfwSetWindowShouldClose(m_pWindow, true);
+            glfwSetWindowShouldClose(_window, GL_TRUE);
         }
 
+        // Debug event handler
+        DebugKeyEventHandler(_window, _key, _scancode, _action, _mods);
+
+        // Let user handle more event
+        if (GameManager::GetWindow().m_pUserKeyCallback != nullptr)
+        {
+            GameManager::GetWindow().m_pUserKeyCallback(_window, _key, _scancode, _action, _mods);
+        }
+    }
+
+    void Window::AttachKeyEventCallback(GLFWkeyfun _callback)
+    {
+        m_pUserKeyCallback = _callback;
+    }
+
+    // To add some inputs to handle
+    // For just pressed or released use a callback
+    void Window::ProcessInput()
+    {
+
+    }
+
+    int Window::GetKey(int _key)
+    {
+        return glfwGetKey(m_pWindow, _key);
+    }
+
+
+    void Window::DebugKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
+    {
         // Switch wireframe / fill / point mode
-        if (glfwGetKey(m_pWindow, GLFW_KEY_F) == GLFW_PRESS)
+        if (_key == GLFW_KEY_V && _action == GLFW_PRESS)
         {
             GLint result[2];
             glGetIntegerv(GL_POLYGON_MODE, result);
@@ -153,7 +184,7 @@ namespace simpleGL
             }
         }
         // Switch culling mode
-        if (glfwGetKey(m_pWindow, GLFW_KEY_C) == GLFW_PRESS)
+        if (_key == GLFW_KEY_C && _action == GLFW_PRESS)
         {
             GLint result;
             glGetIntegerv(GL_CULL_FACE_MODE, &result);

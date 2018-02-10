@@ -44,7 +44,9 @@ namespace simpleGL
         static void Provide(ISceneManager* _service);
 
         static void Update();
+        static void Render();
         static void Start();
+        static void Quit();
     };
 }
 #endif

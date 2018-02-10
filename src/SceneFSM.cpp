@@ -95,9 +95,9 @@ namespace simpleGL
         m_pPrevious = m_pCurrent;
     }
 
-    IScene& SceneFSM::GetCurrent()
+    IScene* SceneFSM::GetCurrent()
     {
-        return *m_pCurrent;
+        return m_pCurrent;
     }
 
 

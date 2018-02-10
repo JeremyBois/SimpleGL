@@ -17,7 +17,7 @@ namespace simpleGL
         virtual void Render() = 0;
 
         virtual void    Change(IScene& _scene) = 0;
-        virtual IScene& GetCurrent() = 0;
+        virtual IScene* GetCurrent() = 0;
     };
 }
 #endif
