@@ -35,7 +35,7 @@ make
 
 ## Notes
 
-Last released of GLM () does not recognize GCC 7.3.
+Last released of GLM (**9.9.5**) does not recognize GCC 7.3.
 
 `glm/simd/platform.h` should be updated with the following in the gcc section:
 ```
