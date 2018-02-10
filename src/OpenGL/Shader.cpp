@@ -17,10 +17,6 @@ namespace simpleGL
 
     void Shader::ConstructProgram(std::string vertexPath, std::string fragPath)
     {
-        // To handle errors
-        int  success;
-        char infoLog[512];
-
         // Load an compile vertex shader
         unsigned int vertexShader;
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -29,18 +25,7 @@ namespace simpleGL
         // Attach source code to object (vertexShaderSource)
         glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
         glCompileShader(vertexShader);
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if(!success)
-        {
-            // Get error and store it in as a char array
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-        // else
-        // {
-        //     std::cout << "*** Vertex Shader definition ***" << std::endl;
-        //     std::cout << vertexShaderString << std::endl;
-        // }
+        CheckForCompileErrors(vertexShader, "VERTEX");
 
         // Load an compile fragment shader
         unsigned int fragmentShader;
@@ -49,30 +34,14 @@ namespace simpleGL
         const char* fragShaderSource = fragShaderString.c_str();
         glShaderSource(fragmentShader, 1, &fragShaderSource, NULL);
         glCompileShader(fragmentShader);
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        if(!success)
-        {
-            // Get error and store it in as a char array
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-        // else
-        // {
-        //     std::cout << "*** Fragment Shader definition ***" << std::endl;
-        //     std::cout << fragShaderString << std::endl;
-        // }
+        CheckForCompileErrors(vertexShader, "FRAGMENT");
 
         // Create a shader program that link vertex and fragment together
         m_id = glCreateProgram();
         glAttachShader(m_id, vertexShader);
         glAttachShader(m_id, fragmentShader);
         glLinkProgram(m_id);
-        glGetProgramiv(m_id, GL_LINK_STATUS, &success);
-        if(!success)
-        {
-            glGetProgramInfoLog(m_id, 512, NULL, infoLog);
-            std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        }
+        CheckForCompileErrors(vertexShader, "PROGRAM");
 
         // Clean up
         glDeleteShader(vertexShader);
@@ -109,6 +78,31 @@ namespace simpleGL
         glUniform3f(vertexColorLocation, value[0], value[1], value[2]);
     }
 
+    void Shader::SetVec4(const std::string &name, const glm::vec4 &value) const
+    {
+        glUniform4fv(glGetUniformLocation(m_id, name.c_str()), 1, &value[0]);
+    }
+
+    void Shader::SetVec4(const std::string &name, float x, float y, float z, float w)
+    {
+        glUniform4f(glGetUniformLocation(m_id, name.c_str()), x, y, z, w);
+    }
+
+    void Shader::SetMat2(const std::string &name, const glm::mat2 &mat) const
+    {
+        glUniformMatrix2fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
+    void Shader::SetMat3(const std::string &name, const glm::mat3 &mat) const
+    {
+        glUniformMatrix3fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
+    void Shader::SetMat4(const std::string &name, const glm::mat4 &mat) const
+    {
+        glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
     // Get the maximum number of attributes (each attribute is a vec4)
     // you can declare per shader
     int Shader::GetMaxAttributeNb()
@@ -116,5 +110,31 @@ namespace simpleGL
         GLint nbAttributes;
         glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nbAttributes);
         return nbAttributes;
+    }
+
+    void Shader::CheckForCompileErrors(GLuint shader, std::string type)
+    {
+        const unsigned int infoSizeMax = 1024;
+        GLint success;
+        GLchar infoLog[infoSizeMax];
+
+        if(type != "PROGRAM")
+        {
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            if(!success)
+            {
+                glGetShaderInfoLog(shader, infoSizeMax, NULL, infoLog);
+                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            }
+        }
+        else
+        {
+            glGetProgramiv(shader, GL_LINK_STATUS, &success);
+            if(!success)
+            {
+                glGetProgramInfoLog(shader, infoSizeMax, NULL, infoLog);
+                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            }
+        }
     }
 }

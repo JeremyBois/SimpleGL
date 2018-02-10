@@ -5,13 +5,13 @@
 ## Getting started
 
 ```
-    # Build
-    cd build/
-    cmake .. -G "Unix Makefiles"
-    make
+# Build
+cd build/
+cmake .. -G "Unix Makefiles"
+make
 
-    # Run
-    ../samples/Game/bin/Debug/OpenGl-Game
+# Run
+../samples/Game/bin/Debug/OpenGl-Game
 ```
 
 
@@ -31,3 +31,14 @@
   - **F** --> Change filtering
   - **PageUp** --> Scale UV up
   - **PageUp** --> Scale UV down
+
+
+## Notes
+
+Last released of GLM () does not recognize GCC 7.3.
+
+`glm/simd/platform.h` should be updated with the following in the gcc section:
+```
+#   elif (__GNUC__ == 7) && (__GNUC_MINOR__ == 3)
+#       define GLM_COMPILER (GLM_COMPILER_GCC72)
+```

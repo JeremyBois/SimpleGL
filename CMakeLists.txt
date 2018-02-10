@@ -216,6 +216,7 @@ if (BUILD_SHARED_LIBS)
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
+            ${PROJECT_SOURCE_DIR}/extern/GLM           #[[ https://glm.g-truc.net/0.9.8/index.html ]]
     )
 
     # Set pre processor command for Shared lib export
@@ -234,6 +235,7 @@ else()
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
+            ${PROJECT_SOURCE_DIR}/extern/GLM
     )
 endif()
 
@@ -281,6 +283,7 @@ if (BUILD_SHARED_LIBS)
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
+            ${PROJECT_SOURCE_DIR}/extern/GLM
             ${PROJECT_SOURCE_DIR}/samples/Game/include
     )
 
