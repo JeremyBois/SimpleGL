@@ -35,6 +35,7 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 0] = 1.0f;
             m_vertices[m_sizePos + tempShift + 1] = 1.0f;
             m_vertices[m_sizePos + tempShift + 2] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 3] = 1.0f;
 
             // UV
             m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
@@ -46,7 +47,7 @@ namespace simpleGL
 
 
     void Triangle::Create(GL_POS3 _pos[m_sizeVertices],
-                          GL_COLOR3 _colors[m_sizeVertices])
+                          GL_COLOR4 _colors[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
@@ -70,6 +71,7 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 0] = _colors[i].r;
             m_vertices[m_sizePos + tempShift + 1] = _colors[i].g;
             m_vertices[m_sizePos + tempShift + 2] = _colors[i].b;
+            m_vertices[m_sizePos + tempShift + 3] = _colors[i].a;
 
             // UV
             m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;

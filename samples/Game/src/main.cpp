@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     // Create a simple SceneManager with a starting scene
     StartingScene* firstScene = new StartingScene();
     simpleGL::SceneFSM* mySceneManager = new simpleGL::SceneFSM(*firstScene);
-    simpleGL::GameManager::Provide(mySceneManager);
+    simpleGL::GameManager::AttachSceneMgr(mySceneManager);
 
     // Start loop
     Game::Start();

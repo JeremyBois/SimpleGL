@@ -24,7 +24,17 @@ namespace simpleGL
         s_pSceneService = &s_nullSceneManager;
     }
 
-    void GameManager::Provide(INodeManager* _service)
+    void GameManager::DetachNodeMgr()
+    {
+        s_pNodeService = &s_nullNodeManager;
+    }
+
+    void GameManager::DetachSceneMgr()
+    {
+        s_pSceneService = &s_nullSceneManager;
+    }
+
+    void GameManager::AttachNodeMgr(INodeManager* _service)
     {
         if (_service == nullptr)
         {
@@ -36,7 +46,7 @@ namespace simpleGL
         }
     }
 
-    void GameManager::Provide(ISceneManager* _service)
+    void GameManager::AttachSceneMgr(ISceneManager* _service)
     {
         if (_service == nullptr)
         {
@@ -51,12 +61,12 @@ namespace simpleGL
     // Reset services if needed
     void GameManager::Update()
     {
-        if (!s_pSceneService)
+        if (s_pSceneService == nullptr)
         {
             s_pSceneService = &s_nullSceneManager;
         }
 
-        if (!s_pNodeService)
+        if (s_pNodeService == nullptr)
         {
             s_pNodeService = &s_nullNodeManager;
         }

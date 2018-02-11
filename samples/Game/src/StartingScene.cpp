@@ -6,7 +6,7 @@
 typedef simpleGL::GameManager Game;
 
 using POS3 = simpleGL::GL_POS3;
-using COLOR3 = simpleGL::GL_COLOR3;
+using COLOR4 = simpleGL::GL_COLOR4;
 
 
 StartingScene::StartingScene()
@@ -79,8 +79,7 @@ void StartingScene::ZoomUV(simpleGL::Shader& _shader, bool _zoom)
 
 bool StartingScene::OnInit()
 {
-    // auto test =  simpleGL::NodeManager();
-    simpleGL::GameManager::Provide(&m_container);
+    simpleGL::GameManager::AttachNodeMgr(&m_container);
 
     POS3 pos1[]
     {
@@ -96,11 +95,11 @@ bool StartingScene::OnInit()
         {-0.4f, -0.8f, 0.0f}
     };
 
-    COLOR3 color1[]
+    COLOR4 color1[]
     {
-        {1.0f, 0.0f, 0.0f},
-        {0.0f, 1.0f, 0.0f},
-        {0.0f, 0.0f, 1.0f}
+        {1.0f, 0.0f, 0.0f, 1.0f},
+        {0.0f, 1.0f, 0.0f, 1.0f},
+        {0.0f, 0.0f, 1.0f, 1.0f}
     };
 
     m_pTriangles[0]->Create(pos1, color1);
@@ -155,8 +154,11 @@ bool StartingScene::OnQuit()
 {
     delete m_pFirstNode;
 
+    // Detach obsolete services
+    simpleGL::GameManager::DetachNodeMgr();
+
     // Remove event callback
-    Game::GetWindow().AttachKeyEventCallback(nullptr);
+    Game::GetWindow().DetachKeyEventCallback();
 
     return true;
 }

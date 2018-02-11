@@ -1,13 +1,12 @@
 #version 330 core
 // Define version and that we use core functionality
 
-// Inputs vertex attributes and set location of that variable
+// In
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec4 aColor;
 
-layout (location = 1) in vec3 aColor;
-
-// Specify a color output to the fragment shader
-out vec3 vertexColor;
+// Out
+out vec4 vertexColor;
 
 void main()
 {

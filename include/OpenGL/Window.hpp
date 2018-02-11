@@ -50,6 +50,7 @@ namespace simpleGL
         virtual int GetKey(int _key);
 
         void AttachKeyEventCallback(GLFWkeyfun _callback);
+        void DetachKeyEventCallback() {m_pUserKeyCallback = nullptr;}
 
         // glfwSetWindowUserPointer and glfwGetWindowUserPointer
         // can be used to set and get specific chunk of data

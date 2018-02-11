@@ -92,8 +92,7 @@ namespace simpleGL
     {
         glBindTexture(GL_TEXTURE_2D, m_id);
         float borderColor[] = {_color.r, _color.g, _color.b, _color.a};
-        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
-                         borderColor);
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     }
 }
 

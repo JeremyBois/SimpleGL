@@ -40,8 +40,11 @@ namespace simpleGL
         static inline Window&        GetWindow() {return *s_pWindowService;}
 
 
-        static void Provide(INodeManager* _service);
-        static void Provide(ISceneManager* _service);
+        static void AttachNodeMgr(INodeManager* _service);
+        static void AttachSceneMgr(ISceneManager* _service);
+
+        static void DetachNodeMgr();
+        static void DetachSceneMgr();
 
         static void Update();
         static void Render();
