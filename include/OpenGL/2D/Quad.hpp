@@ -32,8 +32,8 @@ namespace simpleGL
         Quad();
         virtual ~Quad();
 
-        void Create(GL_POS3 _pos[m_sizeVertices], GL_COLOR4 _colors[m_sizeVertices]);
-        void Create(GL_POS3 _pos[m_sizeVertices]);
+        void Create(glm::vec3 _pos[m_sizeVertices], GL_COLOR4 _colors[m_sizeVertices]);
+        void Create(glm::vec3 _pos[m_sizeVertices]);
 
         virtual void Draw();
         virtual void Init() {};

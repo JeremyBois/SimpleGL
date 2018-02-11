@@ -31,12 +31,6 @@ namespace simpleGL
         static int _nbElements;
     };
 
-    struct SIMPLEGL_API GL_POS3
-    {
-        GLfloat x, y, z;
-        static int _nbElements;
-    };
-
     struct SIMPLEGL_API GL_UV2
     {
         // In OpenGl doc: u = s   v = t

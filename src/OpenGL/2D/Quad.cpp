@@ -10,7 +10,7 @@ namespace simpleGL
         glGenBuffers(1, &m_VBO);
     }
 
-    void Quad::Create(GL_POS3 _pos[m_sizeVertices])
+    void Quad::Create(glm::vec3 _pos[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
@@ -47,7 +47,7 @@ namespace simpleGL
     }
 
 
-    void Quad::Create(GL_POS3 _pos[m_sizeVertices],
+    void Quad::Create(glm::vec3 _pos[m_sizeVertices],
                       GL_COLOR4 _colors[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;

@@ -1,12 +1,12 @@
 #include "StartingScene.hpp"
 
 #include "math.h"
-
+#include "glm.hpp"
 
 typedef simpleGL::GameManager Game;
 
-using POS3 = simpleGL::GL_POS3;
 using COLOR4 = simpleGL::GL_COLOR4;
+
 
 
 StartingScene::StartingScene()
@@ -81,14 +81,14 @@ bool StartingScene::OnInit()
 {
     simpleGL::GameManager::AttachNodeMgr(&m_container);
 
-    POS3 pos1[]
+    glm::vec3 pos1[]
     {
         {0.4f, 0.4f, 0.0f},
         {0.4f,  0.8f, 0.0f},
         {0.8f, 0.4f, 0.0f}
     };
 
-    POS3 pos2[]
+    glm::vec3 pos2[]
     {
         {-0.8f, -0.8f, 0.0f},
         {-0.8f,  -0.4f, 0.0f},
@@ -110,18 +110,19 @@ bool StartingScene::OnInit()
 
 
     // Add a quad
-    POS3 quadV[]
+    glm::vec3 quadV[]
     {
-        {-0.4f, -0.4f, 0.0f},
-        {-0.4f,  0.4f, 0.0f},
-        {0.4f, 0.4f, 0.0f},
-        {0.4f, -0.4f, 0.0f}
+        {-0.2f, -0.2f, 0.0f},
+        {-0.2f,  0.2f, 0.0f},
+        {0.2f, 0.2f, 0.0f},
+        {0.2f, -0.2f, 0.0f}
     };
 
     m_pQuad->Create(quadV);
     m_pQuad->LinkShader(&m_uvShader);
     m_pQuad->LinkTexture(&m_textureContainer, GL_TEXTURE0);
     m_pQuad->LinkTexture(&m_textureSmile, GL_TEXTURE1);
+    m_pQuad->SetScale(glm::vec3(2.0f, 2.0f, 1.0f));
     m_uvShader.Use();
     m_uvShader.SetInt("tex0", 0);
     m_uvShader.SetInt("tex1", 1);
@@ -148,6 +149,11 @@ bool StartingScene::OnUpdate()
     {
         ZoomUV(m_uvShader, false);
     }
+
+
+    // Rotate
+    float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
+    m_pTriangles[0]->SetRotation(rotation);
 }
 
 bool StartingScene::OnQuit()

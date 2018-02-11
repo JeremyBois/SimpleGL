@@ -8,7 +8,5 @@ namespace simpleGL
 
     int GL_COLOR3::_nbElements = 3;
 
-    int GL_POS3::_nbElements = 3;
-
     int GL_UV2::_nbElements = 2;
 }
