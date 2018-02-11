@@ -1,9 +1,10 @@
 # TODO
 
+**Last update 2018-02-11**
+
 ## Shape 2D:
 
-  - Add matrix transformations
-  - Construct shape based on width and height not points
+  - Construct shape based on width and height not vertices
 
 
 ## Window

@@ -32,6 +32,8 @@ namespace simpleGL
         static NullSceneManager s_nullSceneManager;
 
     public:
+        GameManager(GameManager const&)    = delete;  // C++ 11
+        void operator=(GameManager const&) = delete;  // C++ 11
 
         static void Init(unsigned int _windowWidth, unsigned int _windowHeight, std::string _windowName);
 
