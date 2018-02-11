@@ -16,7 +16,7 @@ namespace simpleGL
     class SIMPLEGL_API NodeManager: public INodeManager
     {
     private:
-        Node* m_pRoot;
+        Node m_root;
 
     public:
         NodeManager();

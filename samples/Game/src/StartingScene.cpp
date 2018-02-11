@@ -11,7 +11,6 @@ using COLOR3 = simpleGL::GL_COLOR3;
 
 StartingScene::StartingScene()
 {
-    m_pContainer =  new simpleGL::NodeManager();
     m_pFirstNode =  new simpleGL::Node();
 
     // Compile shader
@@ -80,7 +79,8 @@ void StartingScene::ZoomUV(simpleGL::Shader& _shader, bool _zoom)
 
 bool StartingScene::OnInit()
 {
-    simpleGL::GameManager::Provide(m_pContainer);
+    // auto test =  simpleGL::NodeManager();
+    simpleGL::GameManager::Provide(&m_container);
 
     POS3 pos1[]
     {
@@ -131,7 +131,7 @@ bool StartingScene::OnInit()
     m_pFirstNode->AddGameObject(m_pTriangles[0]);
     m_pFirstNode->AddGameObject(m_pTriangles[1]);
     m_pFirstNode->AddGameObject(m_pQuad);
-    m_pContainer->AddNode(m_pFirstNode);
+    m_container.AddNode(m_pFirstNode);
 
 
     // Add callback for key events
@@ -153,9 +153,6 @@ bool StartingScene::OnUpdate()
 
 bool StartingScene::OnQuit()
 {
-    // Game Manager reset service to null if
-    delete m_pContainer;
-    m_pContainer = nullptr;
     delete m_pFirstNode;
 
     // Remove event callback

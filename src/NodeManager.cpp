@@ -6,16 +6,11 @@ namespace simpleGL
 {
     NodeManager::NodeManager()
     {
-        m_pRoot = new Node();
-        m_pRoot->SetName("Root");
+        m_root.SetName("Root");
     }
 
     NodeManager::~NodeManager()
     {
-        if (m_pRoot != nullptr)
-        {
-            delete m_pRoot;
-        }
     }
 
 
@@ -27,32 +22,23 @@ namespace simpleGL
         }
         else
         {
-            m_pRoot->AddNode(_pNode);
+            m_root.AddNode(_pNode);
         }
     }
 
     void NodeManager::Render()
     {
-        if (m_pRoot != nullptr)
-        {
-            m_pRoot->Draw();
-        }
+        m_root.Draw();
     }
 
     void NodeManager::Update()
     {
-        if (m_pRoot != nullptr)
-        {
-            m_pRoot->Update();
-        }
+        m_root.Update();
     }
 
     void NodeManager::Clear()
     {
-        if (m_pRoot != nullptr)
-        {
-            m_pRoot->Clear();
-        }
+        m_root.Clear();
     }
 
 }
