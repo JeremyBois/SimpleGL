@@ -3,6 +3,8 @@
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Interface/IWindow.hpp"
+#include "gtc/matrix_transform.hpp"
+
 
 namespace simpleGL
 {
@@ -28,11 +30,12 @@ namespace simpleGL
         int const m_versionMajor = 3;
         int const m_versionMinor = 3;
         int const m_profile = GLFW_OPENGL_CORE_PROFILE;
-
         std::string m_name;
         float       m_clearColor[4];
-
         GLFWwindow* m_pWindow;
+
+        glm::mat4 m_viewM;
+        glm::mat4 m_projM;
 
 
         // Callback handler
@@ -59,6 +62,8 @@ namespace simpleGL
         // void* AccessPointer();
 
         virtual inline GLFWwindow& GetGLFWwindow() const {return *m_pWindow;}
+        virtual inline const glm::mat4 GetViewMatrix() const {return m_viewM;}
+        virtual inline const glm::mat4 GetProjectionMatrix() const {return m_projM;}
     };
 }
 #endif

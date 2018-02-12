@@ -17,25 +17,5 @@ namespace simpleGL
 
         template<typename T> static void SafeDelete(T*& a) {delete a; a = nullptr;};
     };
-
-
-    struct SIMPLEGL_API GL_COLOR3
-    {
-        GLfloat r, g, b;
-        static int _nbElements;
-    };
-
-    struct SIMPLEGL_API GL_COLOR4
-    {
-        GLfloat r, g, b, a;
-        static int _nbElements;
-    };
-
-    struct SIMPLEGL_API GL_UV2
-    {
-        // In OpenGl doc: u = s   v = t
-        GLfloat tu, tv;
-        static int _nbElements;
-    };
 }
 #endif

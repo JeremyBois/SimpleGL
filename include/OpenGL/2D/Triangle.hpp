@@ -3,7 +3,6 @@
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Shape2D.hpp"
-#include "Utility/Tools.hpp"
 
 #include "OpenGL/Texture.hpp"
 
@@ -32,7 +31,7 @@ namespace simpleGL
         Triangle();
         virtual ~Triangle();
 
-        void Create(glm::vec3 _pos[m_sizeVertices], GL_COLOR4 _colors[m_sizeVertices]);
+        void Create(glm::vec3 _pos[m_sizeVertices], glm::vec4 _colors[m_sizeVertices]);
         void Create(glm::vec3 _pos[m_sizeVertices]);
 
         virtual void Draw();

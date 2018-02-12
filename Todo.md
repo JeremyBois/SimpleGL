@@ -1,10 +1,8 @@
 # TODO
 
-**Last update 2018-02-11**
+**Last update 2018-02-12**
 
 ## Shape 2D:
-
-  - Construct shape based on width and height not vertices
 
 
 ## Window

@@ -69,11 +69,16 @@ namespace simpleGL
         // and before the game loop is initiated.
         glfwSetFramebufferSizeCallback(m_pWindow, Framebuffer_size_callback);
 
-        SetDefaultFlag();
-
-
         // Register a callback for keys inputs
         glfwSetKeyCallback(m_pWindow, Key_callback);
+
+        SetDefaultFlag();
+
+        // Camera
+        // Translate in the reverse direction we want to move
+        m_viewM = glm::translate(m_viewM, glm::vec3(0.0f, 0.0f, -3.0f));
+        // Perspective projection
+        m_projM = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
 
         return true;
     }

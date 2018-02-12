@@ -2,9 +2,10 @@
 #define __TEXTURE__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
-
-#include "Utility/Tools.hpp"
 #include "GameObject.hpp"
+
+#include "glm.hpp"
+
 
 namespace simpleGL
 {
@@ -34,7 +35,7 @@ namespace simpleGL
         void Use(GLenum _unit=GL_TEXTURE0);
         void Set(GLenum _param, const GLint* _values);
         void Set(GLenum _param, const GLint _value);
-        void SetBorderColor(GL_COLOR4 _color);
+        void SetBorderColor(glm::vec4 _color);
 
 
         virtual void Init() {};

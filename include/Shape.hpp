@@ -24,6 +24,11 @@ namespace simpleGL
         // Maintain a collection of texture for each unit
         TexUnitMap m_pTextureMap;
 
+        // Helpers
+        glm::vec3 m_xAxis, m_yAxis, m_zAxis;
+        glm::mat4 m_localToWorld;
+
+
     public:
         Shape();
         virtual ~Shape();

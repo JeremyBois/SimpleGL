@@ -5,8 +5,6 @@
 
 typedef simpleGL::GameManager Game;
 
-using COLOR4 = simpleGL::GL_COLOR4;
-
 
 
 StartingScene::StartingScene()
@@ -95,7 +93,7 @@ bool StartingScene::OnInit()
         {-0.4f, -0.8f, 0.0f}
     };
 
-    COLOR4 color1[]
+    glm::vec4 color1[]
     {
         {1.0f, 0.0f, 0.0f, 1.0f},
         {0.0f, 1.0f, 0.0f, 1.0f},
@@ -109,20 +107,12 @@ bool StartingScene::OnInit()
     m_pTriangles[1]->LinkShader(&m_colorShader);
 
 
-    // Add a quad
-    glm::vec3 quadV[]
-    {
-        {-0.2f, -0.2f, 0.0f},
-        {-0.2f,  0.2f, 0.0f},
-        {0.2f, 0.2f, 0.0f},
-        {0.2f, -0.2f, 0.0f}
-    };
-
-    m_pQuad->Create(quadV);
+    // Add quad
+    m_pQuad->Create(0.8f, 1.2f);
     m_pQuad->LinkShader(&m_uvShader);
     m_pQuad->LinkTexture(&m_textureContainer, GL_TEXTURE0);
     m_pQuad->LinkTexture(&m_textureSmile, GL_TEXTURE1);
-    m_pQuad->SetScale(glm::vec3(2.0f, 2.0f, 1.0f));
+    m_pQuad->SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
     m_uvShader.Use();
     m_uvShader.SetInt("tex0", 0);
     m_uvShader.SetInt("tex1", 1);
@@ -153,7 +143,8 @@ bool StartingScene::OnUpdate()
 
     // Rotate
     float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
-    m_pTriangles[0]->SetRotation(rotation);
+    // m_pTriangles[0]->SetYawPitchRollAngles(glm::vec3(0.0f, 0.0f, rotation));
+    m_pTriangles[0]->SetRotationZ(rotation);
 }
 
 bool StartingScene::OnQuit()

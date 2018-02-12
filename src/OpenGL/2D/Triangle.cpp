@@ -1,6 +1,5 @@
 #include "OpenGL/2D/Triangle.hpp"
 
-#include "Utility/Tools.hpp"
 
 namespace simpleGL
 {
@@ -14,14 +13,14 @@ namespace simpleGL
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
-        GL_UV2 tempUV[] =
+        glm::vec2 tempUV[] =
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
             {1.0f, 0.0f}
         };
 
-        // Construct the array (pos + color + UV)
+        // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
         {
             // Pos
@@ -37,9 +36,9 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 2] = 1.0f;
             m_vertices[m_sizePos + tempShift + 3] = 1.0f;
 
-            // UV
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].tv;
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].t;
         }
 
         SendData();
@@ -47,18 +46,18 @@ namespace simpleGL
 
 
     void Triangle::Create(glm::vec3 _pos[m_sizeVertices],
-                          GL_COLOR4 _colors[m_sizeVertices])
+                          glm::vec4 _colors[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
-        GL_UV2 tempUV[] =
+        glm::vec2 tempUV[] =
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
             {1.0f, 0.0f}
         };
 
-        // Construct the array (pos + color + UV)
+        // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
         {
             // Pos
@@ -73,9 +72,9 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 2] = _colors[i].b;
             m_vertices[m_sizePos + tempShift + 3] = _colors[i].a;
 
-            // UV
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].tv;
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].t;
         }
 
         SendData();

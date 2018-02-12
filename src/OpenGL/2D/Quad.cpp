@@ -1,6 +1,5 @@
 #include "OpenGL/2D/Quad.hpp"
 
-#include "Utility/Tools.hpp"
 
 namespace simpleGL
 {
@@ -10,11 +9,23 @@ namespace simpleGL
         glGenBuffers(1, &m_VBO);
     }
 
-    void Quad::Create(glm::vec3 _pos[m_sizeVertices])
+    void Quad::Create(float _width, float _height)
     {
+        float halfWidth  = _width / 2.0f;
+        float halfHeight = _height / 2.0f;
+
+        glm::vec2 tempVertices[] =
+        {
+            {-halfWidth, -halfHeight},
+            {-halfWidth, halfHeight},
+            {halfWidth, halfHeight},
+            {halfWidth, -halfHeight}
+        };
+
+
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
-        GL_UV2 tempUV[] =
+        glm::vec2 tempST[] =
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
@@ -22,15 +33,15 @@ namespace simpleGL
             {1.0f, 0.0f}
         };
 
-        // Construct the array (pos + color + UV)
+        // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
         {
             // Pos
             int tempShift = (i * shiftV);
 
-            m_vertices[tempShift + 0] = _pos[i].x;
-            m_vertices[tempShift + 1] = _pos[i].y;
-            m_vertices[tempShift + 2] = _pos[i].z;
+            m_vertices[tempShift + 0] = tempVertices[i].x;
+            m_vertices[tempShift + 1] = tempVertices[i].y;
+            m_vertices[tempShift + 2] = 0.0f;
 
             // Default to white color
             m_vertices[m_sizePos + tempShift + 0] = 1.0f;
@@ -38,21 +49,32 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 2] = 1.0f;
             m_vertices[m_sizePos + tempShift + 3] = 1.0f;
 
-            // UV
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].tv;
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempST[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempST[i].t;
         }
 
         SendData();
     }
 
 
-    void Quad::Create(glm::vec3 _pos[m_sizeVertices],
-                      GL_COLOR4 _colors[m_sizeVertices])
+    void Quad::Create(float _width, float _height,
+                      glm::vec4 _colors[m_sizeVertices])
     {
+        float halfWidth  = _width / 2.0f;
+        float halfHeight = _height / 2.0f;
+
+        glm::vec2 tempVertices[] =
+        {
+            {-halfWidth, -halfHeight},
+            {-halfWidth, halfHeight},
+            {halfWidth, halfHeight},
+            {halfWidth, -halfHeight}
+        };
+
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
-        GL_UV2 tempUV[] =
+        glm::vec2 tempST[] =
         {
             {0.0f, 0.0f},
             {0.0f, 1.0f},
@@ -60,14 +82,14 @@ namespace simpleGL
             {1.0f, 0.0f}
         };
 
-        // Construct the array (pos + color + UV)
+        // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
         {
             // Pos
             int tempShift = (i * shiftV);
-            m_vertices[tempShift + 0] = _pos[i].x;
-            m_vertices[tempShift + 1] = _pos[i].y;
-            m_vertices[tempShift + 2] = _pos[i].z;
+            m_vertices[tempShift + 0] = tempVertices[i].x;
+            m_vertices[tempShift + 1] = tempVertices[i].y;
+            m_vertices[tempShift + 2] = 0.0f;
 
             // Color
             m_vertices[m_sizePos + tempShift + 0] = _colors[i].r;
@@ -75,9 +97,9 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 2] = _colors[i].b;
             m_vertices[m_sizePos + tempShift + 3] = _colors[i].a;
 
-            // UV
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].tu;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].tv;
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempST[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempST[i].t;
         }
 
         SendData();

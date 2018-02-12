@@ -10,6 +10,14 @@ namespace simpleGL
         m_baseShader = Shader("shaders/basic.vert",
                               "shaders/basic.frag");
         m_pShader = &m_baseShader;
+
+        // Init helpers
+        m_xAxis = glm::vec3(1.0f, 0.0f, 0.0f);
+        m_yAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+        m_zAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+
+        // Identity
+        m_localToWorld = glm::mat4(1.0f);
     }
 
     Shape::~Shape()

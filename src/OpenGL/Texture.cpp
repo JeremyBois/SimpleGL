@@ -88,7 +88,7 @@ namespace simpleGL
     }
 
 
-    void Texture::SetBorderColor(GL_COLOR4 _color)
+    void Texture::SetBorderColor(glm::vec4 _color)
     {
         glBindTexture(GL_TEXTURE_2D, m_id);
         float borderColor[] = {_color.r, _color.g, _color.b, _color.a};
