@@ -9,17 +9,24 @@ namespace simpleGL
         glGenBuffers(1, &m_VBO);
     }
 
+    Quad::~Quad()
+    {
+        glDeleteVertexArrays(1, &m_VAO);
+        glDeleteBuffers(1, &m_VBO);
+    }
+
     void Quad::Create(float _width, float _height)
     {
         float halfWidth  = _width / 2.0f;
         float halfHeight = _height / 2.0f;
 
+        // Counter clockwise
         glm::vec2 tempVertices[] =
         {
-            {-halfWidth, -halfHeight},
             {-halfWidth, halfHeight},
-            {halfWidth, halfHeight},
-            {halfWidth, -halfHeight}
+            {-halfWidth, -halfHeight},
+            {halfWidth, -halfHeight},
+            {halfWidth, halfHeight}
         };
 
 
@@ -27,10 +34,10 @@ namespace simpleGL
 
         glm::vec2 tempST[] =
         {
-            {0.0f, 0.0f},
             {0.0f, 1.0f},
-            {1.0f, 1.0f},
-            {1.0f, 0.0f}
+            {0.0f, 0.0f},
+            {1.0f, 0.0f},
+            {1.0f, 1.0f}
         };
 
         // Construct the array (pos + color + ST)
@@ -64,22 +71,24 @@ namespace simpleGL
         float halfWidth  = _width / 2.0f;
         float halfHeight = _height / 2.0f;
 
+        // Counter clockwise
         glm::vec2 tempVertices[] =
         {
-            {-halfWidth, -halfHeight},
             {-halfWidth, halfHeight},
-            {halfWidth, halfHeight},
-            {halfWidth, -halfHeight}
+            {-halfWidth, -halfHeight},
+            {halfWidth, -halfHeight},
+            {halfWidth, halfHeight}
         };
+
 
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
         glm::vec2 tempST[] =
         {
-            {0.0f, 0.0f},
             {0.0f, 1.0f},
-            {1.0f, 1.0f},
-            {1.0f, 0.0f}
+            {0.0f, 0.0f},
+            {1.0f, 0.0f},
+            {1.0f, 1.0f}
         };
 
         // Construct the array (pos + color + ST)
@@ -140,11 +149,5 @@ namespace simpleGL
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, m_sizeVertices);
-    }
-
-    Quad::~Quad()
-    {
-        glDeleteVertexArrays(1, &m_VAO);
-        glDeleteBuffers(1, &m_VBO);
     }
 }

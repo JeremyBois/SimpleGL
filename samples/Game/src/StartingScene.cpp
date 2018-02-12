@@ -23,15 +23,21 @@ StartingScene::StartingScene()
     m_uvShader.Use();
     m_uvShader.SetFloat("uvScale", 1.0f);
 
+    m_colorVertexShader = simpleGL::Shader("shaders/positionColor.vert",
+                                           "shaders/colorFromVertex.frag");
+
     // Get a texture
     m_textureWall.Load("data/images/wall.jpg");
-    m_textureContainer.Load("data/images/container.jpg");
+    m_textureContainer.Load("data/images/container.jpg", false, true);
     m_textureSmile.Load("data/images/awesomeface.png", true, true);
 
     // Create a triangle
     m_pTriangles[0] = new simpleGL::Triangle();
     m_pTriangles[1] = new simpleGL::Triangle();
     m_pQuad = new simpleGL::Quad();
+
+    // Create a cube
+    m_pCuboid = new simpleGL::Cuboid();
 
 }
 
@@ -81,15 +87,15 @@ bool StartingScene::OnInit()
 
     glm::vec3 pos1[]
     {
-        {0.4f, 0.4f, 0.0f},
         {0.4f,  0.8f, 0.0f},
+        {0.4f, 0.4f, 0.0f},
         {0.8f, 0.4f, 0.0f}
     };
 
     glm::vec3 pos2[]
     {
-        {-0.8f, -0.8f, 0.0f},
         {-0.8f,  -0.4f, 0.0f},
+        {-0.8f, -0.8f, 0.0f},
         {-0.4f, -0.8f, 0.0f}
     };
 
@@ -117,10 +123,18 @@ bool StartingScene::OnInit()
     m_uvShader.SetInt("tex0", 0);
     m_uvShader.SetInt("tex1", 1);
 
+    // Add Cuboid
+    m_pCuboid->Create(0.5f, 0.5f, 0.5f);
+    m_pCuboid->LinkShader(&m_colorVertexShader);
+    m_pCuboid->SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
+    m_pCuboid->SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
+
+
     // Populate container
     m_pFirstNode->AddGameObject(m_pTriangles[0]);
     m_pFirstNode->AddGameObject(m_pTriangles[1]);
     m_pFirstNode->AddGameObject(m_pQuad);
+    m_pFirstNode->AddGameObject(m_pCuboid);
     m_container.AddNode(m_pFirstNode);
 
 

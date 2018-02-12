@@ -16,13 +16,11 @@ namespace simpleGL
         glm::vec3 m_refRotOrigin;
 
     protected:
-        glm::vec3 m_position;
-        glm::vec3 m_scale;
         glm::vec3 m_rotOrigin;
         glm::vec3 m_eulerAngles;
 
 
-        virtual void ConstructLocalToWorldMatrix();
+        virtual void ConstructModelMatrix();
 
     public:
         Shape2D();
@@ -32,13 +30,8 @@ namespace simpleGL
         virtual void SetRotationX(float _degrees);
         virtual void SetRotationY(float _degrees);
         virtual void SetRotationZ(float _degrees);
-        virtual void SetPosition(glm::vec3 _position);
-        virtual void SetScale(glm::vec3 _scale);
 
-        const glm::vec3         GetYawPitchRollAngles() const;
-        inline const glm::vec3  GetPosition() const {return m_position;}
-        inline const glm::vec3  GetScale()    const {return m_scale;}
-        inline const glm::mat4& GetLocalToWorldMatrix() const {return m_localToWorld;};
+        const glm::vec3 GetYawPitchRollAngles() const;
 
         virtual void Draw();
     };

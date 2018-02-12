@@ -8,19 +8,23 @@
 #include "NodeManager.hpp"
 #include "SceneFSM.hpp"
 
-
 // Base
 #include "Node.hpp"
-#include "Utility/Tools.hpp"
-
 
 // Interface prototype
 #include "Interface/IScene.hpp"
 
 
+
 // SimpleGL PUBLIC API for OpenGl specific
+// 2D
 #include "OpenGL/2D/Triangle.hpp"
 #include "OpenGL/2D/Quad.hpp"
+
+// 3D
+#include "OpenGL/3D/Cuboid.hpp"
+
+// Others
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"
 

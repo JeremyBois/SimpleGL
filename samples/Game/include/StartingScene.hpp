@@ -13,9 +13,11 @@ private:
 
     simpleGL::Triangle*     m_pTriangles[2];
     simpleGL::Quad*         m_pQuad;
+    simpleGL::Cuboid*       m_pCuboid;
 
     simpleGL::Shader        m_colorShader;
     simpleGL::Shader        m_uvShader;
+    simpleGL::Shader        m_colorVertexShader;
 
     simpleGL::Texture       m_textureWall;
     simpleGL::Texture       m_textureContainer;

@@ -17,5 +17,5 @@ out vec4 vertexColor;
 void main()
 {
     gl_Position = _projectionM * _viewM * _modelM * vec4(aPos.x, aPos.y, aPos.z, 1.0);
-    vertexColor = aColor;
+    vertexColor = gl_Position;
 }

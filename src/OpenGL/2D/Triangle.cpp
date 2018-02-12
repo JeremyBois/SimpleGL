@@ -9,14 +9,21 @@ namespace simpleGL
         glGenBuffers(1, &m_VBO);
     }
 
+    Triangle::~Triangle()
+    {
+        glDeleteVertexArrays(1, &m_VAO);
+        glDeleteBuffers(1, &m_VBO);
+    }
+
     void Triangle::Create(glm::vec3 _pos[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
 
+        // Counter clockwise
         glm::vec2 tempUV[] =
         {
-            {0.0f, 0.0f},
             {0.0f, 1.0f},
+            {0.0f, 0.0f},
             {1.0f, 0.0f}
         };
 
@@ -115,11 +122,5 @@ namespace simpleGL
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, m_sizeVertices);
-    }
-
-    Triangle::~Triangle()
-    {
-        glDeleteVertexArrays(1, &m_VAO);
-        glDeleteBuffers(1, &m_VBO);
     }
 }

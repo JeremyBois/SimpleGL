@@ -110,7 +110,7 @@ namespace simpleGL
     void Window::Render()
     {
         glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], m_clearColor[3]);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Recursive call to draw of all nodes.
         GameManager::Render();
@@ -122,8 +122,14 @@ namespace simpleGL
     void Window::SetDefaultFlag()
     {
         // Enable culling and set it to front mode.
+        // Vertices must be defines in counter-clockwise order for Backface culling
+        // to work properly.
+        // https://stackoverflow.com/questions/8142388/in-what-order-should-i-send-my-vertices-to-opengl-for-culling#8142461
         glEnable(GL_CULL_FACE);
-        glCullFace(GL_FRONT);
+        glCullFace(GL_BACK);
+
+        // Add depth testing
+        glEnable(GL_DEPTH_TEST);
     }
 
     // Callback to adjust drawing area based on window area.
