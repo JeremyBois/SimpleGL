@@ -124,8 +124,8 @@ namespace simpleGL
 
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
-        // glDrawArrays(GL_TRIANGLE_STRIP, 0, m_sizeVertices);
 
+        // One strip per face
         for (int i = 0; i < 6; ++i)
         {
             glDrawArrays(GL_TRIANGLE_STRIP, i * (m_sizeVertices / 6), m_sizeVertices / 6);
