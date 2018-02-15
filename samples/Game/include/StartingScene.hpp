@@ -2,7 +2,6 @@
 #define __STARTINGSCENE__HPP
 
 #include "simpleGL.hpp"
-#include "memory"
 
 
 

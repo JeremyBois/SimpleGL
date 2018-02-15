@@ -7,6 +7,7 @@ namespace GL = simpleGL;
 typedef GL::GameManager Game;
 
 
+
 StartingScene::StartingScene()
 {
     m_pNodes[0] =  new GL::Node();
@@ -108,6 +109,7 @@ void StartingScene::ZoomUV(GL::Shader& _shader, bool _zoom)
 
 bool StartingScene::OnInit()
 {
+    // Steal ownership
     GL::GameManager::AttachNodeMgr(&m_container);
 
     glm::vec3 pos1[]
@@ -148,6 +150,7 @@ bool StartingScene::OnInit()
     m_container.AddNode(m_pNodes[2]);
     m_container.AddNode(m_pNodes[3]);
 
+
     GL::ShapeRenderer* temp;
     temp = m_pNodes[0]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_pTriangles[0]);
@@ -168,6 +171,7 @@ bool StartingScene::OnInit()
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
+
 }
 
 bool StartingScene::OnUpdate()

@@ -14,12 +14,12 @@ namespace simpleGL
 
     Node::~Node()
     {
-        Destroy();
+        // Handle by smart pointers
     }
 
     void Node::AddNode(Node* _pNode)
     {
-        m_children.push_back(_pNode);
+        m_children.push_back(NodePtr(_pNode));
         _pNode->SetParent(this);
     }
 
@@ -72,21 +72,4 @@ namespace simpleGL
         m_children.clear();
         m_components.clear();
     }
-
-    void Node::Destroy()
-    {
-        for (Component* comp : m_components)
-        {
-            delete comp;
-        }
-        m_components.clear();
-
-        for (Node* child : m_children)
-        {
-            delete child;
-        }
-
-        m_children.clear();
-    }
-
 }

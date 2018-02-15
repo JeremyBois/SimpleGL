@@ -2,7 +2,6 @@
 #define __MATERIAL__HPP
 
 
-
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "GameObject.hpp"
 #include "OpenGL/Shader.hpp"

@@ -10,8 +10,15 @@
 #include "Interface/ISceneManager.hpp"
 #include "Interface/NullSceneManager.hpp"
 
+#include <memory>
+
+
 namespace simpleGL
 {
+    // Used to steal ownership when a service is attached
+    typedef std::shared_ptr<INodeManager>  INodeMgrPtr;
+    typedef std::shared_ptr<ISceneManager> ISceneMgrPtr;
+
     // Service locator to provide a global access for different stuff
     // Only Window is an internal service and must be created explicitly using Init().
     // Other can be provide but are not required.
@@ -24,12 +31,10 @@ namespace simpleGL
         static Window* s_pWindowService;
 
         // Node manager as a service
-        static INodeManager*   s_pNodeService;
-        static NullNodeManager s_nullNodeManager;
+        static INodeMgrPtr   s_pNodeService;
 
         // Scene manager as a service
-        static ISceneManager*   s_pSceneService;
-        static NullSceneManager s_nullSceneManager;
+        static ISceneMgrPtr   s_pSceneService;
 
     public:
         GameManager(GameManager const&)    = delete;  // C++ 11
@@ -40,7 +45,6 @@ namespace simpleGL
         static inline INodeManager&  GetNodeMgr() {return *s_pNodeService;}
         static inline ISceneManager& GetSceneMgr() {return *s_pSceneService;}
         static inline Window&        GetWindow() {return *s_pWindowService;}
-
 
         static void AttachNodeMgr(INodeManager* _service);
         static void AttachSceneMgr(ISceneManager* _service);

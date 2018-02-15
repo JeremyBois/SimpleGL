@@ -7,13 +7,16 @@
 
 #include <vector>
 #include <typeinfo>
-
+#include <memory>
 
 
 namespace simpleGL
 {
+    typedef std::shared_ptr<Node> NodePtr;
+    typedef std::vector<NodePtr> NodesList;
 
-    typedef std::vector<Component*>   ComponentsList;
+    typedef std::shared_ptr<Component> ComponentPtr;
+    typedef std::vector<ComponentPtr> ComponentsList;
 
     // Define base class for a component
     // A Node can be a parent of multiple Node
@@ -27,7 +30,7 @@ namespace simpleGL
         // Composite
         Node*              m_pParent;
         Transform*         m_pTransform;
-        std::vector<Node*> m_children;
+        NodesList          m_children;
         ComponentsList     m_components;
 
     public:
@@ -38,10 +41,10 @@ namespace simpleGL
         inline void   SetName(std::string _name) {m_name = _name;}
         inline void   SetParent(Node* _pNode){m_pParent = _pNode;}
 
-        inline bool               IsActive() {return m_isActive;}
-        inline const std::string& GetName() {return m_name;}
-        inline Transform&         GetTransform() {return *m_pTransform;}
-        inline Node&              GetParent(){return *m_pParent;}
+        inline bool               IsActive() const {return m_isActive;}
+        inline const std::string& GetName() const {return m_name;}
+        inline Transform&         GetTransform() const {return *m_pTransform;}
+        inline Node&              GetParent() const {return *m_pParent;}
 
         void AddNode(Node* _pNode);
 
@@ -50,17 +53,17 @@ namespace simpleGL
             // Inherite from Gameobject ?
             Derived_from<T, Component>();
 
-            Component* created = new T();
+            ComponentPtr created = ComponentPtr(new T());
 
             // Add reference to Node in object
             created->AttachToNode(this);
 
             m_components.push_back(created);
 
-            return (T*)created;
+            return dynamic_cast<T*>(created.get());
         }
 
-        template <typename T> T* GetComponent()
+        template <typename T> T* GetComponent() const
         {
             // Inherite from Gameobject ?
             Derived_from<T, Component>();
@@ -76,13 +79,13 @@ namespace simpleGL
                 // A class is polymorphic if it defines a virtual method.
                 if (typeid(T) == typeid(componentRef))
                 {
-                    return dynamic_cast<T*>(m_components[i]);
+                    return dynamic_cast<T*>(m_components[i].get());
                 }
             }
             return nullptr;
         }
 
-        template <typename T> T* GetComponents()
+        template <typename T> T* GetComponents() const
         {
             // Inherite from Gameobject ?
             Derived_from<T, Component>();
@@ -100,7 +103,7 @@ namespace simpleGL
                 // A class is polymorphic if it defines a virtual method.
                 if (typeid(T) == typeid(componentRef))
                 {
-                    listOfComponents.push_back(dynamic_cast<T*>(m_components[i]));
+                    listOfComponents.push_back(dynamic_cast<T*>(m_components[i].get()));
                 }
             }
             return listOfComponents;
@@ -109,7 +112,6 @@ namespace simpleGL
         virtual void Draw();
         virtual void Update();
         virtual void Clear();
-        virtual void Destroy();
     };
 }
 

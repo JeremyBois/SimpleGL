@@ -16,7 +16,6 @@ namespace simpleGL
 
     NodeManager::~NodeManager()
     {
-        Destroy();
     }
 
 
@@ -46,10 +45,4 @@ namespace simpleGL
     {
         m_root.Clear();
     }
-
-    void NodeManager::Destroy()
-    {
-        m_root.Destroy();
-    }
-
 }
