@@ -15,5 +15,5 @@ void main()
     vec4 t1 = texture2D(tex1, texCoord);
 
     // Multiplication then alpha blending
-    FragColor = mix(vertexColor * t0, t1, 0.006 * t1.a);
+    FragColor = mix(vertexColor * t0, t1, 0.01 * t1.a);
 }

@@ -1,8 +1,8 @@
 # TODO
 
-**Last update 2018-02-12**
+**Last update 2018-02-15**
 
-## Shape 2D:
+## Shapes
 
 
 ## Window
@@ -10,3 +10,13 @@
   - Add support for time
   - Add wrapper to let user add pointer which can be used inside a callback
   - Add callback for text key to account for keyboard layout
+
+
+## Data
+
+  - Add a data manager to store
+
+    - Textures
+    - Shaders
+    - Materials
+    - Shapes

@@ -18,32 +18,32 @@ namespace simpleGL
 
     void Texture::Get(GLenum _param, GLint* _container)
     {
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
         glGetTexParameteriv(GL_TEXTURE_2D, _param, _container);
     }
 
     void Texture::Get(GLenum _param, GLfloat* _container)
     {
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
         glGetTexParameterfv(GL_TEXTURE_2D, _param, _container);
     }
 
     void Texture::Set(GLenum _param, const GLint* _values)
     {
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
         glTexParameteri(GL_TEXTURE_2D, _param, *_values);
     }
 
     void Texture::Set(GLenum _param, const GLint _value)
     {
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
         glTexParameteri(GL_TEXTURE_2D, _param, _value);
     }
 
     void Texture::Load(std::string _path, bool _hasAlpha, bool _reverseY)
     {
-        glGenTextures(1, &m_id);
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glGenTextures(1, &m_texID);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
 
         // Default wrapping and filtering
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -84,13 +84,13 @@ namespace simpleGL
     void Texture::Use(GLenum _unit)
     {
         glActiveTexture(_unit);
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
     }
 
 
     void Texture::SetBorderColor(glm::vec4 _color)
     {
-        glBindTexture(GL_TEXTURE_2D, m_id);
+        glBindTexture(GL_TEXTURE_2D, m_texID);
         float borderColor[] = {_color.r, _color.g, _color.b, _color.a};
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     }

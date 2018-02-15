@@ -13,7 +13,7 @@ namespace simpleGL
     class SIMPLEGL_API Texture: public GameObject
     {
     private:
-        unsigned int m_id;
+        unsigned int m_texID;
 
         int m_width, m_height, m_nbChannels;
 
@@ -23,7 +23,7 @@ namespace simpleGL
         ~Texture();
 
         // Getter
-        inline int GetID() const {return m_id;}
+        inline int TextureID() const {return m_texID;}
         inline int GetWidth() const {return m_width;}
         inline int GetHeight() const {return m_height;}
         inline int GetNbrChannels() const {return m_nbChannels;}
@@ -32,7 +32,7 @@ namespace simpleGL
 
         // Setter
         void Load(std::string _path, bool _hasAlpha=false, bool _reverseY=false);
-        void Use(GLenum _unit=GL_TEXTURE0);
+        void Use(GLenum _unit);
         void Set(GLenum _param, const GLint* _values);
         void Set(GLenum _param, const GLint _value);
         void SetBorderColor(glm::vec4 _color);

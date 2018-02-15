@@ -35,10 +35,6 @@ namespace simpleGL
         void Create(float _width, float _height);
 
         virtual void Draw();
-        virtual void Init() {};
-        virtual void Update(){};
-        virtual void Quit(){};
-        virtual GameObject* Clone() {return new Quad();}
     };
 }
 #endif

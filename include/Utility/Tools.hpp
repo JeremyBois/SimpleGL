@@ -17,5 +17,12 @@ namespace simpleGL
 
         template<typename T> static void SafeDelete(T*& a) {delete a; a = nullptr;};
     };
+
+    template<class Child, class Parent>
+    struct Derived_from
+    {
+        static void constraints(Child* p) { Parent* pb = p; }
+        Derived_from() { void(*p)(Child*) = constraints; }
+    };
 }
 #endif

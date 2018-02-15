@@ -5,69 +5,88 @@ namespace simpleGL
 {
     Node::Node()
     {
+        m_isActive = true;
         m_name = "New Node";
         m_pParent = nullptr;
+
+        m_pTransform = AddComponent<Transform>();
     }
 
     Node::~Node()
     {
-
-    }
-
-    void Node::AddGameObject(GameObject* _pGObject)
-    {
-        m_pGameObjects.push_back(_pGObject);
+        Destroy();
     }
 
     void Node::AddNode(Node* _pNode)
     {
-        m_pChildren.push_back(_pNode);
+        m_children.push_back(_pNode);
         _pNode->SetParent(this);
     }
 
     // Call Draw of all children and all gameObject attached
     void Node::Draw()
     {
-        unsigned int childrenCount = m_pChildren.size();
-        for (unsigned int i = 0; i < childrenCount; ++i)
+        if (m_isActive)
         {
-            m_pChildren[i]->Draw();
-        }
+            unsigned int childrenCount = m_children.size();
+            for (unsigned int i = 0; i < childrenCount; ++i)
+            {
+                m_children[i]->Draw();
+            }
 
-        unsigned int objectCount = m_pGameObjects.size();
-        for (unsigned int i = 0; i < objectCount; ++i)
-        {
-            m_pGameObjects[i]->Draw();
+            unsigned int objectCount = m_components.size();
+            for (unsigned int i = 0; i < objectCount; ++i)
+            {
+                m_components[i]->Draw();
+            }
         }
     }
 
     void Node::Update()
     {
-        unsigned int childrenCount = m_pChildren.size();
-        for (unsigned int i = 0; i < childrenCount; ++i)
+        if (m_isActive)
         {
-            m_pChildren[i]->Update();
-        }
+            unsigned int childrenCount = m_children.size();
+            for (unsigned int i = 0; i < childrenCount; ++i)
+            {
+                m_children[i]->Update();
+            }
 
-        unsigned int objectCount = m_pGameObjects.size();
-        for (unsigned int i = 0; i < objectCount; ++i)
-        {
-            m_pGameObjects[i]->Update();
+            unsigned int objectCount = m_components.size();
+            for (unsigned int i = 0; i < objectCount; ++i)
+            {
+                m_components[i]->Update();
+            }
         }
-
     }
 
-    // Clear children then clear children and gameobject containers.
+    // Clear children and components (components and node are not destroyed)
     void Node::Clear()
     {
-        unsigned int childrenCount = m_pChildren.size();
+        unsigned int childrenCount = m_children.size();
         for (unsigned int i = 0; i < childrenCount; ++i)
         {
-            m_pChildren[i]->Clear();
+            m_children[i]->Clear();
         }
 
-        m_pChildren.clear();
-        m_pGameObjects.clear();
+        m_children.clear();
+        m_components.clear();
+    }
+
+    void Node::Destroy()
+    {
+        for (Component* comp : m_components)
+        {
+            delete comp;
+        }
+        m_components.clear();
+
+        for (Node* child : m_children)
+        {
+            delete child;
+        }
+
+        m_children.clear();
     }
 
 }

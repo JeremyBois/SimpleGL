@@ -2,19 +2,18 @@
 #define __SHADER__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
+#include "GameObject.hpp"
 
 #include "glm.hpp"
-// #include "gtc/matrix_transform.hpp"
-// #include "gtc/type_ptr.hpp"
 
 
 namespace simpleGL
 {
     // Encapsulate a shader program (vertex and fragment shader).
-    class SIMPLEGL_API Shader
+    class SIMPLEGL_API Shader: GameObject
     {
     private:
-        unsigned int m_id;
+        unsigned int m_shaderID;
 
         void ConstructProgram(std::string vertexPath, std::string fragPath);
         void CheckForCompileErrors(GLuint _shader, std::string _type);
@@ -25,7 +24,7 @@ namespace simpleGL
         ~Shader();
 
         void Use();
-        unsigned int ID() const {return m_id;}
+        unsigned int ShaderID() const {return m_shaderID;}
 
         // Unifrom functions
         void SetBool(const std::string &name, bool value) const;

@@ -34,11 +34,6 @@ namespace simpleGL
         void Create(float _width, float _height, float _depth);
 
         virtual void Draw();
-        virtual void Init(){};
-        virtual void Update(){};
-        virtual void Quit(){};
-
-        virtual GameObject* Clone() {return new Cuboid();}
     };
 }
 #endif

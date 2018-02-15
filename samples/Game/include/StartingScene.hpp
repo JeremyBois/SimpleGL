@@ -5,16 +5,24 @@
 #include "memory"
 
 
+
 class StartingScene: public simpleGL::IScene
 {
 private:
     simpleGL::NodeManager   m_container;
-    simpleGL::Node*         m_pFirstNode;
+    simpleGL::Node*         m_pNodes[4];
 
     simpleGL::Triangle*     m_pTriangles[2];
     simpleGL::Quad*         m_pQuad;
     simpleGL::Cuboid*       m_pCuboid;
 
+    // Material (shader + texture)
+    simpleGL::Material*     m_pBasicMat;
+    simpleGL::Material*     m_pColorMat;
+    simpleGL::Material*     m_pUVMat;
+    simpleGL::Material*     m_pVertexMat;
+
+    simpleGL::Shader        m_basicShader;
     simpleGL::Shader        m_colorShader;
     simpleGL::Shader        m_uvShader;
     simpleGL::Shader        m_colorVertexShader;

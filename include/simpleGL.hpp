@@ -10,6 +10,7 @@
 
 // Base
 #include "Node.hpp"
+#include "Components/ShapeRenderer.hpp"
 
 // Interface prototype
 #include "Interface/IScene.hpp"
@@ -27,6 +28,7 @@
 // Others
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"
+#include "OpenGL/Material.hpp"
 
 
 #endif

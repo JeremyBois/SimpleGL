@@ -5,21 +5,22 @@
 
 namespace simpleGL
 {
-    // @TODO Must be implement using an interface ?
+
     // Abstract class for any game object (sprite, text, shape, ...)
     // Define minimal interface to implement for all
     class SIMPLEGL_API GameObject
     {
+    private:
+        static unsigned int s_nextID;
+
+    protected:
+        unsigned int m_id;
+
     public:
         GameObject();
-        ~GameObject();
+        virtual ~GameObject();
 
-        virtual void Init() = 0;
-        virtual void Draw() = 0;
-        virtual void Update() = 0;
-        virtual void Quit() = 0;
-
-        virtual GameObject* Clone() = 0;
+        unsigned int GetID() {return m_id;}
     };
 }
 #endif

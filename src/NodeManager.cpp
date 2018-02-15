@@ -1,16 +1,22 @@
 #include "NodeManager.hpp"
 
 #include <assert.h>
+#include <typeinfo>
+
+
 
 namespace simpleGL
 {
     NodeManager::NodeManager()
     {
         m_root.SetName("Root");
+
+        m_root.AddComponent<Transform>();
     }
 
     NodeManager::~NodeManager()
     {
+        Destroy();
     }
 
 
@@ -39,6 +45,11 @@ namespace simpleGL
     void NodeManager::Clear()
     {
         m_root.Clear();
+    }
+
+    void NodeManager::Destroy()
+    {
+        m_root.Destroy();
     }
 
 }

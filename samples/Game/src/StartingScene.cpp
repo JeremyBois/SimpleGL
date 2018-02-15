@@ -3,42 +3,69 @@
 #include "math.h"
 #include "glm.hpp"
 
-typedef simpleGL::GameManager Game;
-
+namespace GL = simpleGL;
+typedef GL::GameManager Game;
 
 
 StartingScene::StartingScene()
 {
-    m_pFirstNode =  new simpleGL::Node();
+    m_pNodes[0] =  new GL::Node();
+    m_pNodes[1] =  new GL::Node();
+    m_pNodes[2] =  new GL::Node();
+    m_pNodes[2]->GetTransform().SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
 
-    // Compile shader
-    m_colorShader =  simpleGL::Shader("shaders/basic.vert",
+    m_pNodes[3] =  new GL::Node();
+    m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
+    m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
+
+    // Create shaders
+    m_basicShader = GL::Shader("shaders/basic.vert",
+                               "shaders/basic.frag");
+
+    m_colorShader =  GL::Shader("shaders/basic.vert",
                                       "shaders/colorFromProgram.frag");
     float color[] = {0.0f, 1.0f, 0.0f, 1.0f};
     m_colorShader.Use();
     m_colorShader.SetFloat4("ourColor", color);
 
-    m_uvShader =  simpleGL::Shader("shaders/basic.vert",
+    m_uvShader =  GL::Shader("shaders/basic.vert",
                                    "shaders/UVscale.frag");
     m_uvShader.Use();
     m_uvShader.SetFloat("uvScale", 1.0f);
+    m_uvShader.SetInt("tex0", 0);
+    m_uvShader.SetInt("tex1", 1);
 
-    m_colorVertexShader = simpleGL::Shader("shaders/positionColor.vert",
+    m_colorVertexShader = GL::Shader("shaders/positionColor.vert",
                                            "shaders/colorFromVertex.frag");
 
-    // Get a texture
+    // Create textures
     m_textureWall.Load("data/images/wall.jpg");
     m_textureContainer.Load("data/images/container.jpg", false, true);
     m_textureSmile.Load("data/images/awesomeface.png", true, true);
 
-    // Create a triangle
-    m_pTriangles[0] = new simpleGL::Triangle();
-    m_pTriangles[1] = new simpleGL::Triangle();
-    m_pQuad = new simpleGL::Quad();
 
-    // Create a cube
-    m_pCuboid = new simpleGL::Cuboid();
+    // Create shapes
+    m_pTriangles[0] = new GL::Triangle();
+    m_pTriangles[1] = new GL::Triangle();
+    m_pQuad = new GL::Quad();
+    m_pCuboid = new GL::Cuboid();
 
+
+    // Create materials
+    m_pBasicMat = new GL::Material();
+    m_pBasicMat->LinkShader(&m_basicShader);
+    m_pBasicMat->LinkTexture(&m_textureWall);
+
+    m_pColorMat = new GL::Material();
+    m_pColorMat->LinkShader(&m_colorShader);
+
+    m_pUVMat = new GL::Material();
+    m_pUVMat->LinkShader(&m_uvShader);
+    m_pUVMat->LinkTexture(&m_textureContainer, GL_TEXTURE0);
+    m_pUVMat->LinkTexture(&m_textureSmile, GL_TEXTURE1);
+
+    m_pVertexMat = new GL::Material();
+    m_pVertexMat->LinkShader(&m_colorVertexShader);
 }
 
 StartingScene::~StartingScene()
@@ -47,7 +74,7 @@ StartingScene::~StartingScene()
 }
 
 
-void StartingScene::ChangeGreenOverTime(simpleGL::Shader& _shader)
+void StartingScene::ChangeGreenOverTime(GL::Shader& _shader)
 {
     float color[] = {0.0f, 1.0f, 0.0f, 1.0f};
 
@@ -58,7 +85,7 @@ void StartingScene::ChangeGreenOverTime(simpleGL::Shader& _shader)
 }
 
 
-void StartingScene::ZoomUVOverTime(simpleGL::Shader& _shader)
+void StartingScene::ZoomUVOverTime(GL::Shader& _shader)
 {
     float timeValue = glfwGetTime();
     float scale = 5.0f * (std::sin(timeValue * 0.25f) / 2.0f + 0.5f);
@@ -67,7 +94,7 @@ void StartingScene::ZoomUVOverTime(simpleGL::Shader& _shader)
 }
 
 
-void StartingScene::ZoomUV(simpleGL::Shader& _shader, bool _zoom)
+void StartingScene::ZoomUV(GL::Shader& _shader, bool _zoom)
 {
     m_zoomScale += _zoom ? 0.1f : -0.1f;
     if (m_zoomScale < 0)
@@ -79,11 +106,9 @@ void StartingScene::ZoomUV(simpleGL::Shader& _shader, bool _zoom)
 }
 
 
-
-
 bool StartingScene::OnInit()
 {
-    simpleGL::GameManager::AttachNodeMgr(&m_container);
+    GL::GameManager::AttachNodeMgr(&m_container);
 
     glm::vec3 pos1[]
     {
@@ -107,35 +132,38 @@ bool StartingScene::OnInit()
     };
 
     m_pTriangles[0]->Create(pos1, color1);
-    m_pTriangles[0]->LinkTexture(&m_textureWall);
-
     m_pTriangles[1]->Create(pos2);
-    m_pTriangles[1]->LinkShader(&m_colorShader);
 
 
     // Add quad
     m_pQuad->Create(0.8f, 1.2f);
-    m_pQuad->LinkShader(&m_uvShader);
-    m_pQuad->LinkTexture(&m_textureContainer, GL_TEXTURE0);
-    m_pQuad->LinkTexture(&m_textureSmile, GL_TEXTURE1);
-    m_pQuad->SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
-    m_uvShader.Use();
-    m_uvShader.SetInt("tex0", 0);
-    m_uvShader.SetInt("tex1", 1);
 
     // Add Cuboid
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
-    m_pCuboid->LinkShader(&m_colorVertexShader);
-    m_pCuboid->SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
-    m_pCuboid->SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
 
 
     // Populate container
-    m_pFirstNode->AddGameObject(m_pTriangles[0]);
-    m_pFirstNode->AddGameObject(m_pTriangles[1]);
-    m_pFirstNode->AddGameObject(m_pQuad);
-    m_pFirstNode->AddGameObject(m_pCuboid);
-    m_container.AddNode(m_pFirstNode);
+    m_container.AddNode(m_pNodes[0]);
+    m_container.AddNode(m_pNodes[1]);
+    m_container.AddNode(m_pNodes[2]);
+    m_container.AddNode(m_pNodes[3]);
+
+    GL::ShapeRenderer* temp;
+    temp = m_pNodes[0]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_pTriangles[0]);
+    temp->LinkMaterial(m_pBasicMat);
+
+    temp = m_pNodes[1]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_pTriangles[1]);
+    temp->LinkMaterial(m_pColorMat);
+
+    temp = m_pNodes[2]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_pQuad);
+    temp->LinkMaterial(m_pUVMat);
+
+    temp = m_pNodes[3]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_pCuboid);
+    temp->LinkMaterial(m_pVertexMat);
 
 
     // Add callback for key events
@@ -154,19 +182,15 @@ bool StartingScene::OnUpdate()
         ZoomUV(m_uvShader, false);
     }
 
-
     // Rotate
     float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
-    // m_pTriangles[0]->SetYawPitchRollAngles(glm::vec3(0.0f, 0.0f, rotation));
-    m_pTriangles[0]->SetRotationZ(rotation);
+    m_pNodes[0]->GetTransform().SetRotationZ(rotation);
 }
 
 bool StartingScene::OnQuit()
 {
-    delete m_pFirstNode;
-
     // Detach obsolete services
-    simpleGL::GameManager::DetachNodeMgr();
+    GL::GameManager::DetachNodeMgr();
 
     // Remove event callback
     Game::GetWindow().DetachKeyEventCallback();
@@ -188,7 +212,7 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
         // Set texture to affect
         // Get ref to active Scene
         StartingScene* myScene = (StartingScene*)Game::GetSceneMgr().GetCurrent();
-        simpleGL::Texture myTexture = myScene->m_textureContainer;
+        GL::Texture myTexture = myScene->m_textureContainer;
 
         // Get current wrap mode
         GLint result[1];
@@ -225,7 +249,7 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
         // Set texture to affect
         // Get ref to active Scene
         StartingScene* myScene = (StartingScene*)Game::GetSceneMgr().GetCurrent();
-        simpleGL::Texture myTexture = myScene->m_textureContainer;
+        GL::Texture myTexture = myScene->m_textureContainer;
 
         // Get current wrap mode
         GLint result[1];

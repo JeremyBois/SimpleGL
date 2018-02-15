@@ -35,10 +35,6 @@ namespace simpleGL
         void Create(glm::vec3 _pos[m_sizeVertices]);
 
         virtual void Draw();
-        virtual void Init() {};
-        virtual void Update(){};
-        virtual void Quit(){};
-        virtual GameObject* Clone() {return new Triangle();}
     };
 }
 #endif

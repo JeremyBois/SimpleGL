@@ -27,6 +27,7 @@ namespace simpleGL
         virtual void Render();
         virtual void Update();
         virtual void Clear();
+        virtual void Destroy();
     };
 }
 

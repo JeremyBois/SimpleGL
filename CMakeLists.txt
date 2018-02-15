@@ -130,6 +130,7 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 #     GLOB
 #     binary_SOURCES
 #     src/Interface/*
+#     src/Components/*
 #     src/OpenGL/*
 #     src/OpenGL/2D/*
 #     src/OpenGL/3D/*
@@ -196,6 +197,7 @@ file(
     GLOB
     library_SOURCES
     src/Interface/*
+    src/Components/*
     src/OpenGL/*
     src/OpenGL/2D/*
     src/OpenGL/3D/*
