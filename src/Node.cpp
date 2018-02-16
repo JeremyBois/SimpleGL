@@ -19,7 +19,10 @@ namespace simpleGL
 
     void Node::AddNode(Node* _pNode)
     {
-        m_children.push_back(NodePtr(_pNode));
+        // NodePtr sharedPtr = std::make_shared<Node>(*_pNode);
+        // m_children.push_back(sharedPtr);
+
+        m_children.emplace_back(_pNode);
         _pNode->SetParent(this);
     }
 

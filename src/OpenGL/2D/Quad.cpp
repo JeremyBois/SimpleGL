@@ -144,8 +144,6 @@ namespace simpleGL
 
     void Quad::Draw()
     {
-        Shape2D::Draw();
-
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, m_sizeVertices);

@@ -117,8 +117,6 @@ namespace simpleGL
 
     void Triangle::Draw()
     {
-        Shape2D::Draw();
-
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, m_sizeVertices);

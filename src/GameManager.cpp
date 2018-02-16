@@ -21,22 +21,19 @@ namespace simpleGL
 
     void GameManager::DetachNodeMgr()
     {
-        INodeMgrPtr().swap(s_pNodeService);
-        s_pNodeService = INodeMgrPtr(new NullNodeManager());
+        s_pNodeService.reset(new NullNodeManager());
     }
 
     void GameManager::DetachSceneMgr()
     {
-        ISceneMgrPtr().swap(s_pSceneService);
-        s_pSceneService = ISceneMgrPtr(new NullSceneManager());
+        s_pSceneService.reset(new NullSceneManager());
     }
 
     void GameManager::AttachNodeMgr(INodeManager* _service)
     {
         if (_service == nullptr)
         {
-            INodeMgrPtr().swap(s_pNodeService);
-            s_pNodeService = INodeMgrPtr(new NullNodeManager());
+            s_pNodeService.reset(new NullNodeManager());
         }
         else
         {
@@ -48,8 +45,7 @@ namespace simpleGL
     {
         if (_service == nullptr)
         {
-            ISceneMgrPtr().swap(s_pSceneService);
-            s_pSceneService = ISceneMgrPtr(new NullSceneManager());
+            s_pSceneService.reset(new NullSceneManager());
         }
         else
         {

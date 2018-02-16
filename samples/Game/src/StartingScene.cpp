@@ -110,7 +110,9 @@ void StartingScene::ZoomUV(GL::Shader& _shader, bool _zoom)
 bool StartingScene::OnInit()
 {
     // Steal ownership
-    GL::GameManager::AttachNodeMgr(&m_container);
+    m_container = new GL::NodeManager();
+    GL::GameManager::AttachNodeMgr(m_container);
+
 
     glm::vec3 pos1[]
     {
@@ -145,10 +147,10 @@ bool StartingScene::OnInit()
 
 
     // Populate container
-    m_container.AddNode(m_pNodes[0]);
-    m_container.AddNode(m_pNodes[1]);
-    m_container.AddNode(m_pNodes[2]);
-    m_container.AddNode(m_pNodes[3]);
+    m_container->AddNode(m_pNodes[0]);
+    m_container->AddNode(m_pNodes[1]);
+    m_container->AddNode(m_pNodes[2]);
+    m_container->AddNode(m_pNodes[3]);
 
 
     GL::ShapeRenderer* temp;

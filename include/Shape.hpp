@@ -10,10 +10,10 @@ namespace simpleGL
     class SIMPLEGL_API Shape: public GameObject
     {
     public:
-        Shape();
-        virtual ~Shape();
+        Shape() = default;
+        virtual ~Shape() = default;
 
-        virtual void Draw();
+        virtual void Draw() = 0;
     };
 }
 #endif

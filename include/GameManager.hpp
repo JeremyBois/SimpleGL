@@ -16,8 +16,8 @@
 namespace simpleGL
 {
     // Used to steal ownership when a service is attached
-    typedef std::shared_ptr<INodeManager>  INodeMgrPtr;
-    typedef std::shared_ptr<ISceneManager> ISceneMgrPtr;
+    typedef std::unique_ptr<INodeManager>  INodeMgrPtr;
+    typedef std::unique_ptr<ISceneManager> ISceneMgrPtr;
 
     // Service locator to provide a global access for different stuff
     // Only Window is an internal service and must be created explicitly using Init().

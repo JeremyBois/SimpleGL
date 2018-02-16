@@ -5,6 +5,9 @@
 #include "Components/Transform.hpp"
 #include "Utility/Tools.hpp"
 
+#include "GameObject.hpp"
+
+
 #include <vector>
 #include <typeinfo>
 #include <memory>
@@ -12,16 +15,16 @@
 
 namespace simpleGL
 {
-    typedef std::shared_ptr<Node> NodePtr;
+    typedef std::unique_ptr<Node> NodePtr;
     typedef std::vector<NodePtr> NodesList;
 
-    typedef std::shared_ptr<Component> ComponentPtr;
+    typedef std::unique_ptr<Component> ComponentPtr;
     typedef std::vector<ComponentPtr> ComponentsList;
 
     // Define base class for a component
     // A Node can be a parent of multiple Node
     // A Node can be a parent of a list of Component (see Component.hpp)
-    class SIMPLEGL_API Node
+    class SIMPLEGL_API Node: public GameObject
     {
     private:
         bool        m_isActive;
@@ -53,14 +56,14 @@ namespace simpleGL
             // Inherite from Gameobject ?
             Derived_from<T, Component>();
 
-            ComponentPtr created = ComponentPtr(new T());
+            T* created = new T();
 
             // Add reference to Node in object
             created->AttachToNode(this);
 
-            m_components.push_back(created);
+            m_components.emplace_back(created);
 
-            return dynamic_cast<T*>(created.get());
+            return created;
         }
 
         template <typename T> T* GetComponent() const

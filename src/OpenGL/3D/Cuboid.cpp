@@ -120,8 +120,6 @@ namespace simpleGL
 
     void Cuboid::Draw()
     {
-        Shape3D::Draw();
-
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
 
