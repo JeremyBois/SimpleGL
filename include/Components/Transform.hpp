@@ -2,14 +2,14 @@
 #define __TRANSFORM__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
-#include "Component.hpp"
+#include "Components/Component.hpp"
 
 #include "glm.hpp"
 
 
 namespace simpleGL
 {
-    // Abstract class for any shape
+    /// Base component attached to every Node.
     class SIMPLEGL_API Transform: public Component
     {
     private:

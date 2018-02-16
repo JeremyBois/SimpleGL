@@ -21,13 +21,11 @@ namespace simpleGL
     typedef std::unique_ptr<Component> ComponentPtr;
     typedef std::vector<ComponentPtr> ComponentsList;
 
-    // Define base class for a component
-    // A Node can be a parent of multiple Node
-    // A Node can be a parent of a list of Component (see Component.hpp)
+    /// A Node can be the parent of multiple nodes (children) and can
+    /// have multiple components.
     class SIMPLEGL_API Node: public GameObject
     {
     private:
-        bool        m_isActive;
         std::string m_name;
 
         // Composite
@@ -40,11 +38,9 @@ namespace simpleGL
         Node();
         ~Node();
 
-        inline void   SetActive(bool _state) {m_isActive = _state;}
         inline void   SetName(std::string _name) {m_name = _name;}
         inline void   SetParent(Node* _pNode){m_pParent = _pNode;}
 
-        inline bool               IsActive() const {return m_isActive;}
         inline const std::string& GetName() const {return m_name;}
         inline Transform&         GetTransform() const {return *m_pTransform;}
         inline Node&              GetParent() const {return *m_pParent;}

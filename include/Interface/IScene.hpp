@@ -6,6 +6,7 @@
 
 namespace simpleGL
 {
+    /// Interface for Scene implementations
     class SIMPLEGL_API IScene
     {
     public:

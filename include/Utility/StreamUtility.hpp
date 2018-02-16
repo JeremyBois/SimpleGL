@@ -15,7 +15,7 @@ namespace simpleGL
         StreamUtility(StreamUtility const&) = delete;   // C++ 11
         void operator=(StreamUtility const&) = delete;  // C++ 11
 
-        static std::string ReadFile(std::string _path);
+        static std::string ReadFile(const std::string& _path);
     };
 }
 #endif

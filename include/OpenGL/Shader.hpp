@@ -10,17 +10,17 @@
 namespace simpleGL
 {
     // Encapsulate a shader program (vertex and fragment shader).
-    class SIMPLEGL_API Shader: GameObject
+    class SIMPLEGL_API Shader: public GameObject
     {
     private:
         unsigned int m_shaderID;
 
-        void ConstructProgram(std::string vertexPath, std::string fragPath);
-        void CheckForCompileErrors(GLuint _shader, std::string _type);
+        void ConstructProgram(const std::string _vertexPath, const std::string _fragPath);
+        void CheckForCompileErrors(GLuint _shader, const std::string _type);
 
     public:
         Shader() {};  // Allows lazy initialization
-        Shader(std::string vertexPath, std::string fragPath);
+        Shader(const std::string vertexPath, const std::string fragPath);
         ~Shader();
 
         void Use();

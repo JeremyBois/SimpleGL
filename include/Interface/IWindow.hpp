@@ -6,6 +6,7 @@
 
 namespace simpleGL
 {
+    /// Interface for Window implementations
     class SIMPLEGL_LOCAL IWindow
     {
     public:

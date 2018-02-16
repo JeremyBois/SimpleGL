@@ -9,35 +9,25 @@ namespace simpleGL
 {
     class Node;
 
+    /// Abstract class for every component attached to a Node.
     class SIMPLEGL_API Component: public GameObject
     {
     protected:
         Node* m_pNode;
 
-        bool m_isActive;
-
     public:
-        Component() {m_isActive = true;};
-        virtual ~Component() {};
+        Component() = default;
+        virtual ~Component() = default;
 
-        virtual bool Init() {};
+        virtual bool Init() = 0;
         virtual bool Draw() = 0;
         virtual bool Update() = 0;
-        virtual bool Quit() {};
+        virtual bool Quit() = 0;
 
         virtual Component* Clone() = 0;
 
         virtual Node& GetNode() {return *m_pNode;}
         virtual void  AttachToNode(Node* _pNode) {m_pNode = _pNode;}
-
-        inline void SetActive(bool _state) {m_isActive = _state;}
-        inline bool IsActive() {return m_isActive;}
-
-        // // @TODO Forward and backward inclusion
-        // template <typename T> T* GetComponent()
-        // {
-        //     return GetNode().GetComponent<T>();
-        // }
     };
 }
 #endif

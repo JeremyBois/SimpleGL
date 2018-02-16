@@ -7,7 +7,7 @@ namespace simpleGL
 {
     class Node;
 
-    // Interface for NodeManager implementations
+    /// Interface for NodeManager implementations
     class SIMPLEGL_LOCAL INodeManager
     {
     public:

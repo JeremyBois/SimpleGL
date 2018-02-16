@@ -5,9 +5,9 @@
 
 namespace simpleGL
 {
-    Shader::Shader(std::string vertexPath, std::string fragPath)
+    Shader::Shader(const std::string _vertexPath, const std::string _fragPath)
     {
-        ConstructProgram(vertexPath, fragPath);
+        ConstructProgram(_vertexPath, _fragPath);
     }
 
     Shader::~Shader()
@@ -15,12 +15,12 @@ namespace simpleGL
 
     }
 
-    void Shader::ConstructProgram(std::string vertexPath, std::string fragPath)
+    void Shader::ConstructProgram(const std::string _vertexPath, const std::string _fragPath)
     {
         // Load an compile vertex shader
         unsigned int vertexShader;
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        std::string vertexShaderString = StreamUtility::ReadFile(vertexPath);
+        std::string vertexShaderString = StreamUtility::ReadFile(_vertexPath);
         const char* vertexShaderSource = vertexShaderString.c_str();
         // Attach source code to object (vertexShaderSource)
         glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
@@ -30,7 +30,7 @@ namespace simpleGL
         // Load an compile fragment shader
         unsigned int fragmentShader;
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        std::string fragShaderString = StreamUtility::ReadFile(fragPath);
+        std::string fragShaderString = StreamUtility::ReadFile(_fragPath);
         const char* fragShaderSource = fragShaderString.c_str();
         glShaderSource(fragmentShader, 1, &fragShaderSource, NULL);
         glCompileShader(fragmentShader);
@@ -112,7 +112,7 @@ namespace simpleGL
         return nbAttributes;
     }
 
-    void Shader::CheckForCompileErrors(GLuint shader, std::string type)
+    void Shader::CheckForCompileErrors(GLuint shader, const std::string type)
     {
         const unsigned int infoSizeMax = 1024;
         GLint success;

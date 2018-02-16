@@ -7,7 +7,7 @@
 
 namespace simpleGL
 {
-    // Basic interface the manager must implement
+    /// Interface for SceneManager implementations
     class SIMPLEGL_LOCAL ISceneManager
     {
     public:

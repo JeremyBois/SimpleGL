@@ -10,7 +10,7 @@
 
 namespace simpleGL
 {
-    // Can be used to construct and draw a triangle
+    /// Componenent which can draw any shape object.
     class SIMPLEGL_API ShapeRenderer: public Component
     {
     private:
@@ -28,7 +28,7 @@ namespace simpleGL
         virtual bool Init() {};
         virtual bool Update(){};
         virtual bool Quit(){};
-        virtual Component* Clone() {return new ShapeRenderer();}
+        virtual Component* Clone();
     };
 }
 #endif

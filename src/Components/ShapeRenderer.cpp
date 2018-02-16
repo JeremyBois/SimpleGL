@@ -13,6 +13,15 @@ namespace simpleGL
     {
     }
 
+    Component* ShapeRenderer::Clone()
+    {
+        ShapeRenderer* shapeR = new ShapeRenderer();
+        shapeR->m_pMaterial = m_pMaterial;
+        shapeR->m_pShape = m_pShape;
+
+        return shapeR;
+    }
+
     bool ShapeRenderer::Draw()
     {
         if (!IsActive())
@@ -22,7 +31,7 @@ namespace simpleGL
 
         if (m_pMaterial != nullptr && m_pShape != nullptr)
         {
-            m_pMaterial->Use(*GetNode().GetComponent<Transform>());
+            m_pMaterial->Use(*(GetNode().GetComponent<Transform>()));
             m_pShape->Draw();
             return true;
         }

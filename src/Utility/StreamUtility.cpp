@@ -5,7 +5,7 @@
 
 namespace simpleGL
 {
-    std::string StreamUtility::ReadFile(std::string _path)
+    std::string StreamUtility::ReadFile(const std::string& _path)
     {
         std::string content;
         std::ifstream readStream(_path, std::ios::in);

@@ -16,7 +16,7 @@
 
   - Add a data manager to store
 
-    - Textures
-    - Shaders
-    - Materials
-    - Shapes
+    - Materials ?
+    - Shapes ?
+
+  - Update GameManager
