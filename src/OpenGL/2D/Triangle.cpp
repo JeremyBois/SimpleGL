@@ -15,6 +15,97 @@ namespace simpleGL
         glDeleteBuffers(1, &m_VBO);
     }
 
+    void Triangle::Create(float _base, float _height)
+    {
+         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+
+        // Counter clockwise
+        glm::vec2 tempUV[] =
+        {
+            {0.0f, 1.0f},
+            {0.0f, 0.0f},
+            {1.0f, 0.0f}
+        };
+
+        auto halfSize = glm::vec2(_base / 2.0f, _height / 2.0f);
+
+        glm::vec3 tempPos[] =
+        {
+            {0.0f, halfSize.y, 0.0f},
+            {-halfSize.x, -halfSize.y, 0.0f},
+            {halfSize.x, -halfSize.y, 0.0f}
+        };
+
+        // Construct the array (pos + color + ST)
+        for (int i = 0; i < m_sizeVertices; ++i)
+        {
+            // Pos
+            int tempShift = (i * shiftV);
+
+            m_vertices[tempShift + 0] = tempPos[i].x;
+            m_vertices[tempShift + 1] = tempPos[i].y;
+            m_vertices[tempShift + 2] = tempPos[i].z;
+
+            // Default to white color
+            m_vertices[m_sizePos + tempShift + 0] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 1] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 2] = 1.0f;
+            m_vertices[m_sizePos + tempShift + 3] = 1.0f;
+
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].t;
+        }
+
+        SendData();
+    }
+
+    void Triangle::Create(float _base, float _height,
+                          glm::vec4 _colors[m_sizeVertices])
+    {
+         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+
+        // Counter clockwise
+        glm::vec2 tempUV[] =
+        {
+            {0.0f, 1.0f},
+            {0.0f, 0.0f},
+            {1.0f, 0.0f}
+        };
+
+        auto halfSize = glm::vec2(_base / 2.0f, _height / 2.0f);
+
+        glm::vec3 tempPos[] =
+        {
+            {0.0f, halfSize.y, 0.0f},
+            {-halfSize.x, -halfSize.y, 0.0f},
+            {halfSize.x, -halfSize.y, 0.0f}
+        };
+
+        // Construct the array (pos + color + ST)
+        for (int i = 0; i < m_sizeVertices; ++i)
+        {
+            // Pos
+            int tempShift = (i * shiftV);
+
+            m_vertices[tempShift + 0] = tempPos[i].x;
+            m_vertices[tempShift + 1] = tempPos[i].y;
+            m_vertices[tempShift + 2] = tempPos[i].z;
+
+            // Default to white color
+            m_vertices[m_sizePos + tempShift + 0] = _colors[i].r;
+            m_vertices[m_sizePos + tempShift + 1] = _colors[i].g;
+            m_vertices[m_sizePos + tempShift + 2] = _colors[i].b;
+            m_vertices[m_sizePos + tempShift + 3] = _colors[i].a;
+
+            // ST
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[i].s;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[i].t;
+        }
+
+        SendData();
+    }
+
     void Triangle::Create(glm::vec3 _pos[m_sizeVertices])
     {
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;

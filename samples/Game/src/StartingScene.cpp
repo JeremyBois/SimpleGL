@@ -10,39 +10,23 @@ typedef GL::GameManager Game;
 
 StartingScene::StartingScene()
 {
-    m_pNodes[0] =  new GL::Node();
-    m_pNodes[1] =  new GL::Node();
-    m_pNodes[2] =  new GL::Node();
+    // Steal ownership
+    auto* container = new GL::NodeManager();
+    GL::GameManager::AttachNodeMgr(container);
+
+    m_pNodes[0] =  container->CreateNode();
+    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.0f));
+
+
+    m_pNodes[1] =  container->CreateNode();
+    m_pNodes[1]->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, 0.0f));
+    m_pNodes[1]->GetTransform().SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+    m_pNodes[2] =  container->CreateNode();
     m_pNodes[2]->GetTransform().SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
 
-    m_pNodes[3] =  new GL::Node();
+    m_pNodes[3] =  container->CreateNode();
     m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
     m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
-
-    // Create shaders
-    m_basicShader = GL::Shader("shaders/basic.vert",
-                               "shaders/basic.frag");
-
-    m_colorShader =  GL::Shader("shaders/basic.vert",
-                                      "shaders/colorFromProgram.frag");
-    float color[] = {0.0f, 1.0f, 0.0f, 1.0f};
-    m_colorShader.Use();
-    m_colorShader.SetFloat4("ourColor", color);
-
-    m_uvShader =  GL::Shader("shaders/basic.vert",
-                                   "shaders/UVscale.frag");
-    m_uvShader.Use();
-    m_uvShader.SetFloat("uvScale", 1.0f);
-    m_uvShader.SetInt("tex0", 0);
-    m_uvShader.SetInt("tex1", 1);
-
-    m_colorVertexShader = GL::Shader("shaders/positionColor.vert",
-                                           "shaders/colorFromVertex.frag");
-
-    // Create textures
-    m_textureWall.Load("data/images/wall.jpg");
-    m_textureContainer.Load("data/images/container.jpg", false, true);
-    m_textureSmile.Load("data/images/awesomeface.png", true, true);
 
 
     // Create shapes
@@ -50,23 +34,6 @@ StartingScene::StartingScene()
     m_pTriangles[1] = new GL::Triangle();
     m_pQuad = new GL::Quad();
     m_pCuboid = new GL::Cuboid();
-
-
-    // Create materials
-    m_pBasicMat = new GL::Material();
-    m_pBasicMat->LinkShader(&m_basicShader);
-    m_pBasicMat->LinkTexture(&m_textureWall);
-
-    m_pColorMat = new GL::Material();
-    m_pColorMat->LinkShader(&m_colorShader);
-
-    m_pUVMat = new GL::Material();
-    m_pUVMat->LinkShader(&m_uvShader);
-    m_pUVMat->LinkTexture(&m_textureContainer, GL_TEXTURE0);
-    m_pUVMat->LinkTexture(&m_textureSmile, GL_TEXTURE1);
-
-    m_pVertexMat = new GL::Material();
-    m_pVertexMat->LinkShader(&m_colorVertexShader);
 }
 
 StartingScene::~StartingScene()
@@ -109,25 +76,6 @@ void StartingScene::ZoomUV(GL::Shader& _shader, bool _zoom)
 
 bool StartingScene::OnInit()
 {
-    // Steal ownership
-    m_container = new GL::NodeManager();
-    GL::GameManager::AttachNodeMgr(m_container);
-
-
-    glm::vec3 pos1[]
-    {
-        {0.4f,  0.8f, 0.0f},
-        {0.4f, 0.4f, 0.0f},
-        {0.8f, 0.4f, 0.0f}
-    };
-
-    glm::vec3 pos2[]
-    {
-        {-0.8f,  -0.4f, 0.0f},
-        {-0.8f, -0.8f, 0.0f},
-        {-0.4f, -0.8f, 0.0f}
-    };
-
     glm::vec4 color1[]
     {
         {1.0f, 0.0f, 0.0f, 1.0f},
@@ -135,9 +83,9 @@ bool StartingScene::OnInit()
         {0.0f, 0.0f, 1.0f, 1.0f}
     };
 
-    m_pTriangles[0]->Create(pos1, color1);
-    m_pTriangles[1]->Create(pos2);
-
+    // Add triangles
+    m_pTriangles[0]->Create(0.6f, 0.3f, color1);
+    m_pTriangles[1]->Create(2.0f, 1.0f);
 
     // Add quad
     m_pQuad->Create(0.8f, 1.2f);
@@ -145,30 +93,22 @@ bool StartingScene::OnInit()
     // Add Cuboid
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
 
-
-    // Populate container
-    m_container->AddNode(m_pNodes[0]);
-    m_container->AddNode(m_pNodes[1]);
-    m_container->AddNode(m_pNodes[2]);
-    m_container->AddNode(m_pNodes[3]);
-
-
     GL::ShapeRenderer* temp;
     temp = m_pNodes[0]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_pTriangles[0]);
-    temp->LinkMaterial(m_pBasicMat);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Wall"));
 
     temp = m_pNodes[1]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_pTriangles[1]);
-    temp->LinkMaterial(m_pColorMat);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("ColorFromProgram"));
 
     temp = m_pNodes[2]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_pQuad);
-    temp->LinkMaterial(m_pUVMat);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("UV"));
 
     temp = m_pNodes[3]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_pCuboid);
-    temp->LinkMaterial(m_pVertexMat);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("ColorFromVertex"));
 
 
     // Add callback for key events
@@ -178,14 +118,14 @@ bool StartingScene::OnInit()
 
 bool StartingScene::OnUpdate()
 {
-    ChangeGreenOverTime(m_colorShader);
+    ChangeGreenOverTime(*Game::GetDataMgr().GetShader("ColorFromProgram"));
     if (Game::GetWindow().GetKey(GLFW_KEY_PAGE_UP) == GLFW_PRESS)
     {
-        ZoomUV(m_uvShader, true);
+        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), true);
     }
     else if (Game::GetWindow().GetKey(GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
     {
-        ZoomUV(m_uvShader, false);
+        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), false);
     }
 
     // Rotate
@@ -218,7 +158,7 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
         // Set texture to affect
         // Get ref to active Scene
         StartingScene* myScene = (StartingScene*)Game::GetSceneMgr().GetCurrent();
-        GL::Texture myTexture = myScene->m_textureContainer;
+        GL::Texture& myTexture = *Game::GetDataMgr().GetTexture("Container");
 
         // Get current wrap mode
         GLint result[1];
@@ -255,7 +195,7 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
         // Set texture to affect
         // Get ref to active Scene
         StartingScene* myScene = (StartingScene*)Game::GetSceneMgr().GetCurrent();
-        GL::Texture myTexture = myScene->m_textureContainer;
+        GL::Texture& myTexture = *Game::GetDataMgr().GetTexture("Container");
 
         // Get current wrap mode
         GLint result[1];

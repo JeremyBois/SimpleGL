@@ -13,7 +13,8 @@ namespace simpleGL
     public:
         virtual ~INodeManager() = default;
 
-        virtual void AddNode(Node* _pNode, Node* _pParent=nullptr) = 0;
+        virtual void  AddNode(Node* _pNode, Node* _pParent=nullptr) = 0;
+        virtual Node* CreateNode(Node* _pParent=nullptr) = 0;
 
         virtual void Init() = 0;
         virtual void Render() = 0;

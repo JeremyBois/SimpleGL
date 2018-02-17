@@ -22,7 +22,9 @@ namespace simpleGL
         NodeManager();
         ~NodeManager();
 
-        virtual void AddNode(Node* _pNode, Node* _pParent=nullptr);
+        virtual void  AddNode(Node* _pNode, Node* _pParent=nullptr);
+        virtual Node* CreateNode(Node* _pParent=nullptr);
+
         virtual void Init() {};
         virtual void Render();
         virtual void Update();

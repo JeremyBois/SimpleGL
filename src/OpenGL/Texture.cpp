@@ -6,14 +6,14 @@
 namespace simpleGL
 {
 
-    Texture::Texture(std::string _path)
+    Texture::Texture(std::string _path, bool _hasAlpha, bool _reverseY)
     {
-        Load(_path);
+        Load(_path, _hasAlpha, _reverseY);
     }
 
     Texture::~Texture()
     {
-
+        glDeleteTextures(1, &m_texID);
     }
 
     void Texture::Get(GLenum _param, GLint* _container)

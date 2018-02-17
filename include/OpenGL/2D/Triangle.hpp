@@ -34,6 +34,9 @@ namespace simpleGL
         void Create(glm::vec3 _pos[m_sizeVertices], glm::vec4 _colors[m_sizeVertices]);
         void Create(glm::vec3 _pos[m_sizeVertices]);
 
+        void Create(float _base, float _height);
+        void Create(float _base, float _height, glm::vec4 _colors[m_sizeVertices]);
+
         virtual void Draw();
     };
 }

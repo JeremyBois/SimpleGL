@@ -1,18 +1,21 @@
 # Leaning OpenGl by implementing an engine
 
-**Last update 2018-02-15**
+**Last update 2018-02-17**
 
 ## Getting started
 
+**Build:**
 ```
-# Build
-cd build/
+mkdir build && cd build/
 cmake .. -G "Unix Makefiles"
 make
+```
 
-# Run
+**Run:**
+```
 ../samples/Game/bin/Debug/OpenGl-Game
 ```
+
 
 
 ## Try it out

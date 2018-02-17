@@ -1,6 +1,6 @@
 # TODO
 
-**Last update 2018-02-15**
+**Last update 2018-02-17**
 
 ## Shapes
 
@@ -13,10 +13,3 @@
 
 
 ## Data
-
-  - Add a data manager to store
-
-    - Materials ?
-    - Shapes ?
-
-  - Update GameManager

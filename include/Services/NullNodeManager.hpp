@@ -14,6 +14,8 @@ namespace simpleGL
     {
     public:
         virtual void AddNode(Node* _pNode, Node* _pParent) {};
+        virtual Node* CreateNode(Node* _pParent=nullptr) {};
+
         virtual void Init() {};
         virtual void Render() {};
         virtual void Update() {};

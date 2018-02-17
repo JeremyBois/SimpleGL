@@ -1,30 +1,30 @@
 
-#include "SceneFSM.hpp"
+#include "Services/SceneManager.hpp"
 
 
 namespace simpleGL
 {
-    SceneFSM::SceneFSM(IScene& _startScene)
+    SceneManager::SceneManager(IScene& _startScene)
         : m_transitionToNext(false), m_transitionToPrevious(false),
           m_pCurrent(&_startScene), m_pPrevious(nullptr), m_pNext(nullptr)
     {
 
     }
 
-    SceneFSM::~SceneFSM()
+    SceneManager::~SceneManager()
     {
         delete m_pCurrent;
         delete m_pPrevious;
         delete m_pNext;
     }
 
-    bool SceneFSM::Init()
+    bool SceneManager::Init()
     {
         m_pCurrent->OnInit();
     }
 
 
-    bool SceneFSM::Update()
+    bool SceneManager::Update()
     {
         m_pCurrent->OnUpdate();
 
@@ -41,19 +41,19 @@ namespace simpleGL
     }
 
 
-    bool SceneFSM::Quit()
+    bool SceneManager::Quit()
     {
         m_pCurrent->OnQuit();
     }
 
 
-    void SceneFSM::Render()
+    void SceneManager::Render()
     {
         m_pCurrent->OnRender();
     }
 
 
-    void SceneFSM::ToNext()
+    void SceneManager::ToNext()
     {
         m_pCurrent->OnQuit();
         m_pNext->OnInit();
@@ -65,7 +65,7 @@ namespace simpleGL
         m_transitionToNext = false;
     }
 
-    void SceneFSM::ToPrevious()
+    void SceneManager::ToPrevious()
     {
         m_pCurrent->OnQuit();
         m_pPrevious->OnInit();
@@ -78,7 +78,7 @@ namespace simpleGL
     }
 
 
-    void SceneFSM::Revert()
+    void SceneManager::Revert()
     {
         if (m_pPrevious != nullptr)
         {
@@ -86,7 +86,7 @@ namespace simpleGL
         }
     }
 
-    void SceneFSM::Change(IScene& _scene)
+    void SceneManager::Change(IScene& _scene)
     {
         m_transitionToNext = true;
         m_pNext = &_scene;
@@ -95,7 +95,7 @@ namespace simpleGL
         m_pPrevious = m_pCurrent;
     }
 
-    IScene* SceneFSM::GetCurrent()
+    IScene* SceneManager::GetCurrent()
     {
         return m_pCurrent;
     }

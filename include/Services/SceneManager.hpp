@@ -1,5 +1,5 @@
-#ifndef __SCENEFSM__HPP
-#define __SCENEFSM__HPP
+#ifndef __SCENEMANAGER__HPP
+#define __SCENEMANAGER__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 
@@ -9,7 +9,7 @@
 namespace simpleGL
 {
     // Basic interface the manager must implement
-    class SIMPLEGL_API SceneFSM: public ISceneManager
+    class SIMPLEGL_API SceneManager: public ISceneManager
     {
     protected:
         bool m_transitionToNext;
@@ -23,8 +23,8 @@ namespace simpleGL
         void ToPrevious();
 
     public:
-        SceneFSM(IScene& _startScene);
-        ~SceneFSM();
+        SceneManager(IScene& _startScene);
+        ~SceneManager();
 
         virtual bool Init();
         virtual bool Update();

@@ -1,18 +1,23 @@
 #include "GameManager.hpp"
-
+#include "Services/DataManager.hpp"
 
 namespace simpleGL
 {
     Window*         GameManager::s_pWindowService;
     INodeMgrPtr     GameManager::s_pNodeService;
     ISceneMgrPtr    GameManager::s_pSceneService;
+    IDataMgrPtr     GameManager::s_pDataService;
 
     // Should be called before anything else
     void GameManager::Init(unsigned int _windowWidth, unsigned int _windowHeight, std::string _windowName)
     {
-        // Internal service
+        // Window as an internal service
         s_pWindowService = new Window(_windowWidth, _windowHeight, _windowName);
         s_pWindowService->Init();
+
+        // DataMgr as an internal service
+        s_pDataService = IDataMgrPtr(new DataManager());
+        s_pDataService->Init();
 
         // Null pattern
         s_pNodeService = INodeMgrPtr(new NullNodeManager());
@@ -56,8 +61,9 @@ namespace simpleGL
     // Reset services if needed
     void GameManager::Update()
     {
-        GameManager::GetSceneMgr().Update();
-        GameManager::GetNodeMgr().Update();
+        GetDataMgr().Update();
+        GetSceneMgr().Update();
+        GetNodeMgr().Update();
     }
 
     void GameManager::Start()
@@ -70,12 +76,14 @@ namespace simpleGL
 
     void GameManager::Quit()
     {
-        GameManager::GetSceneMgr().Quit();
+        GetSceneMgr().Quit();
+        GetDataMgr().Quit();
     }
 
     void GameManager::Render()
     {
-        GameManager::GetSceneMgr().Render();
-        GameManager::GetNodeMgr().Render();
+        GetDataMgr().Render();
+        GetSceneMgr().Render();
+        GetNodeMgr().Render();
     }
 }

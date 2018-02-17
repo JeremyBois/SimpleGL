@@ -14,23 +14,25 @@
 
 
 void ChangeWorkingDirectory(const std::string& _path, const std::string& _toAdd);
+void LoadData();
 
 
-typedef simpleGL::GameManager Game;
+namespace GL = simpleGL;
+typedef GL::GameManager Game;
 
 
 int main(int argc, char** argv)
 {
     ChangeWorkingDirectory(__FILE__, "../../../");
 
-
     // Test implementation of Game Manager / Window
     Game::Init(800, 600, "My OpenGl window");
 
+    LoadData();
+
     // Create a simple SceneManager with a starting scene
     StartingScene* firstScene = new StartingScene();
-    simpleGL::SceneFSM* mySceneManager = new simpleGL::SceneFSM(*firstScene);
-    simpleGL::GameManager::AttachSceneMgr(mySceneManager);
+    simpleGL::GameManager::AttachSceneMgr(new simpleGL::SceneManager(*firstScene));
 
     // Start loop
     Game::Start();
@@ -52,4 +54,47 @@ void ChangeWorkingDirectory(const std::string& _path, const std::string& _toAdd)
     // char cwd[1024];
     // getcwd(cwd, sizeof(cwd));
     // cout << "Current working directory: " << cwd << endl;
+}
+
+
+void LoadData()
+{
+    // Load textures
+    Game::GetDataMgr().CreateTexture("Wall", "data/images/wall.jpg");
+    Game::GetDataMgr().CreateTexture("Container", "data/images/container.jpg", false, true);
+    Game::GetDataMgr().CreateTexture("Awesomeface", "data/images/awesomeface.png", true, true);
+
+
+    // Load shaders
+    GL::Shader* shaderPtr;
+
+    shaderPtr = Game::GetDataMgr().CreateShader("ColorFromProgram",
+                                    "shaders/basic.vert", "shaders/colorFromProgram.frag");
+    float color[] = {0.0f, 1.0f, 0.0f, 1.0f};
+
+    shaderPtr->Use();
+    shaderPtr->SetFloat4("ourColor", color);
+
+    shaderPtr = Game::GetDataMgr().CreateShader("UVscale",
+                                                "shaders/basic.vert", "shaders/UVscale.frag");
+    shaderPtr->Use();
+    shaderPtr->SetFloat("uvScale", 1.0f);
+    shaderPtr->SetInt("tex0", 0);
+    shaderPtr->SetInt("tex1", 1);
+
+    shaderPtr = Game::GetDataMgr().CreateShader("ColorFromVertex",
+                                                "shaders/positionColor.vert", "shaders/colorFromVertex.frag");
+
+    // Load materials
+    GL::Material* pMat;
+    pMat = Game::GetDataMgr().CreateMaterial("Wall", "Default");
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"));
+
+    Game::GetDataMgr().CreateMaterial("ColorFromProgram", "ColorFromProgram");
+
+    pMat = Game::GetDataMgr().CreateMaterial("UV", "UVscale", "Container");
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL_TEXTURE0);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE1);
+
+    Game::GetDataMgr().CreateMaterial("ColorFromVertex", "ColorFromVertex");
 }

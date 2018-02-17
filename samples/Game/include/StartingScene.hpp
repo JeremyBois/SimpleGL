@@ -8,27 +8,11 @@
 class StartingScene: public simpleGL::IScene
 {
 private:
-    simpleGL::NodeManager*   m_container;
     simpleGL::Node*         m_pNodes[4];
 
     simpleGL::Triangle*     m_pTriangles[2];
     simpleGL::Quad*         m_pQuad;
     simpleGL::Cuboid*       m_pCuboid;
-
-    // Material (shader + texture)
-    simpleGL::Material*     m_pBasicMat;
-    simpleGL::Material*     m_pColorMat;
-    simpleGL::Material*     m_pUVMat;
-    simpleGL::Material*     m_pVertexMat;
-
-    simpleGL::Shader        m_basicShader;
-    simpleGL::Shader        m_colorShader;
-    simpleGL::Shader        m_uvShader;
-    simpleGL::Shader        m_colorVertexShader;
-
-    simpleGL::Texture       m_textureWall;
-    simpleGL::Texture       m_textureContainer;
-    simpleGL::Texture       m_textureSmile;
 
     // To enable texture zoom
     float m_zoomScale = 1.0f;

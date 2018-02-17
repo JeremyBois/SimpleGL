@@ -19,7 +19,7 @@ namespace simpleGL
 
     public:
         Texture() {};  // Allows lazy initialization
-        Texture(std::string _path);
+        Texture(std::string _path, bool _hasAlpha=false, bool _reverseY=false);
         ~Texture();
 
         // Getter

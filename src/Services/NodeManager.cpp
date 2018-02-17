@@ -1,4 +1,4 @@
-#include "NodeManager.hpp"
+#include "Services/NodeManager.hpp"
 
 #include <assert.h>
 #include <typeinfo>
@@ -29,6 +29,13 @@ namespace simpleGL
         {
             m_root.AddNode(_pNode);
         }
+    }
+
+    Node* NodeManager::CreateNode(Node* _pParent)
+    {
+        Node* newNode = new Node();
+        AddNode(newNode, _pParent);
+        return newNode;
     }
 
     void NodeManager::Render()

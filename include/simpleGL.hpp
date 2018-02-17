@@ -1,14 +1,13 @@
 #ifndef __SIMPLEGL__HPP
 #define __SIMPLEGL__HPP
 
-// PUBLIC API
-
+// SimpleGL
 // Managers
 #include "GameManager.hpp"
-#include "NodeManager.hpp"
-#include "SceneFSM.hpp"
+#include "Services/NodeManager.hpp"
+#include "Services/SceneManager.hpp"
 
-// Base
+// Components
 #include "Node.hpp"
 #include "Components/ShapeRenderer.hpp"
 
@@ -16,16 +15,13 @@
 #include "Interface/IScene.hpp"
 
 
-
-// SimpleGL PUBLIC API for OpenGl specific
-// 2D
+// OpenGL
+// Shapes
 #include "OpenGL/2D/Triangle.hpp"
 #include "OpenGL/2D/Quad.hpp"
-
-// 3D
 #include "OpenGL/3D/Cuboid.hpp"
 
-// Others
+// Assets
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"
 #include "OpenGL/Material.hpp"

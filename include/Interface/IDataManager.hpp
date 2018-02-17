@@ -2,6 +2,9 @@
 #define __IDATAMANAGER__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
+#include "OpenGL/Shader.hpp"
+#include "OpenGL/Texture.hpp"
+#include "OpenGL/Material.hpp"
 
 #include <unordered_map>
 #include <memory>
@@ -9,10 +12,6 @@
 
 namespace simpleGL
 {
-    class Texture;
-    class Shader;
-
-
     typedef std::unordered_map<std::string, std::unique_ptr<Texture>> TexContainer;
     typedef TexContainer::iterator TexContainerIt;
     typedef TexContainer::const_iterator TexContainerConstIt;
@@ -20,6 +19,10 @@ namespace simpleGL
     typedef std::unordered_map<std::string, std::unique_ptr<Shader>>  ShaderContainer;
     typedef ShaderContainer::iterator  ShaderContainerIt;
     typedef ShaderContainer::const_iterator  ShaderContainerConstIt;
+
+    typedef std::unordered_map<std::string, std::unique_ptr<Material>>  MaterialContainer;
+    typedef MaterialContainer::iterator  MaterialContainerIt;
+    typedef MaterialContainer::const_iterator  MaterialContainerConstIt;
 
 
     /// Interface for DataManager implementations
@@ -31,10 +34,18 @@ namespace simpleGL
         virtual Shader*  CreateShader(const std::string _name, const std::string _vertexPath,
                                       const std::string _fragPath, bool _overrideIfExist=false) = 0;
         virtual Texture* CreateTexture(const std::string _name, const std::string _path,
-                                       bool _overrideIfExist=false) = 0;
+                                       bool _hasAlpha=false, bool _reverseY=false, bool _overrideIfExist=false) = 0;
+        virtual Material* CreateMaterial(const std::string _name, const std::string _shaderName,
+                                         bool _overrideIfExist=false) = 0;
 
-        virtual Shader*  GetShader(const std::string _name) = 0;
-        virtual Texture* GetTexture(const std::string _name) = 0;
+        virtual Shader*  GetShader(const std::string _name) const = 0;
+        virtual Texture* GetTexture(const std::string _name) const = 0;
+        virtual Material* GetMaterial(const std::string _name) const = 0;
+
+        virtual bool Init() = 0;
+        virtual bool Update() = 0;
+        virtual bool Render() = 0;
+        virtual bool Quit() = 0;
     };
 }
 
