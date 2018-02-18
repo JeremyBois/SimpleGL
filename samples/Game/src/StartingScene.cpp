@@ -17,10 +17,10 @@ StartingScene::StartingScene()
     m_pNodes[0] =  container->CreateNode();
     m_pNodes[0]->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.0f));
 
-
     m_pNodes[1] =  container->CreateNode();
     m_pNodes[1]->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, 0.0f));
     m_pNodes[1]->GetTransform().SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
     m_pNodes[2] =  container->CreateNode();
     m_pNodes[2]->GetTransform().SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
 
