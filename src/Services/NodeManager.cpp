@@ -10,8 +10,6 @@ namespace simpleGL
     NodeManager::NodeManager()
     {
         m_root.SetName("Root");
-
-        m_root.AddComponent<Transform>();
     }
 
     NodeManager::~NodeManager()

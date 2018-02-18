@@ -1,5 +1,5 @@
-#ifndef __Tools__HPP
-#define __Tools__HPP
+#ifndef __TOOLS__HPP
+#define __TOOLS__HPP
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 

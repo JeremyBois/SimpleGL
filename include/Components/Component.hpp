@@ -16,7 +16,7 @@ namespace simpleGL
         Node* m_pNode;
 
     public:
-        Component() = default;
+        Component();
         virtual ~Component() = default;
 
         virtual bool Init() = 0;
@@ -27,7 +27,7 @@ namespace simpleGL
         virtual Component* Clone() = 0;
 
         virtual Node& GetNode() {return *m_pNode;}
-        virtual void  AttachToNode(Node* _pNode) {m_pNode = _pNode;}
+        virtual bool  SetParent(Node* _pNode);
     };
 }
 #endif

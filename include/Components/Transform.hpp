@@ -9,7 +9,8 @@
 
 namespace simpleGL
 {
-    /// Base component attached to every Node.
+    /// Control local to world transformation.
+    /// Attached to every Node.
     class SIMPLEGL_API Transform: public Component
     {
     private:
@@ -53,6 +54,7 @@ namespace simpleGL
         virtual bool Quit() {};
 
         virtual Component* Clone() {return new Transform();}
+        virtual bool       SetParent(Node* _pNode);
     };
 }
 #endif

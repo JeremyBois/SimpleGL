@@ -9,7 +9,9 @@ namespace simpleGL
         m_name = "New Node";
         m_pParent = nullptr;
 
-        m_pTransform = AddComponent<Transform>();
+        // Transform can only be added internally
+        m_pTransform = new Transform();
+        EmplaceBack(m_pTransform);
     }
 
     Node::~Node()
@@ -19,15 +21,15 @@ namespace simpleGL
 
     void Node::AddNode(Node* _pNode)
     {
-        // NodePtr sharedPtr = std::make_shared<Node>(*_pNode);
-        // m_children.push_back(sharedPtr);
-
-        m_children.emplace_back(_pNode);
-        _pNode->SetParent(this);
+        if (_pNode != nullptr)
+        {
+            m_children.emplace_back(_pNode);
+            _pNode->SetParent(this);
+        }
     }
 
     // Call Draw of all children and all gameObject attached
-    void Node::Draw()
+    bool Node::Draw()
     {
         if (m_isActive)
         {
@@ -42,10 +44,15 @@ namespace simpleGL
             {
                 m_components[i]->Draw();
             }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    void Node::Update()
+    bool Node::Update()
     {
         if (m_isActive)
         {
@@ -60,6 +67,11 @@ namespace simpleGL
             {
                 m_components[i]->Update();
             }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -74,5 +86,33 @@ namespace simpleGL
 
         m_children.clear();
         m_components.clear();
+    }
+
+    void Node::AttachComponent(Component* _pComponent)
+    {
+        // Add reference to Node in object
+        _pComponent->SetParent(this);
+    }
+
+    Component* Node::ReleaseComponent(unsigned int _id)
+    {
+        Component* result = nullptr;
+
+        for (auto it = m_components.begin(); it != m_components.end(); it++)
+        {
+            if ((*it)->GetID() == _id)
+            {
+                // Smart pointer does not manage it anymore
+                result = (*it).release();
+                m_components.erase(it);
+                break;
+            }
+        }
+        return result;
+    }
+
+    void Node::EmplaceBack(Component* pComp)
+    {
+        m_components.emplace_back(pComp);
     }
 }

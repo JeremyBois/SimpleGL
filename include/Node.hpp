@@ -4,6 +4,7 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Components/Transform.hpp"
 #include "Utility/Tools.hpp"
+#include "Utility/TransformException.hpp"
 
 #include "GameObject.hpp"
 
@@ -19,20 +20,27 @@ namespace simpleGL
     typedef std::vector<NodePtr> NodesList;
 
     typedef std::unique_ptr<Component> ComponentPtr;
-    typedef std::vector<ComponentPtr> ComponentsList;
+    typedef std::vector<ComponentPtr> ComponentsVector;
 
     /// A Node can be the parent of multiple nodes (children) and can
     /// have multiple components.
     class SIMPLEGL_API Node: public GameObject
     {
     private:
+        // Provide access to private and protected members of Node
+        friend bool Component::SetParent(Node *_pNode);
+
         std::string m_name;
 
         // Composite
         Node*              m_pParent;
         Transform*         m_pTransform;
         NodesList          m_children;
-        ComponentsList     m_components;
+        ComponentsVector   m_components;
+
+
+        Component* ReleaseComponent(unsigned int _id);
+        void       EmplaceBack(Component* pComp);
 
     public:
         Node();
@@ -46,6 +54,7 @@ namespace simpleGL
         inline Node&              GetParent() const {return *m_pParent;}
 
         void AddNode(Node* _pNode);
+        void AttachComponent(Component* _pComponent);
 
         template <typename T> T* AddComponent()
         {
@@ -55,9 +64,8 @@ namespace simpleGL
             T* created = new T();
 
             // Add reference to Node in object
-            created->AttachToNode(this);
-
-            m_components.emplace_back(created);
+            // and steal ownership (see friend Component::SetParent)
+            created->SetParent(this);
 
             return created;
         }
@@ -108,10 +116,16 @@ namespace simpleGL
             return listOfComponents;
         }
 
-        virtual void Draw();
-        virtual void Update();
+        virtual bool Draw();
+        virtual bool Update();
         virtual void Clear();
     };
+
+    // Specialization for Transform (should be inlined)
+    template<> inline Transform* Node::AddComponent()
+    {
+        throw TransformException();
+    }
 }
 
 #endif

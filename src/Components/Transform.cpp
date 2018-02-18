@@ -98,4 +98,9 @@ namespace simpleGL
             m_localToWorld = glm::scale(m_localToWorld, m_scale);
         }
     }
+
+    bool Transform::SetParent(Node* _pNode)
+    {
+        return false;
+    }
 }
