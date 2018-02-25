@@ -14,6 +14,8 @@ private:
     simpleGL::Quad*         m_pQuad;
     simpleGL::Cuboid*       m_pCuboid;
 
+    simpleGL::CameraDebug*   m_pCam;
+
     // To enable texture zoom
     float m_zoomScale = 1.0f;
 

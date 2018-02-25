@@ -10,6 +10,7 @@
 // Components
 #include "Node.hpp"
 #include "Components/ShapeRenderer.hpp"
+#include "Components/CameraDebug.hpp"
 
 // Interface prototype
 #include "Interface/IScene.hpp"

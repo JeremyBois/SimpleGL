@@ -28,6 +28,11 @@ StartingScene::StartingScene()
     m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
     m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
 
+    // Create a camera
+    Game::GetWindow().mainCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
+    m_pCam = Game::GetWindow().mainCam;
+    m_pCam->SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
+    m_pCam->Pitch(30.0f);
 
     // Create shapes
     m_pTriangles[0] = new GL::Triangle();

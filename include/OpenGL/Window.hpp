@@ -3,6 +3,7 @@
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Interface/IWindow.hpp"
+#include "Components/CameraDebug.hpp"
 #include "gtc/matrix_transform.hpp"
 
 
@@ -42,6 +43,8 @@ namespace simpleGL
         GLFWkeyfun m_pUserKeyCallback;
 
     public:
+        CameraDebug* mainCam;
+
         Window(unsigned int _width, unsigned int _height, std::string _name);
         ~Window();
 
