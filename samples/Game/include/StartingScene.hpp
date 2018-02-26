@@ -16,6 +16,8 @@ private:
 
     simpleGL::CameraDebug*   m_pCam;
 
+    static double s_lastX, s_lastY;
+
     // To enable texture zoom
     float m_zoomScale = 1.0f;
 
@@ -34,5 +36,7 @@ public:
 
     // @TODO Must be defined in IScene
     static void MyKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);
+    static void MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos);
+    static void MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset);
 };
 #endif

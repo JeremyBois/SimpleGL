@@ -76,6 +76,9 @@ namespace simpleGL
 
         SetDefaultFlag();
 
+        // Hide cursor for camera movements
+        glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
         // Camera
         // Translate in the reverse direction we want to move
         // m_viewM = glm::translate(m_viewM, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -165,13 +168,8 @@ namespace simpleGL
         }
     }
 
-    void Window::AttachKeyEventCallback(GLFWkeyfun _callback)
-    {
-        m_pUserKeyCallback = _callback;
-    }
-
     // To add some inputs to handle
-    // For just pressed or released use a callback
+    // For just pressed or just released attach a callback
     void Window::ProcessInput()
     {
 
@@ -228,4 +226,22 @@ namespace simpleGL
             }
         }
     }
+
+    GLFWkeyfun Window::AttachKeyEventCallback(GLFWkeyfun _callback)
+    {
+        GLFWkeyfun oldCallback = m_pUserKeyCallback;
+        m_pUserKeyCallback = _callback;
+        return oldCallback;
+    }
+
+    GLFWcursorposfun Window::AttachMousePosEventCallback(GLFWcursorposfun _callback)
+    {
+        return glfwSetCursorPosCallback(m_pWindow, _callback);
+    }
+
+    GLFWscrollfun Window::AttachScrollEventCallback(GLFWscrollfun _callback)
+    {
+        return glfwSetScrollCallback(m_pWindow, _callback);
+    }
+
 }

@@ -21,7 +21,7 @@ namespace simpleGL
         static bool instantiated_;
 
         // Callback to handle keys as events
-        static void Key_callback(GLFWwindow* window, int _key, int _scancode, int _action, int _mods);
+        static void Key_callback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);
         static void Framebuffer_size_callback(GLFWwindow* _window, int _width, int _height);
 
         // Contains handler for debug keys
@@ -55,8 +55,11 @@ namespace simpleGL
 
         virtual int GetKey(int _key);
 
-        void AttachKeyEventCallback(GLFWkeyfun _callback);
-        void DetachKeyEventCallback() {m_pUserKeyCallback = nullptr;}
+        GLFWkeyfun AttachKeyEventCallback(GLFWkeyfun _callback);
+        GLFWcursorposfun AttachMousePosEventCallback(GLFWcursorposfun _callback);
+        GLFWscrollfun AttachScrollEventCallback(GLFWscrollfun _callback);
+
+        void SetCursorPos(double _x, double _y) const {glfwSetCursorPos(m_pWindow, _x, _y);}
 
         // glfwSetWindowUserPointer and glfwGetWindowUserPointer
         // can be used to set and get specific chunk of data

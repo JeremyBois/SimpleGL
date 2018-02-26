@@ -7,6 +7,8 @@ namespace GL = simpleGL;
 typedef GL::GameManager Game;
 
 
+double StartingScene::s_lastX = 0.0f;
+double StartingScene::s_lastY = 0.0f;
 
 StartingScene::StartingScene()
 {
@@ -119,6 +121,12 @@ bool StartingScene::OnInit()
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
 
+    // Add callback for Mouse position
+    Game::GetWindow().AttachMousePosEventCallback(MyMousePosEventHandler);
+    Game::GetWindow().SetCursorPos(StartingScene::s_lastX, StartingScene::s_lastY);
+
+    // Add callback for Mouse Scroll
+
 }
 
 bool StartingScene::OnUpdate()
@@ -142,9 +150,6 @@ bool StartingScene::OnQuit()
 {
     // Detach obsolete services
     GL::GameManager::DetachNodeMgr();
-
-    // Remove event callback
-    Game::GetWindow().DetachKeyEventCallback();
 
     return true;
 }
@@ -240,5 +245,26 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
                 break;
         }
     }
+}
+
+void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos)
+{
+    float xoffset = s_lastX - _xpos;
+    float yoffset = s_lastY - _ypos;  // Reversed since y-coordinates go from bottom to top
+    s_lastX = _xpos;
+    s_lastY = _ypos;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    // Update main camera
+    Game::GetWindow().mainCam->Yaw(xoffset);
+    Game::GetWindow().mainCam->Pitch(yoffset);
+}
+
+void StartingScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
+{
+
 }
 
