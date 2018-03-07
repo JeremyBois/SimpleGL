@@ -1,5 +1,8 @@
 #include "Components/CameraDebug.hpp"
 
+
+#include "gtc/matrix_access.hpp"
+
 namespace simpleGL
 {
     CameraDebug::CameraDebug()
@@ -10,6 +13,7 @@ namespace simpleGL
 
     glm::mat4 CameraDebug::GetViewMatrix() const
     {
+        // R⁻¹ * T⁻¹
         return glm::translate(glm::mat4_cast(m_orientation), -m_position);
     }
 
@@ -44,18 +48,22 @@ namespace simpleGL
     }
 
 
+    /// Positive rotations are counterclockwise.
     void CameraDebug::Rotate(float degrees, const glm::vec3 &axis)
     {
         m_orientation *= glm::angleAxis(glm::radians(degrees), axis * m_orientation);
 
-        // Update camera coordinates system
+        // A matrix M which transforms from the space A to the space B has the
+        // basis vectors of space A, but expressed relative to space B.
+        // The View matrix transforms from world space to camera space.
+        // Thus, the basis vectors of the View matrix are the basis vectors
+        // of world space, as seen from camera space, not the basis vectors of camera space
         glm::mat3 rotationM = glm::mat3_cast(m_orientation);
 
-        // Extracted vector basis are stored in each row because
-        // we get the matrix inverse ---> inv(Morientation) = transpose(Morientation)
-        m_right = glm::vec3(glm::vec3(rotationM[0][0], rotationM[1][0], rotationM[2][0]));
-        m_up = glm::vec3(glm::vec3(rotationM[0][1], rotationM[1][1], rotationM[2][1]));
-        m_look = glm::vec3(glm::vec3(rotationM[0][2], rotationM[1][2], rotationM[2][2]));
+        // Camera local basis
+        m_right = glm::row(rotationM, 0);
+        m_up = glm::row(rotationM, 1);
+        m_look = glm::row(rotationM, 2);
     }
 
     /// Rotation around the Y world axis
@@ -90,5 +98,4 @@ namespace simpleGL
     {
         m_position += m_look * _units;
     }
-
 }
