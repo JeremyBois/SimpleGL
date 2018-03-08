@@ -1,6 +1,6 @@
 # Leaning OpenGl by implementing an engine
 
-**Last update 2018-02-17**
+**Last update 2018-03-08**
 
 ## Getting started
 
