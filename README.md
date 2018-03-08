@@ -36,6 +36,13 @@ make
   - **PageUp** --> Scale UV down
 
 
+*Control the debug camera*:
+
+  - **Mouse movements** --> Rotations
+  - **Mouse scroll**    --> Zoom
+  - **Arrow keys**      --> Move
+
+
 ## Notes
 
 Last released of GLM (**9.8.5**) does not recognize GCC 7.3.

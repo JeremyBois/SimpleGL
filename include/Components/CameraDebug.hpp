@@ -13,6 +13,7 @@
 
 namespace simpleGL
 {
+    /// https://www.3dgep.com/understanding-the-view-matrix/
     /// A camera is a component that implement the ICamera interface
     class CameraDebug: public Component
     {
