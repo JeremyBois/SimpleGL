@@ -34,7 +34,7 @@ StartingScene::StartingScene()
     Game::GetWindow().mainCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
     m_pCam = Game::GetWindow().mainCam;
     m_pCam->SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
-    m_pCam->Pitch(30.0f);
+    m_pCam->Pitch(-30.0f);
 
     // Create shapes
     m_pTriangles[0] = new GL::Triangle();
@@ -126,20 +126,14 @@ bool StartingScene::OnInit()
     Game::GetWindow().SetCursorPos(StartingScene::s_lastX, StartingScene::s_lastY);
 
     // Add callback for Mouse Scroll
-
+    Game::GetWindow().AttachScrollEventCallback(MyScrollEventHandler);
 }
 
 bool StartingScene::OnUpdate()
 {
     ChangeGreenOverTime(*Game::GetDataMgr().GetShader("ColorFromProgram"));
-    if (Game::GetWindow().GetKey(GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-    {
-        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), true);
-    }
-    else if (Game::GetWindow().GetKey(GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-    {
-        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), false);
-    }
+
+    ProcessInput();
 
     // Rotate
     float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
@@ -265,6 +259,40 @@ void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, do
 
 void StartingScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
 {
-
+    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+    mainCam->SetFov(mainCam->GetFov() - _yoffset);
 }
 
+void StartingScene::ProcessInput()
+{
+    GL::Window window = Game::GetWindow();
+    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+
+    float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
+
+    if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        mainCam->Walk(cameraSpeed);
+    }
+    if (window.GetKey(GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        mainCam->Walk(-cameraSpeed);
+    }
+    if (window.GetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        mainCam->Strafe(-cameraSpeed);
+    }
+    if (window.GetKey(GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        mainCam->Strafe(cameraSpeed);
+    }
+
+    if (window.GetKey(GLFW_KEY_PAGE_UP) == GLFW_PRESS)
+    {
+        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), true);
+    }
+    else if (window.GetKey(GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
+    {
+        ZoomUV(*Game::GetDataMgr().GetShader("UVscale"), false);
+    }
+}

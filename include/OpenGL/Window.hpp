@@ -13,6 +13,7 @@ namespace simpleGL
     {
     private:
         unsigned int m_width, m_height;
+        float m_deltaTime, m_timeLastFrame;
 
         void ProcessInput();
         void SetDefaultFlag();
@@ -55,9 +56,9 @@ namespace simpleGL
 
         virtual int GetKey(int _key);
 
-        GLFWkeyfun AttachKeyEventCallback(GLFWkeyfun _callback);
+        GLFWkeyfun       AttachKeyEventCallback(GLFWkeyfun _callback);
         GLFWcursorposfun AttachMousePosEventCallback(GLFWcursorposfun _callback);
-        GLFWscrollfun AttachScrollEventCallback(GLFWscrollfun _callback);
+        GLFWscrollfun    AttachScrollEventCallback(GLFWscrollfun _callback);
 
         void SetCursorPos(double _x, double _y) const {glfwSetCursorPos(m_pWindow, _x, _y);}
 
@@ -67,9 +68,14 @@ namespace simpleGL
         // void  RegisterPointer(void* _pointer);
         // void* AccessPointer();
 
-        virtual inline GLFWwindow& GetGLFWwindow() const {return *m_pWindow;}
+        virtual inline GLFWwindow&     GetGLFWwindow() const {return *m_pWindow;}
         virtual inline const glm::mat4 GetViewMatrix() const {return m_viewM;}
         virtual inline const glm::mat4 GetProjectionMatrix() const {return m_projM;}
+        virtual inline const float     GetWidth() const {return m_width;}
+        virtual inline const float     GetHeight() const {return m_height;}
+
+        virtual inline const float     GetTime() const {return glfwGetTime();}
+        virtual inline const float     GetDeltaTime() const {return m_deltaTime;}
     };
 }
 #endif

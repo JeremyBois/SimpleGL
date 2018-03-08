@@ -34,6 +34,8 @@ public:
     virtual bool OnQuit();
     virtual void OnRender();
 
+    virtual void ProcessInput();
+
     // @TODO Must be defined in IScene
     static void MyKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);
     static void MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos);

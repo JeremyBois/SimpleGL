@@ -22,6 +22,10 @@ namespace simpleGL
         m_clearColor[3] = 1.0f;
 
         mainCam = nullptr;
+
+
+        m_timeLastFrame = 0.0f;
+        m_deltaTime = 0.0f;
     }
 
     Window::~Window()
@@ -84,7 +88,7 @@ namespace simpleGL
         // m_viewM = glm::translate(m_viewM, glm::vec3(0.0f, 0.0f, -3.0f));
         // m_viewM = glm::lookAt(glm::vec3(0.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         // Perspective projection
-        m_projM = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
+        // m_projM = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
 
         return true;
     }
@@ -93,6 +97,11 @@ namespace simpleGL
     {
         while (!glfwWindowShouldClose(m_pWindow))
         {
+            // Update DeltaTime since last frame
+            float currentFrame = glfwGetTime();
+            m_deltaTime = currentFrame - m_timeLastFrame;
+            m_timeLastFrame = currentFrame;
+
             ProcessInput();
 
             GameManager::Update();
@@ -100,6 +109,7 @@ namespace simpleGL
             if (mainCam != nullptr)
             {
                 m_viewM = mainCam->GetViewMatrix();
+                m_projM = mainCam->GetPerspectiveMatrix();
             }
 
             Render();
