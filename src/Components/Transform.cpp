@@ -13,7 +13,8 @@ namespace simpleGL
 
 
     Transform::Transform()
-        : m_right(glm::vec3(1.0f, 0.0f, 0.0f)), m_up(glm::vec3(0.0f, 1.0f, 0.0f)), m_look(glm::vec3(0.0f, 0.0f, 1.0f))
+        : m_right(glm::vec3(1.0f, 0.0f, 0.0f)), m_up(glm::vec3(0.0f, 1.0f, 0.0f)),
+          m_look(glm::vec3(0.0f, 0.0f, 1.0f))
     {
         // Identity
         m_localToWorld = glm::mat4(1.0f);
@@ -63,8 +64,9 @@ namespace simpleGL
     void Transform::SetRotation(const glm::vec3 _eulerAngles)
     {
         m_orientation = glm::quat(glm::vec3(glm::radians(_eulerAngles.x),
-                                  glm::radians(_eulerAngles.y),
-                                  glm::radians(_eulerAngles.z))
+                                            glm::radians(_eulerAngles.y),
+                                            glm::radians(_eulerAngles.z)
+                                           )
                                  );
 
         ConstructModelMatrix();

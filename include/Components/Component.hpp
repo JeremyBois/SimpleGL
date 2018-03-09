@@ -27,8 +27,9 @@ namespace simpleGL
 
         virtual Component* Clone() = 0;
 
-        inline Node& GetParent() {return *m_pNode;}
-        const Transform&   GetTransform() const;
+        inline const Node&       GetParent() {return *m_pNode;}
+        const        Transform&  GetTransform() const;
+
         virtual bool  SetParent(Node* _pNode);
     };
 }

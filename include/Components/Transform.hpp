@@ -10,22 +10,21 @@
 namespace simpleGL
 {
     /// Control local to world transformation.
-    /// Attached to every Node.
+    /// Attached to every Node at their creation.
     class SIMPLEGL_API Transform: public Component
     {
     protected:
         static const glm::vec3 s_xAxis, s_yAxis, s_zAxis;
-
-        // Transformations
-        glm::vec3 m_position;
-        glm::vec3 m_scale;
 
         // Store rotation as a quaternion but keep track of local basis
         glm::vec3 m_look;
         glm::vec3 m_up;
         glm::vec3 m_right;
         glm::quat m_orientation;
+        glm::vec3 m_position;
+        glm::vec3 m_scale;
 
+        // Local model --> world matrix
         glm::mat4 m_localToWorld;
 
 
@@ -43,7 +42,7 @@ namespace simpleGL
         inline         const glm::vec3  GetLook() const {return m_look;}
         inline         const glm::vec3  GetUp() const {return m_up;}
         inline         const glm::vec3  GetRight() const {return m_right;}
-        const                glm::vec3 GetYawPitchRollAngles() const;
+        const                glm::vec3  GetYawPitchRollAngles() const;
 
         // Set common transformations
         void SetPosition(const glm::vec3 _position);
