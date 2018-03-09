@@ -1,9 +1,10 @@
 #include "StartingScene.hpp"
+#include "LightShadowScene.hpp"
 
 #include "math.h"
 #include "glm.hpp"
 
-#include "gtx/string_cast.hpp"
+// #include "gtx/string_cast.hpp" // For debug
 
 namespace GL = simpleGL;
 typedef GL::GameManager Game;
@@ -14,28 +15,6 @@ double StartingScene::s_lastY = 0.0f;
 
 StartingScene::StartingScene()
 {
-    // Steal ownership
-    auto* container = new GL::NodeManager();
-    GL::GameManager::AttachNodeMgr(container);
-
-    m_pNodes[0] =  container->CreateNode();
-    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.0f));
-
-    m_pNodes[1] =  container->CreateNode();
-    m_pNodes[1]->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, 0.0f));
-    m_pNodes[1]->GetTransform().SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
-
-    m_pNodes[2] =  container->CreateNode();
-    m_pNodes[2]->GetTransform().SetRotationX(-55.0f);
-
-    m_pNodes[3] =  container->CreateNode();
-    m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
-    m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
-
-    // Create a camera
-    m_pNodes[4] =  container->CreateNode();
-    m_pNodes[4]->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
-
     // Create shapes
     m_pTriangles[0] = new GL::Triangle();
     m_pTriangles[1] = new GL::Triangle();
@@ -83,6 +62,29 @@ void StartingScene::ZoomUV(GL::Shader& _shader, bool _zoom)
 
 bool StartingScene::OnInit()
 {
+    // Steal ownership
+    auto* container = new GL::NodeManager();
+    GL::GameManager::AttachNodeMgr(container);
+
+    m_pNodes[0] =  container->CreateNode();
+    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(1.0f, 1.0f, 0.0f));
+
+    m_pNodes[1] =  container->CreateNode();
+    m_pNodes[1]->GetTransform().SetPosition(glm::vec3(-1.0f, -1.0f, 0.0f));
+    m_pNodes[1]->GetTransform().SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+    m_pNodes[2] =  container->CreateNode();
+    m_pNodes[2]->GetTransform().SetRotationX(-55.0f);
+
+    m_pNodes[3] =  container->CreateNode();
+    m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
+    m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
+
+    // Create a camera
+    m_pNodes[4] =  container->CreateNode();
+    m_pNodes[4]->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
+
+
     glm::vec4 color1[]
     {
         {1.0f, 0.0f, 0.0f, 1.0f},
@@ -136,8 +138,6 @@ bool StartingScene::OnInit()
 bool StartingScene::OnUpdate()
 {
     ChangeGreenOverTime(*Game::GetDataMgr().GetShader("ColorFromProgram"));
-
-    ProcessInput();
 
     // Rotate
     float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
@@ -273,6 +273,11 @@ void StartingScene::ProcessInput()
     GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
+
+    if (window.GetKey(GLFW_KEY_1) == GLFW_PRESS)
+    {
+        Game::GetSceneMgr().Change(new LightShadowScene());
+    }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {

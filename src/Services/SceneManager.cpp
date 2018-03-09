@@ -26,6 +26,7 @@ namespace simpleGL
 
     bool SceneManager::Update()
     {
+        m_pCurrent->ProcessInput();
         m_pCurrent->OnUpdate();
 
         // Change must occurs after current scene update ended
@@ -55,10 +56,12 @@ namespace simpleGL
 
     void SceneManager::ToNext()
     {
-        m_pCurrent->OnQuit();
+        if (m_pCurrent)
+        {
+            m_pCurrent->OnQuit();
+            delete m_pCurrent;
+        }
         m_pNext->OnInit();
-
-        delete m_pCurrent;
         m_pCurrent = m_pNext;
 
         m_pNext = nullptr;
@@ -86,10 +89,10 @@ namespace simpleGL
         }
     }
 
-    void SceneManager::Change(IScene& _scene)
+    void SceneManager::Change(IScene* _pScene)
     {
         m_transitionToNext = true;
-        m_pNext = &_scene;
+        m_pNext = _pScene;
 
         delete m_pPrevious;
         m_pPrevious = m_pCurrent;

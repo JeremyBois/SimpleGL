@@ -31,7 +31,7 @@ namespace simpleGL
         virtual bool Quit();
         virtual void Render();
 
-        virtual void    Change(IScene& _scene);
+        virtual void    Change(IScene* _pScene);
         virtual IScene* GetCurrent();
 
         virtual void Revert();

@@ -13,6 +13,8 @@ namespace simpleGL
         IScene(){};
         virtual ~IScene(){};
 
+        virtual void ProcessInput() {};
+
         virtual bool OnInit() = 0;
         virtual bool OnUpdate() = 0;
         virtual bool OnQuit() = 0;

@@ -1,5 +1,6 @@
 #include "simpleGL.hpp"
 #include "StartingScene.hpp"
+#include "LightShadowScene.hpp"
 
 // Handle Windows and Linux environments
 #ifdef __unix__
@@ -31,7 +32,8 @@ int main(int argc, char** argv)
     LoadData();
 
     // Create a simple SceneManager with a starting scene
-    StartingScene* firstScene = new StartingScene();
+    // StartingScene* firstScene = new StartingScene();
+    LightShadowScene* firstScene = new LightShadowScene();
     simpleGL::GameManager::AttachSceneMgr(new simpleGL::SceneManager(*firstScene));
 
     // Start loop
