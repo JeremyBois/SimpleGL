@@ -8,7 +8,7 @@
 class StartingScene: public simpleGL::IScene
 {
 private:
-    simpleGL::Node*         m_pNodes[4];
+    simpleGL::Node*         m_pNodes[5];
 
     simpleGL::Triangle*     m_pTriangles[2];
     simpleGL::Quad*         m_pQuad;

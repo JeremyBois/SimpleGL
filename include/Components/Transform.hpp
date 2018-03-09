@@ -5,7 +5,7 @@
 #include "Components/Component.hpp"
 
 #include "glm.hpp"
-
+#include "gtc/quaternion.hpp"
 
 namespace simpleGL
 {
@@ -13,19 +13,21 @@ namespace simpleGL
     /// Attached to every Node.
     class SIMPLEGL_API Transform: public Component
     {
-    private:
-        glm::vec3 m_refRotOrigin;
-
     protected:
+        static const glm::vec3 s_xAxis, s_yAxis, s_zAxis;
+
         // Transformations
-        glm::vec3 m_xAxis, m_yAxis, m_zAxis;
         glm::vec3 m_position;
         glm::vec3 m_scale;
 
-        glm::vec3 m_rotOrigin;
-        glm::vec3 m_eulerAngles;
+        // Store rotation as a quaternion but keep track of local basis
+        glm::vec3 m_look;
+        glm::vec3 m_up;
+        glm::vec3 m_right;
+        glm::quat m_orientation;
 
         glm::mat4 m_localToWorld;
+
 
         virtual void ConstructModelMatrix();
 
@@ -33,27 +35,31 @@ namespace simpleGL
         Transform();
         virtual ~Transform();
 
-        inline         const glm::vec3  GetPosition()    const {return m_position;}
-        inline         const glm::vec3  GetScale()       const {return m_scale;}
         inline virtual const glm::mat4& GetModelMatrix() const {return m_localToWorld;}
 
+        inline         const glm::vec3  GetPosition()    const {return m_position;}
+        inline         const glm::quat  GetRotation()    const {return m_orientation;}
+        inline         const glm::vec3  GetScale()       const {return m_scale;}
+        inline         const glm::vec3  GetLook() const {return m_look;}
+        inline         const glm::vec3  GetUp() const {return m_up;}
+        inline         const glm::vec3  GetRight() const {return m_right;}
+        const                glm::vec3 GetYawPitchRollAngles() const;
 
-        // Common transformations
-        virtual void SetPosition(glm::vec3 _position);
-        virtual void SetScale(glm::vec3 _scale);
-        virtual void SetYawPitchRollAngles(glm::vec3 _eulerAngles, glm::vec3 _origin=glm::vec3(0.0f, 0.0f, 0.0f));
-        virtual void SetRotationX(float _degrees);
-        virtual void SetRotationY(float _degrees);
-        virtual void SetRotationZ(float _degrees);
-
-        const glm::vec3 GetYawPitchRollAngles() const;
+        // Set common transformations
+        void SetPosition(const glm::vec3 _position);
+        void SetScale(const glm::vec3 _scale);
+        void SetRotationX(float _degrees);
+        void SetRotationY(float _degrees);
+        void SetRotationZ(float _degrees);
+        void SetRotation(const glm::quat _rotation);
+        void SetRotation(const glm::vec3 _eulerAngles);
 
         virtual bool Init() {};
         virtual bool Draw() {};
         virtual bool Update() {};
         virtual bool Quit() {};
 
-        virtual Component* Clone() {return new Transform();}
+        virtual Component* Clone() {return new Transform(*this);}
         virtual bool       SetParent(Node* _pNode);
     };
 }

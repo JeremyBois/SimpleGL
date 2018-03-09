@@ -3,6 +3,8 @@
 #include "math.h"
 #include "glm.hpp"
 
+#include "gtx/string_cast.hpp"
+
 namespace GL = simpleGL;
 typedef GL::GameManager Game;
 
@@ -24,17 +26,15 @@ StartingScene::StartingScene()
     m_pNodes[1]->GetTransform().SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
     m_pNodes[2] =  container->CreateNode();
-    m_pNodes[2]->GetTransform().SetYawPitchRollAngles(glm::vec3(-55.0f, 0.0f, 0.0f));
+    m_pNodes[2]->GetTransform().SetRotationX(-55.0f);
 
     m_pNodes[3] =  container->CreateNode();
     m_pNodes[3]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
     m_pNodes[3]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
 
     // Create a camera
-    Game::GetWindow().mainCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
-    m_pCam = Game::GetWindow().mainCam;
-    m_pCam->SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
-    m_pCam->Pitch(-30.0f);
+    m_pNodes[4] =  container->CreateNode();
+    m_pNodes[4]->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
 
     // Create shapes
     m_pTriangles[0] = new GL::Triangle();
@@ -117,6 +117,10 @@ bool StartingScene::OnInit()
     temp->LinkShape(m_pCuboid);
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("ColorFromVertex"));
 
+    // Add camera
+    Game::GetWindow().mainCam = m_pNodes[4]->AddComponent<GL::CameraDebug>();
+    m_pCam = Game::GetWindow().mainCam;
+    m_pCam->Pitch(-30.0f);
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);

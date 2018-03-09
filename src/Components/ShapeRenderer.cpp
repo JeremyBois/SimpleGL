@@ -31,7 +31,7 @@ namespace simpleGL
 
         if (m_pMaterial != nullptr && m_pShape != nullptr)
         {
-            m_pMaterial->Use(*(GetNode().GetComponent<Transform>()));
+            m_pMaterial->Use(*(GetParent().GetComponent<Transform>()));
             m_pShape->Draw();
             return true;
         }

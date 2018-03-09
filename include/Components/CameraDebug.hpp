@@ -18,13 +18,6 @@ namespace simpleGL
     class CameraDebug: public Component
     {
     protected:
-        glm::vec3 m_look;
-        glm::vec3 m_up;
-        glm::vec3 m_right;
-
-        glm::vec3 m_position;
-        glm::quat m_orientation;
-
         float m_fov, m_near, m_far;
         float m_width, m_height;
 
@@ -40,7 +33,6 @@ namespace simpleGL
         virtual void Yaw(float degrees);
         virtual void Pitch(float degrees);
         virtual void Roll(float degrees);
-        virtual void SetPosition(glm::vec3 _pos);
         virtual void SetAspect(float _width, float _height);
         virtual void SetNear(float _near);
         virtual void SetFar(float _far);
@@ -48,16 +40,15 @@ namespace simpleGL
 
         virtual glm::mat4 GetViewMatrix() const;
         virtual glm::mat4 GetPerspectiveMatrix() const;
-        virtual glm::vec3 GetPosition() const;
-        virtual glm::vec3 GetLook() const;
-        virtual glm::vec3 GetUp() const;
-        virtual glm::vec3 GetRight() const;
-        virtual float     GetFov() const;
-        virtual float     GetAspect() const;
-        virtual float     GetAspectWidth() const;
-        virtual float     GetAspectHeight() const;
-        virtual float     GetNear() const;
-        virtual float     GetFar() const;
+        glm::vec3 GetLook() const;
+        glm::vec3 GetUp() const;
+        glm::vec3 GetRight() const;
+        float     GetFov() const;
+        float     GetAspect() const;
+        float     GetAspectWidth() const;
+        float     GetAspectHeight() const;
+        float     GetNear() const;
+        float     GetFar() const;
 
         virtual bool Draw() {};
         virtual bool Init() {};

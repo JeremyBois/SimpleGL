@@ -1,4 +1,5 @@
 #include "Components/Component.hpp"
+#include "Components/Transform.hpp"
 #include "Node.hpp"
 
 namespace simpleGL
@@ -25,5 +26,10 @@ namespace simpleGL
         m_pNode = _pNode;
         // Give back ownership to the node
         m_pNode->EmplaceBack(this);
+    }
+
+    const Transform& Component::GetTransform() const
+    {
+        return m_pNode->GetTransform();
     }
 }

@@ -8,6 +8,7 @@
 namespace simpleGL
 {
     class Node;
+    class Transform;
 
     /// Abstract class for every component attached to a Node.
     class SIMPLEGL_API Component: public GameObject
@@ -26,7 +27,8 @@ namespace simpleGL
 
         virtual Component* Clone() = 0;
 
-        virtual Node& GetNode() {return *m_pNode;}
+        inline Node& GetParent() {return *m_pNode;}
+        const Transform&   GetTransform() const;
         virtual bool  SetParent(Node* _pNode);
     };
 }
