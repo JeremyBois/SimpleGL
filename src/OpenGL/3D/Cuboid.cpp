@@ -22,7 +22,7 @@ namespace simpleGL
         float halfDepth  = _depth / 2.0f;
 
         // Counter clockwise
-        // Top left - Bottom left - Bottom right - Top right
+        // Top left - Bottom left - top right - bottom right
         glm::vec3 tempVertices[] =
         {
             // Front Face (1-2-3-4)
@@ -62,9 +62,18 @@ namespace simpleGL
             { halfWidth, -halfHeight, -halfDepth }
         };
 
+        // Counter clockwise
+        // Top left - Bottom left - top right - bottom right
+        glm::vec2 tempUV[] =
+        {
+            // All faces
+            { 0.0f, 0.0f },
+            { 0.0f, 1.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f }
+        };
 
         int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
-
 
         // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
@@ -83,8 +92,28 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 3] = 1.0f;
 
             // ST
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = 0.0f;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = 0.0f;
+            int modI = i % 4;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[modI].x;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[modI].y;
+        }
+
+        SendData();
+    }
+
+    /// Change UV mapping
+    /// Counter clockwise definition of vertices using triangles strips
+    /// Top left - Bottom left - top right - bottom right
+    void Cuboid::SetUV(const glm::vec2 _uvMap[m_sizeVertices])
+    {
+        int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+
+        for (int i = 0; i < m_sizeVertices - 1; ++i)
+        {
+            // Pos
+            int tempShift = (i * shiftV);
+
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = _uvMap[i].x;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = _uvMap[i].y;
         }
 
         SendData();

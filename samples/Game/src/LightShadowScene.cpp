@@ -1,4 +1,5 @@
 #include "LightShadowScene.hpp"
+#include "StartingScene.hpp"
 
 #include "math.h"
 #include "glm.hpp"
@@ -32,17 +33,35 @@ bool LightShadowScene::OnInit()
     m_pNodes[0] =  container->CreateNode();
     m_pNodes[0]->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
 
-    m_pNodes[1] =  container->CreateNode();
-    m_pNodes[1]->GetTransform().SetPosition(glm::vec3(-2.0f, 0.0f, -2.0f));
-    m_pNodes[1]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 3.0f));
+    // Create a field of boxes
+    m_pCuboid->Create(0.5f, 0.5f, 0.5f);
+
+    glm::vec3 m_cubePositions[] =
+    {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
 
     GL::ShapeRenderer* temp;
-    temp = m_pNodes[1]->AddComponent<GL::ShapeRenderer>();
-    temp->LinkShape(m_pCuboid);
-    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("ColorFromVertex"));
+    for (int i = 0; i < 10; ++i)
+    {
+        m_pNodes[i + 1] = container->CreateNode();
+        m_pNodes[i + 1]->GetTransform().SetPosition(m_cubePositions[i]);
+        m_pNodes[i + 1]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 
-    // Add Cuboid
-    m_pCuboid->Create(0.5f, 0.5f, 0.5f);
+        temp = m_pNodes[i + 1]->AddComponent<GL::ShapeRenderer>();
+        temp->LinkShape(m_pCuboid);
+        temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Box"));
+    }
+
 
     // Add camera
     Game::GetWindow().mainCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
@@ -111,6 +130,11 @@ void LightShadowScene::ProcessInput()
     GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
+
+    if (window.GetKey(GLFW_KEY_1) == GLFW_PRESS)
+    {
+        Game::GetSceneMgr().Change(new StartingScene());
+    }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {

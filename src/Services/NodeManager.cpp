@@ -14,6 +14,7 @@ namespace simpleGL
 
     NodeManager::~NodeManager()
     {
+        Clear();
     }
 
 

@@ -120,8 +120,7 @@ bool StartingScene::OnInit()
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("ColorFromVertex"));
 
     // Add camera
-    Game::GetWindow().mainCam = m_pNodes[4]->AddComponent<GL::CameraDebug>();
-    m_pCam = Game::GetWindow().mainCam;
+    m_pCam = m_pNodes[4]->AddComponent<GL::CameraDebug>();
     m_pCam->Pitch(-30.0f);
 
     // Add callback for key events
@@ -274,7 +273,7 @@ void StartingScene::ProcessInput()
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
 
-    if (window.GetKey(GLFW_KEY_1) == GLFW_PRESS)
+    if (window.GetKey(GLFW_KEY_2) == GLFW_PRESS)
     {
         Game::GetSceneMgr().Change(new LightShadowScene());
     }

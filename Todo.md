@@ -1,6 +1,6 @@
 # TODO
 
-**Last update 2018-03-08**
+**Last update 2018-03-09**
 
 ## Shapes
 
@@ -12,3 +12,8 @@
 
 
 ## Data
+
+
+## Components
+
+  - Set main camera at creation

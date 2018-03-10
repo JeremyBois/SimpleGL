@@ -3,16 +3,17 @@
 
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Components/Transform.hpp"
+#include "Components/Camera.hpp"
 #include "Utility/Tools.hpp"
 #include "Utility/TransformException.hpp"
 
 #include "GameObject.hpp"
-
+#include "GameManager.hpp"
 
 #include <vector>
 #include <typeinfo>
 #include <memory>
-
+#include <type_traits>
 
 namespace simpleGL
 {
@@ -66,6 +67,13 @@ namespace simpleGL
             // Add reference to Node in object
             // and steal ownership (see friend Component::SetParent)
             created->SetParent(this);
+
+            // // Each time we add a Camera see it as main one
+            // // if (std::is_base_of<T, Camera>::value)
+            // if (typeid(T) == typeid(Camera))
+            // {
+            //     GameManager::GetWindow().mainCam = created;
+            // }
 
             return created;
         }
@@ -126,6 +134,19 @@ namespace simpleGL
     {
         throw TransformException();
     }
+
+    // template<> inline CameraDebug* Node::AddComponent()
+    // {
+    //     CameraDebug* created = new CameraDebug();
+
+    //     // Add reference to Node in object
+    //     // and steal ownership (see friend Component::SetParent)
+    //     created->SetParent(this);
+
+    //     GameManager::GetWindow().mainCam = created;
+
+    //     return created;
+    // }
 }
 
 #endif

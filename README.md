@@ -1,6 +1,6 @@
 # Leaning OpenGl by implementing an engine
 
-**Last update 2018-03-08**
+**Last update 2018-03-09**
 
 ## Getting started
 
@@ -52,3 +52,9 @@ Last released of GLM (**9.8.5**) does not recognize GCC 7.3.
 #   elif (__GNUC__ == 7) && (__GNUC_MINOR__ == 3)
 #       define GLM_COMPILER (GLM_COMPILER_GCC72)
 ```
+
+
+
+## Other
+
+  - [GDB](https://betterexplained.com/articles/debugging-with-gdb/)

@@ -8,7 +8,7 @@
 class LightShadowScene: public simpleGL::IScene
 {
 private:
-    simpleGL::Node*         m_pNodes[5];
+    simpleGL::Node*         m_pNodes[11];
     simpleGL::Cuboid*       m_pCuboid;
 
     simpleGL::CameraDebug*   m_pCam;

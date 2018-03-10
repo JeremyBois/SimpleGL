@@ -32,6 +32,7 @@ namespace simpleGL
         virtual ~Cuboid();
 
         void Create(float _width, float _height, float _depth);
+        void SetUV(const glm::vec2 _uvMap[m_sizeVertices]);
 
         virtual void Draw();
     };

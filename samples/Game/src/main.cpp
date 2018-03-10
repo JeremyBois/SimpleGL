@@ -94,9 +94,12 @@ void LoadData()
 
     Game::GetDataMgr().CreateMaterial("ColorFromProgram", "ColorFromProgram");
 
-    pMat = Game::GetDataMgr().CreateMaterial("UV", "UVscale", "Container");
+    pMat = Game::GetDataMgr().CreateMaterial("UV", "UVscale");
     pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL_TEXTURE0);
     pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE1);
 
     Game::GetDataMgr().CreateMaterial("ColorFromVertex", "ColorFromVertex");
+
+    pMat = Game::GetDataMgr().CreateMaterial("Box", "Default");
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE0);
 }
