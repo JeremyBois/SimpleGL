@@ -31,7 +31,8 @@ bool LightShadowScene::OnInit()
 
     // Create a camera
     m_pNodes[0] =  container->CreateNode();
-    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(0.0f, 2.0f, 3.0f));
+    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 5.0f));
+
 
     // Create a field of boxes
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
@@ -56,17 +57,17 @@ bool LightShadowScene::OnInit()
         m_pNodes[i + 1] = container->CreateNode();
         m_pNodes[i + 1]->GetTransform().SetPosition(m_cubePositions[i]);
         m_pNodes[i + 1]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+        float angle = 20.0f * i;
+        m_pNodes[i + 1]->GetTransform().SetRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 
         temp = m_pNodes[i + 1]->AddComponent<GL::ShapeRenderer>();
         temp->LinkShape(m_pCuboid);
         temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Box"));
     }
 
-
     // Add camera
-    Game::GetWindow().mainCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
-    m_pCam = Game::GetWindow().mainCam;
-    m_pCam->Pitch(-30.0f);
+    m_pCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
+    m_pCam->LookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
@@ -120,14 +121,14 @@ void LightShadowScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos,
 
 void LightShadowScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
 {
-    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+    GL::Camera* mainCam = Game::GetWindow().mainCam;
     mainCam->SetFov(mainCam->GetFov() - _yoffset);
 }
 
 void LightShadowScene::ProcessInput()
 {
     GL::Window window = Game::GetWindow();
-    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+    GL::Camera* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
 

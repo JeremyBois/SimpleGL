@@ -83,13 +83,6 @@ namespace simpleGL
         // Hide cursor for camera movements
         glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-        // Camera
-        // Translate in the reverse direction we want to move
-        // m_viewM = glm::translate(m_viewM, glm::vec3(0.0f, 0.0f, -3.0f));
-        // m_viewM = glm::lookAt(glm::vec3(0.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        // Perspective projection
-        // m_projM = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
-
         return true;
     }
 

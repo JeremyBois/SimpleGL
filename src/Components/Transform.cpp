@@ -7,9 +7,9 @@ namespace simpleGL
 {
 
     // Axis helpers (World basis)
-    const glm::vec3 Transform::s_xAxis = glm::vec3(1.0f, 0.0f, 0.0f);
-    const glm::vec3 Transform::s_yAxis = glm::vec3(0.0f, 1.0f, 0.0f);
-    const glm::vec3 Transform::s_zAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+    const glm::vec3 Transform::XAxis = glm::vec3(1.0f, 0.0f, 0.0f);
+    const glm::vec3 Transform::YAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+    const glm::vec3 Transform::ZAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 
 
     Transform::Transform()
@@ -26,6 +26,17 @@ namespace simpleGL
     Transform::~Transform()
     {
 
+    }
+
+    /// Return Euler angles from orientation in degrees
+    const glm::vec3 Transform::GetYawPitchRollAngles() const
+    {
+        glm::vec3 eulerDeg = glm::eulerAngles(m_orientation);
+        eulerDeg.x = glm::degrees(eulerDeg.x);
+        eulerDeg.y = glm::degrees(eulerDeg.y);
+        eulerDeg.z = glm::degrees(eulerDeg.z);
+
+        return eulerDeg;
     }
 
     void Transform::SetPosition(const glm::vec3 _position)
@@ -63,39 +74,37 @@ namespace simpleGL
     // Euler angles in degrees for rotation around each axis
     void Transform::SetRotation(const glm::vec3 _eulerAngles)
     {
-        m_orientation = glm::quat(glm::vec3(glm::radians(_eulerAngles.x),
-                                            glm::radians(_eulerAngles.y),
-                                            glm::radians(_eulerAngles.z)
-                                           )
-                                 );
+        glm::quat orientation = glm::quat
+        (
+            glm::vec3
+            (
+                glm::radians(_eulerAngles.x),
+                glm::radians(_eulerAngles.y),
+                glm::radians(_eulerAngles.z)
+            )
+        );
 
-        ConstructModelMatrix();
+        SetRotation(orientation);
     }
 
-    /// Return Euler angles from orientation in degrees
-    const glm::vec3 Transform::GetYawPitchRollAngles() const
+    void Transform::SetRotation(float _degrees, const glm::vec3 _axe)
     {
-        glm::vec3 eulerDeg = glm::eulerAngles(m_orientation);
-        eulerDeg.x = glm::degrees(eulerDeg.x);
-        eulerDeg.y = glm::degrees(eulerDeg.y);
-        eulerDeg.z = glm::degrees(eulerDeg.z);
-
-        return eulerDeg;
+        SetRotation(glm::angleAxis(glm::radians(_degrees), glm::normalize(_axe)));
     }
 
     void Transform::SetRotationX(float _degrees)
     {
-        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::s_xAxis));
+        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::XAxis));
     }
 
     void Transform::SetRotationY(float _degrees)
     {
-        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::s_yAxis));
+        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::YAxis));
     }
 
     void Transform::SetRotationZ(float _degrees)
     {
-        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::s_zAxis));
+        SetRotation(glm::angleAxis(glm::radians(_degrees), Transform::ZAxis));
     }
 
     void Transform::ConstructModelMatrix()

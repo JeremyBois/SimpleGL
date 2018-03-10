@@ -14,8 +14,6 @@ namespace simpleGL
     class SIMPLEGL_API Transform: public Component
     {
     protected:
-        static const glm::vec3 s_xAxis, s_yAxis, s_zAxis;
-
         // Store rotation as a quaternion but keep track of local basis
         glm::vec3 m_look;
         glm::vec3 m_up;
@@ -31,6 +29,9 @@ namespace simpleGL
         virtual void ConstructModelMatrix();
 
     public:
+
+        static const glm::vec3 XAxis, YAxis, ZAxis;
+
         Transform();
         virtual ~Transform();
 
@@ -51,6 +52,7 @@ namespace simpleGL
         void SetRotationY(float _degrees);
         void SetRotationZ(float _degrees);
         void SetRotation(const glm::quat _rotation);
+        void SetRotation(float _degrees, const glm::vec3 _axe);
         void SetRotation(const glm::vec3 _eulerAngles);
 
         virtual bool Init() {};

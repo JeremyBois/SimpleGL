@@ -262,14 +262,14 @@ void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, do
 
 void StartingScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
 {
-    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+    GL::Camera* mainCam = Game::GetWindow().mainCam;
     mainCam->SetFov(mainCam->GetFov() - _yoffset);
 }
 
 void StartingScene::ProcessInput()
 {
     GL::Window window = Game::GetWindow();
-    GL::CameraDebug* mainCam = Game::GetWindow().mainCam;
+    GL::Camera* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
 

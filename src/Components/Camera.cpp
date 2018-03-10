@@ -4,6 +4,9 @@
 
 #include "gtc/matrix_access.hpp"
 
+
+// #include "gtx/string_cast.hpp"
+
 namespace simpleGL
 {
     Camera::Camera()
@@ -11,6 +14,9 @@ namespace simpleGL
     {
         m_width = GameManager::GetWindow().GetWidth();
         m_height = GameManager::GetWindow().GetHeight();
+
+        // Each new camera become the new main
+        GameManager::GetWindow().mainCam = this;
     }
 
     glm::mat4 Camera::GetViewMatrix() const
@@ -69,6 +75,30 @@ namespace simpleGL
     float Camera::GetFar() const
     {
         return m_far;
+    }
+
+    void Camera::LookAt(glm::vec3 _target)
+    {
+        Transform* pTransform = &m_pNode->GetTransform();
+
+        // Calculate rotation and axis used to rotate
+        glm::vec3 look = glm::normalize(pTransform->GetPosition() - _target);
+
+        // Rotation axis is a perpendicular axis of both directions
+        glm::vec3 rotationAxis = glm::normalize(glm::cross(Transform::ZAxis, look));
+
+        // // Get angle between world look and camera look
+        // float angle = glm::degrees(acos(glm::dot(Transform::ZAxis, look)));
+        // pTransform->SetRotation(angle, rotationAxis);
+
+        // Get angle between world look and camera look
+        // Avoid conversion radians --> degrees --> radians
+        float angle = acos(glm::dot(Transform::ZAxis, look));
+        pTransform->SetRotation(glm::quat(rotationAxis * angle));
+
+        // // Debug show similar result (difference from floating point errors ???)
+        // cout << glm::to_string(glm::lookAt(pTransform->GetPosition(), _target, Transform::YAxis)) << endl << endl;
+        // cout << glm::to_string(GetViewMatrix()) << endl;
     }
 
     /// Positive rotations are counterclockwise.

@@ -27,6 +27,7 @@ namespace simpleGL
         virtual void Fly(float _units);
         virtual void Walk(float _units);
 
+        virtual void LookAt(glm::vec3 _target);
         virtual void Rotate(float degrees, const glm::vec3 &axis);
         virtual void Yaw(float degrees);
         virtual void Pitch(float degrees);
