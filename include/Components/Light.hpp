@@ -4,6 +4,8 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 
 #include "Components/Component.hpp"
+#include "OpenGL/Texture.hpp"
+
 
 #include "glm.hpp"
 
@@ -16,6 +18,10 @@ namespace simpleGL
     {
     protected:
         glm::vec3 m_ambient, m_diffuse, m_specular;
+
+        Texture* m_pDiffuseMap;
+        Texture* m_pSpecularMap;
+        Texture* m_pDefaultMap;
 
     public:
         Light();

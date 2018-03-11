@@ -94,11 +94,15 @@ namespace simpleGL
     /// Populate container with basic stuff.
     bool DataManager::Init()
     {
+        // Default texture
+        CreateTexture("White", "data/images/white.jpg");
+
         CreateShader("Default", "shaders/basic.vert", "shaders/basic.frag");
         CreateMaterial("Default", "Default");
 
         CreateShader("LightGizmo", "shaders/lightGizmo.vert", "shaders/lightGizmo.frag");
         CreateMaterial("LightGizmo", "LightGizmo");
+
 
         return true;
     }

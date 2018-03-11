@@ -64,7 +64,6 @@ bool LightShadowScene::OnInit()
         temp->LinkMaterial(cubeMat);
     }
     // Add cube color
-    cubeMat->SetAmbient(glm::vec3(1.0f, 0.5f, 0.31f));
     cubeMat->SetDiffuse(glm::vec3(1.0f, 0.5f, 0.31f));
     cubeMat->SetSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
 
@@ -112,14 +111,15 @@ bool LightShadowScene::OnUpdate()
 
     // Change light color with time
     glm::vec3 lightColor;
-    lightColor.x = sin(glfwGetTime() * 2.0f);
-    lightColor.y = sin(glfwGetTime() * 0.7f);
-    lightColor.z = sin(glfwGetTime() * 1.3f);
+    lightColor.x = sin(glfwGetTime() * 2.0f * 0.5f);
+    lightColor.y = sin(glfwGetTime() * 0.7f * 0.5f);
+    lightColor.z = sin(glfwGetTime() * 1.3f * 0.5f);
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.3f); // low influence
 
-    cubeMat->SetAmbient(ambientColor);
-    cubeMat->SetDiffuse(diffuseColor);
+    // Update light color
+    m_pLight->SetDiffuse(diffuseColor);
+    m_pLight->SetAmbient(ambientColor);
     m_pLight->Use(cubeMat->GetShader());
 }
 
