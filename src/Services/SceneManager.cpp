@@ -59,10 +59,11 @@ namespace simpleGL
         if (m_pCurrent)
         {
             m_pCurrent->OnQuit();
-            delete m_pCurrent;
+            // m_pPrevious still point to current
+            // to be able to go to previous scene
+            m_pCurrent = m_pNext;
         }
-        m_pNext->OnInit();
-        m_pCurrent = m_pNext;
+        m_pCurrent->OnInit();
 
         m_pNext = nullptr;
         m_transitionToNext = false;

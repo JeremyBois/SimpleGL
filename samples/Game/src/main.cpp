@@ -27,14 +27,15 @@ int main(int argc, char** argv)
     ChangeWorkingDirectory(__FILE__, "../../../");
 
     // Test implementation of Game Manager / Window
-    Game::Init(800, 600, "My OpenGl window");
+    Game::Init(1200, 800, "My OpenGl window");
 
     LoadData();
 
     // Create a simple SceneManager with a starting scene
     // StartingScene* firstScene = new StartingScene();
     LightShadowScene* firstScene = new LightShadowScene();
-    simpleGL::GameManager::AttachSceneMgr(new simpleGL::SceneManager(*firstScene));
+    simpleGL::SceneManager* mySceneManager = new simpleGL::SceneManager(*firstScene);
+    simpleGL::GameManager::AttachSceneMgr(mySceneManager);
 
     // Start loop
     Game::Start();
