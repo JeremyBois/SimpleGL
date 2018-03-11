@@ -23,7 +23,7 @@ namespace simpleGL
         Shader(const std::string vertexPath, const std::string fragPath);
         ~Shader();
 
-        void Use();
+        void         Use() const;
         unsigned int ShaderID() const {return m_shaderID;}
 
         // Unifrom functions

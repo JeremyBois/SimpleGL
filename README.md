@@ -1,6 +1,6 @@
 # Leaning OpenGl by implementing an engine
 
-**Last update 2018-03-09**
+**Last update 2018-03-11**
 
 ## Getting started
 
@@ -22,11 +22,24 @@ make
 
 **Assume a US keyboard layout**
 
-*Global control*:
+***
+**Global control**:
 
   - **C** --> Change culling mode
   - **V** --> Change Fill mode
+  - **1** --> Go to scene 1 (with container)
+  - **2** --> Go to scene 2 (lighting)
 
+*Control the debug camera*:
+
+  - **Mouse movements** --> Rotations
+  - **Mouse scroll**    --> Zoom
+  - **Arrow keys**      --> Move
+
+
+
+***
+**Scene 1**:
 
 *Control the container*:
 
@@ -36,11 +49,7 @@ make
   - **PageUp** --> Scale UV down
 
 
-*Control the debug camera*:
 
-  - **Mouse movements** --> Rotations
-  - **Mouse scroll**    --> Zoom
-  - **Arrow keys**      --> Move
 
 
 ## Notes

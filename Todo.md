@@ -1,6 +1,6 @@
 # TODO
 
-**Last update 2018-03-09**
+**Last update 2018-03-11**
 
 ## Shapes
 
@@ -16,4 +16,4 @@
 
 ## Components
 
-  - Set main camera at creation
+  - Find a way to pass light to every active shaders

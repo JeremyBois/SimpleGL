@@ -64,8 +64,12 @@ bool LightShadowScene::OnInit()
         temp->LinkMaterial(cubeMat);
     }
     // Add cube color
-    cubeMat->GetShader().Use();
-    cubeMat->GetShader().SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+    cubeMat->SetAmbient(glm::vec3(1.0f, 0.5f, 0.31f));
+    cubeMat->SetDiffuse(glm::vec3(1.0f, 0.5f, 0.31f));
+    cubeMat->SetSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
+
+    // cubeMat->GetShader().Use();
+    // cubeMat->GetShader().SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 
 
     // Add camera
@@ -85,7 +89,7 @@ bool LightShadowScene::OnInit()
 
     // Apply light to cubeMat
     // @TODO Should be called each time the light move for now
-    m_pLight->Use(&cubeMat->GetShader());
+    m_pLight->Use(cubeMat->GetShader());
 
 
     // Add callback for key events
@@ -101,8 +105,22 @@ bool LightShadowScene::OnInit()
 
 bool LightShadowScene::OnUpdate()
 {
+    GL::Material* cubeMat = Game::GetDataMgr().GetMaterial("BoxLight");
+
     // Call to update camera position for light calculation
-    m_pCam->Use(&Game::GetDataMgr().GetMaterial("BoxLight")->GetShader());
+    m_pCam->Use(&cubeMat->GetShader());
+
+    // Change light color with time
+    glm::vec3 lightColor;
+    lightColor.x = sin(glfwGetTime() * 2.0f);
+    lightColor.y = sin(glfwGetTime() * 0.7f);
+    lightColor.z = sin(glfwGetTime() * 1.3f);
+    glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.3f); // low influence
+
+    cubeMat->SetAmbient(ambientColor);
+    cubeMat->SetDiffuse(diffuseColor);
+    m_pLight->Use(cubeMat->GetShader());
 }
 
 bool LightShadowScene::OnQuit()
@@ -156,6 +174,7 @@ void LightShadowScene::ProcessInput()
     if (window.GetKey(GLFW_KEY_1) == GLFW_PRESS)
     {
         Game::GetSceneMgr().Change(new StartingScene());
+        return;
     }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)

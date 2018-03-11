@@ -276,6 +276,7 @@ void StartingScene::ProcessInput()
     if (window.GetKey(GLFW_KEY_2) == GLFW_PRESS)
     {
         Game::GetSceneMgr().Change(new LightShadowScene());
+        return;
     }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)

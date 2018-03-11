@@ -6,6 +6,8 @@
 namespace simpleGL
 {
     Material::Material()
+        : m_ambient(glm::vec3(1.0f, 1.0f, 1.0f)), m_diffuse(glm::vec3(1.0f, 1.0f, 1.0f)),
+          m_specular(glm::vec3(1.0f, 1.0f, 1.0f)), m_shininess(32.0f), m_glossiness(1.0f)
     {
         // Default shader
         m_baseShader = Shader("shaders/basic.vert",
@@ -66,7 +68,7 @@ namespace simpleGL
         // Model to World and World to Model
         m_pShader->SetMat4("_modelM", _transform.GetModelMatrix());
         glm::mat4 modelInv = glm::inverse(_transform.GetModelMatrix());
-        m_pShader->SetMat4("_modelMInv", modelInv);
+        m_pShader->SetMat4("_modelInvM", modelInv);
 
         // Normal matrix in world space
         m_pShader->SetMat3("_normalM", glm::mat3(glm::transpose(modelInv)));
@@ -74,5 +76,12 @@ namespace simpleGL
         // View and projection matrix
         m_pShader->SetMat4("_viewM", GameManager::GetWindow().GetViewMatrix());
         m_pShader->SetMat4("_projectionM", GameManager::GetWindow().GetProjectionMatrix());
+
+        // Pass object color informations
+        m_pShader->SetVec3("objectMaterial.ambient", m_ambient);
+        m_pShader->SetVec3("objectMaterial.diffuse", m_diffuse);
+        m_pShader->SetVec3("objectMaterial.specular", m_specular);
+        m_pShader->SetFloat("objectMaterial.shininess", m_shininess);
+        m_pShader->SetFloat("objectMaterial.glossiness", m_glossiness);
     }
 }

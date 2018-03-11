@@ -8,7 +8,7 @@ layout (location = 3) in vec3 aNormal;
 
 
 uniform mat4 _modelM;
-uniform mat4 _modelMInv;
+uniform mat4 _modelInvM;
 uniform mat4 _viewM;
 uniform mat4 _projectionM;
 uniform mat3 _normalM;

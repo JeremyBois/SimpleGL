@@ -15,17 +15,23 @@ namespace simpleGL
     class SIMPLEGL_API Light: public Component
     {
     protected:
-        glm::vec3 m_diffuse, m_specular;
+        glm::vec3 m_ambient, m_diffuse, m_specular;
 
     public:
         Light();
         virtual ~Light() = default;
 
+        // Color
+        virtual glm::vec3 GetAmbient() const {return m_ambient;}
+        virtual glm::vec3 GetDiffuse() const {return m_diffuse;}
+        virtual glm::vec3 GetSpecular() const {return m_specular;}
 
-        virtual glm::vec3 GetDiffuseColor() const {return m_diffuse;}
-        virtual glm::vec3 GetSpecularColor() const {return m_specular;}
+        virtual void SetAmbient(glm::vec3 _ambient) {m_ambient = _ambient;}
+        virtual void SetDiffuse(glm::vec3 _diffuse) {m_diffuse = _diffuse;}
+        virtual void SetSpecular(glm::vec3 _specular) {m_specular = _specular;}
 
-        virtual void      Use(Shader* _shader) const;
+        // Set light in properties inside the shader
+        virtual void Use(const Shader& _shader) const;
 
         virtual bool Init() {};
         virtual bool Draw() {};
