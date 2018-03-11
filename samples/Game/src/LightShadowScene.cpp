@@ -16,6 +16,7 @@ double LightShadowScene::s_lastY = 0.0f;
 LightShadowScene::LightShadowScene()
 {
     m_pCuboid = new GL::Cuboid();
+    m_lightShape = new GL::Cuboid();
 }
 
 LightShadowScene::~LightShadowScene()
@@ -29,13 +30,11 @@ bool LightShadowScene::OnInit()
     auto* container = new GL::NodeManager();
     GL::GameManager::AttachNodeMgr(container);
 
-    // Create a camera
-    m_pNodes[0] =  container->CreateNode();
-    m_pNodes[0]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 5.0f));
-
-
     // Create a field of boxes
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
+    m_lightShape->Create(0.1f, 0.1f, 0.1f);
+
+    GL::Material* cubeMat = Game::GetDataMgr().GetMaterial("BoxLight");
 
     glm::vec3 m_cubePositions[] =
     {
@@ -54,20 +53,40 @@ bool LightShadowScene::OnInit()
     GL::ShapeRenderer* temp;
     for (int i = 0; i < 10; ++i)
     {
-        m_pNodes[i + 1] = container->CreateNode();
-        m_pNodes[i + 1]->GetTransform().SetPosition(m_cubePositions[i]);
-        m_pNodes[i + 1]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+        m_pNodes[i] = container->CreateNode();
+        m_pNodes[i]->GetTransform().SetPosition(m_cubePositions[i]);
+        m_pNodes[i]->GetTransform().SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
         float angle = 20.0f * i;
-        m_pNodes[i + 1]->GetTransform().SetRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
+        m_pNodes[i]->GetTransform().SetRotation(angle, glm::vec3(1.0f, 0.3f, 0.5f));
 
-        temp = m_pNodes[i + 1]->AddComponent<GL::ShapeRenderer>();
+        temp = m_pNodes[i]->AddComponent<GL::ShapeRenderer>();
         temp->LinkShape(m_pCuboid);
-        temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Box"));
+        temp->LinkMaterial(cubeMat);
     }
+    // Add cube color
+    cubeMat->GetShader().Use();
+    cubeMat->GetShader().SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+
 
     // Add camera
-    m_pCam = m_pNodes[0]->AddComponent<GL::CameraDebug>();
+    m_pNodes[10] = container->CreateNode();
+    m_pCam = m_pNodes[10]->AddComponent<GL::CameraDebug>();
+    m_pNodes[10]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 5.0f));
     m_pCam->LookAt(glm::vec3(0.0f, 0.0f, -3.0f));
+
+
+    // Add light
+    m_pNodes[11] = container->CreateNode();
+    m_pNodes[11]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 2.0f));
+    m_pLight = m_pNodes[11]->AddComponent<GL::Light>();
+    temp = m_pNodes[11]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_lightShape);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
+
+    // Apply light to cubeMat
+    // @TODO Should be called each time the light move for now
+    m_pLight->Use(&cubeMat->GetShader());
+
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
@@ -82,6 +101,8 @@ bool LightShadowScene::OnInit()
 
 bool LightShadowScene::OnUpdate()
 {
+    // Call to update camera position for light calculation
+    m_pCam->Use(&Game::GetDataMgr().GetMaterial("BoxLight")->GetShader());
 }
 
 bool LightShadowScene::OnQuit()

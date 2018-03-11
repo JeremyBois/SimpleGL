@@ -11,6 +11,8 @@
 
 namespace simpleGL
 {
+    class Shader;
+
     /// https://www.3dgep.com/understanding-the-view-matrix/
     /// A camera is a component that implement the ICamera interface
     class SIMPLEGL_LOCAL Camera: public Component
@@ -49,6 +51,8 @@ namespace simpleGL
         float     GetAspectHeight() const;
         float     GetNear() const;
         float     GetFar() const;
+
+        void Use(Shader* _shader) const;
     };
 }
 

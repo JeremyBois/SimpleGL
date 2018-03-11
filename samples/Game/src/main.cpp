@@ -87,6 +87,9 @@ void LoadData()
     shaderPtr = Game::GetDataMgr().CreateShader("ColorFromVertex",
                                                 "shaders/positionColor.vert", "shaders/colorFromVertex.frag");
 
+    shaderPtr = Game::GetDataMgr().CreateShader("WithAmbiantLight",
+                                                "shaders/lighting.vert", "shaders/lighting.frag");
+
     // Load materials
     GL::Material* pMat;
     pMat = Game::GetDataMgr().CreateMaterial("Wall", "Default");
@@ -101,5 +104,7 @@ void LoadData()
     Game::GetDataMgr().CreateMaterial("ColorFromVertex", "ColorFromVertex");
 
     pMat = Game::GetDataMgr().CreateMaterial("Box", "Default");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE0);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE1);
+
+    Game::GetDataMgr().CreateMaterial("BoxLight", "WithAmbiantLight");
 }

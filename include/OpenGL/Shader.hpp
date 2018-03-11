@@ -29,11 +29,17 @@ namespace simpleGL
         // Unifrom functions
         void SetBool(const std::string &name, bool value) const;
         void SetInt(const std::string &name, int value) const;
-        void SetFloat(const std::string &name, float value) const;
-        void SetFloat4(const std::string &name, float value[4]) const;
-        void SetFloat3(const std::string &name, float value[3]) const;
+
+        void SetFloat(const std::string &name, const float value) const;
+        void SetFloat2(const std::string &name, const float value[2]) const;
+        void SetFloat3(const std::string &name, const float value[3]) const;
+        void SetFloat4(const std::string &name, const float value[4]) const;
+
+        void SetVec2(const std::string &name, const glm::vec2 &value) const;
+        void SetVec3(const std::string &name, const glm::vec3 &value) const;
         void SetVec4(const std::string &name, const glm::vec4 &value) const;
-        void SetVec4(const std::string &name, float x, float y, float z, float w);
+        void SetVec4(const std::string &name, float x, float y, float z, float w) const;
+
         void SetMat2(const std::string &name, const glm::mat2 &mat) const;
         void SetMat3(const std::string &name, const glm::mat3 &mat) const;
         void SetMat4(const std::string &name, const glm::mat4 &mat) const;

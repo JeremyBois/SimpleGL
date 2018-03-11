@@ -95,6 +95,11 @@ namespace simpleGL
     bool DataManager::Init()
     {
         CreateShader("Default", "shaders/basic.vert", "shaders/basic.frag");
+        CreateMaterial("Default", "Default");
+
+        CreateShader("LightGizmo", "shaders/lightGizmo.vert", "shaders/lightGizmo.frag");
+        CreateMaterial("LightGizmo", "LightGizmo");
+
         return true;
     }
 

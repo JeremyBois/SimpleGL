@@ -68,13 +68,6 @@ namespace simpleGL
             // and steal ownership (see friend Component::SetParent)
             created->SetParent(this);
 
-            // // Each time we add a Camera see it as main one
-            // // if (std::is_base_of<T, Camera>::value)
-            // if (typeid(T) == typeid(Camera))
-            // {
-            //     GameManager::GetWindow().mainCam = created;
-            // }
-
             return created;
         }
 
@@ -129,24 +122,11 @@ namespace simpleGL
         virtual void Clear();
     };
 
-    // Specialization for Transform (should be inlined)
+    // Specialization for Transform (must be inlined)
     template<> inline Transform* Node::AddComponent()
     {
         throw TransformException();
     }
-
-    // template<> inline CameraDebug* Node::AddComponent()
-    // {
-    //     CameraDebug* created = new CameraDebug();
-
-    //     // Add reference to Node in object
-    //     // and steal ownership (see friend Component::SetParent)
-    //     created->SetParent(this);
-
-    //     GameManager::GetWindow().mainCam = created;
-
-    //     return created;
-    // }
 }
 
 #endif

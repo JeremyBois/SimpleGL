@@ -1,4 +1,5 @@
 #include "Components/Camera.hpp"
+#include "OpenGL/Shader.hpp"
 #include "GameManager.hpp"
 #include "Node.hpp"
 
@@ -161,5 +162,14 @@ namespace simpleGL
     void Camera::SetFov(float _degrees)
     {
         m_fov = std::max(1.0f, _degrees);
+    }
+
+    /// Set camera world position inside the shader
+    void Camera::Use(Shader* _shader) const
+    {
+        _shader->Use();
+
+        // Pass position
+        _shader->SetVec3("viewWorldPos", GetTransform().GetPosition());
     }
 }

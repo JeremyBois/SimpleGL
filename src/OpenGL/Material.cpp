@@ -63,12 +63,15 @@ namespace simpleGL
             it->second->Use(it->first);
         }
 
-        // Pass matrices to shader
+        // Model to World and World to Model
         m_pShader->SetMat4("_modelM", _transform.GetModelMatrix());
-        m_pShader->SetMat4("_modelMInv", glm::inverse(_transform.GetModelMatrix()));
+        glm::mat4 modelInv = glm::inverse(_transform.GetModelMatrix());
+        m_pShader->SetMat4("_modelMInv", modelInv);
 
+        // Normal matrix in world space
+        m_pShader->SetMat3("_normalM", glm::mat3(glm::transpose(modelInv)));
 
-        // View and projection
+        // View and projection matrix
         m_pShader->SetMat4("_viewM", GameManager::GetWindow().GetViewMatrix());
         m_pShader->SetMat4("_projectionM", GameManager::GetWindow().GetProjectionMatrix());
     }

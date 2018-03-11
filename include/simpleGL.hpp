@@ -11,6 +11,7 @@
 #include "Node.hpp"
 #include "Components/ShapeRenderer.hpp"
 #include "Components/CameraDebug.hpp"
+#include "Components/Light.hpp"
 
 // Interface prototype
 #include "Interface/IScene.hpp"

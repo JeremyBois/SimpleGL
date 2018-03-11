@@ -23,7 +23,7 @@ namespace simpleGL
 
         // Counter clockwise
         // Top left - Bottom left - top right - bottom right
-        glm::vec3 tempVertices[] =
+        glm::vec3 positions[] =
         {
             // Front Face (1-2-3-4)
             { -halfWidth, halfHeight, halfDepth },
@@ -64,7 +64,7 @@ namespace simpleGL
 
         // Counter clockwise
         // Top left - Bottom left - top right - bottom right
-        glm::vec2 tempUV[] =
+        glm::vec2 faceUV[] =
         {
             // All faces
             { 0.0f, 0.0f },
@@ -73,7 +73,19 @@ namespace simpleGL
             { 1.0f, 1.0f }
         };
 
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+        // Front - Right - Top - Back - Left - Bottom
+        glm::vec3 faceNormals[] =
+        {
+            {0.0f, 0.0f, 1.0f},
+            {1.0f, 0.0f, 0.0f},
+            {0.0f, 1.0f, 0.0f},
+            {0.0f, 0.0f, -1.0f},
+            {-1.0f, 0.0f, 0.0f},
+            {0.0f, -1.0f, 0.0f}
+        };
+
+        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
+        int normalInd = -1;
 
         // Construct the array (pos + color + ST)
         for (int i = 0; i < m_sizeVertices; ++i)
@@ -81,9 +93,9 @@ namespace simpleGL
             // Pos
             int tempShift = (i * shiftV);
 
-            m_vertices[tempShift + 0] = tempVertices[i].x;
-            m_vertices[tempShift + 1] = tempVertices[i].y;
-            m_vertices[tempShift + 2] = tempVertices[i].z;
+            m_vertices[tempShift + 0] = positions[i].x;
+            m_vertices[tempShift + 1] = positions[i].y;
+            m_vertices[tempShift + 2] = positions[i].z;
 
             // Default to white color
             m_vertices[m_sizePos + tempShift + 0] = 1.0f;
@@ -92,9 +104,20 @@ namespace simpleGL
             m_vertices[m_sizePos + tempShift + 3] = 1.0f;
 
             // ST
-            int modI = i % 4;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = tempUV[modI].x;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = tempUV[modI].y;
+            int uvInd = i % 4;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = faceUV[uvInd].x;
+            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = faceUV[uvInd].y;
+
+            // Normals
+            // On a same face normals are the same for each vertices
+            // uvInd == 0 each time a new face starts
+            if (uvInd == 0)
+            {
+                normalInd += 1;
+            }
+            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 0] = faceNormals[normalInd].x;
+            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 1] = faceNormals[normalInd].y;
+            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 2] = faceNormals[normalInd].z;
         }
 
         SendData();
@@ -105,11 +128,11 @@ namespace simpleGL
     /// Top left - Bottom left - top right - bottom right
     void Cuboid::SetUV(const glm::vec2 _uvMap[m_sizeVertices])
     {
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
 
         for (int i = 0; i < m_sizeVertices - 1; ++i)
         {
-            // Pos
+            // Just update UV
             int tempShift = (i * shiftV);
 
             m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = _uvMap[i].x;
@@ -121,7 +144,7 @@ namespace simpleGL
 
     void Cuboid::SendData()
     {
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV;
+        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
 
         // Store inside the first VAO
         glBindVertexArray(m_VAO);
@@ -145,6 +168,12 @@ namespace simpleGL
                               shiftV * sizeof(float),
                               (void*)((m_sizePos + m_sizeColor) * sizeof(float)));
         glEnableVertexAttribArray(2);
+
+        // Normals
+        glVertexAttribPointer(3, m_sizeNormals, GL_FLOAT, GL_FALSE,
+                              shiftV * sizeof(float),
+                              (void*)((m_sizePos + m_sizeColor + m_sizeUV) * sizeof(float)));
+        glEnableVertexAttribArray(3);
     }
 
     void Cuboid::Draw()
