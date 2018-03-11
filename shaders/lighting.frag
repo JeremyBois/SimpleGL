@@ -71,7 +71,6 @@ void main()
     // Compute emission
     vec3 emission = objectMaterial.emission * texture(objectMaterial._emissionMap, TexCoords).rgb;
 
-    // vec3 finalColor = ambient + diffuse + specular + emission;
-    vec3 finalColor = texture(objectMaterial._emissionMap, TexCoords).rgb;
+    vec3 finalColor = ambient + diffuse + specular + emission;
     FragColor = vec4(finalColor, 1.0f);
 }

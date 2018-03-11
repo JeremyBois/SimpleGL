@@ -68,7 +68,7 @@ void LoadData()
     Game::GetDataMgr().CreateTexture("Awesomeface", "data/images/awesomeface.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerDiffuseMap", "data/images/container2_diffuse.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerSpecularMap", "data/images/container2_specular.png", true, true);
-    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/matrix.jpg", false, true);
+    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", false, true);
 
 
     // Load shaders
@@ -117,5 +117,5 @@ void LoadData()
     pMat->LinkDiffuseMap(Game::GetDataMgr().GetTexture("ContainerDiffuseMap"));
     pMat->LinkSpecularMap(Game::GetDataMgr().GetTexture("ContainerSpecularMap"));
     pMat->LinkEmissionMap(Game::GetDataMgr().GetTexture("ContainerEmissionMap"));
-    pMat->SetEmission(glm::vec3(1.0f, 1.0f, 1.0f));
+    pMat->SetEmission(glm::vec3(0.3f, 0.3f, 0.3f));
 }

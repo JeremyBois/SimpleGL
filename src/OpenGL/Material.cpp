@@ -78,9 +78,9 @@ namespace simpleGL
     {
         // Select shader program for the draw call
         m_pShader->Use();
-        m_pShader->SetInt("objectMaterial._diffuseMap", m_diffuseID);
-        m_pShader->SetInt("objectMaterial._specularMap", m_specularID);
-        m_pShader->SetInt("objectMaterial._emissionMap", m_emissionID);
+        m_pShader->SetInt("objectMaterial._diffuseMap", 0);
+        m_pShader->SetInt("objectMaterial._specularMap", 1);
+        m_pShader->SetInt("objectMaterial._emissionMap", 2);
 
         // Assign correct texture to correct unit
         for (TexUnitMap::const_iterator it=m_pTextureMap.begin(); it!=m_pTextureMap.end(); ++it)

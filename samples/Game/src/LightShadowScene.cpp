@@ -67,10 +67,6 @@ bool LightShadowScene::OnInit()
     cubeMat->SetDiffuse(glm::vec3(1.0f, 0.5f, 0.31f));
     cubeMat->SetSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
 
-    // cubeMat->GetShader().Use();
-    // cubeMat->GetShader().SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-
-
     // Add camera
     m_pNodes[10] = container->CreateNode();
     m_pCam = m_pNodes[10]->AddComponent<GL::CameraDebug>();
@@ -87,7 +83,6 @@ bool LightShadowScene::OnInit()
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
 
     // Apply light to cubeMat
-    // @TODO Should be called each time the light move for now
     m_pLight->Use(cubeMat->GetShader());
 
 
@@ -116,8 +111,6 @@ bool LightShadowScene::OnUpdate()
     lightColor.z = sin(glfwGetTime() * 1.3f * 0.5f);
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.3f); // low influence
-
-    // Update light color
     m_pLight->SetDiffuse(diffuseColor);
     m_pLight->SetAmbient(ambientColor);
     m_pLight->Use(cubeMat->GetShader());
