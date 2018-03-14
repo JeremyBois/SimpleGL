@@ -161,11 +161,14 @@ namespace simpleGL
     }
 
     /// Set camera world position inside the shader
-    void Camera::Use(Shader* _shader) const
+    void Camera::Use(const Shader& _shader) const
     {
-        _shader->Use();
+        if (IsActive())
+        {
+            _shader.Use();
 
-        // Pass position
-        _shader->SetVec3("viewWorldPos", GetTransform().GetPosition());
+            // Pass position
+            _shader.SetVec3("_viewWorldPos_", GetTransform().GetPosition());
+        }
     }
 }

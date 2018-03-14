@@ -6,9 +6,9 @@ layout (location = 1) in vec4 aColor;
 layout (location = 2) in vec2 aTexCoord;
 
 
-uniform mat4 _modelM;
-uniform mat4 _viewM;
-uniform mat4 _projectionM;
+uniform mat4 _modelM_;
+uniform mat4 _viewM_;
+uniform mat4 _projectionM_;
 // uniform mat4 _modelMInv;
 
 // Out
@@ -18,7 +18,7 @@ out vec2 texCoord;
 void main()
 {
     // Vertex position
-    gl_Position = _projectionM * _viewM * _modelM * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = _projectionM_ * _viewM_ * _modelM_ * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 
     // To pixel shader
     vertexColor = aColor;

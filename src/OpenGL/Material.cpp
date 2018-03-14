@@ -2,6 +2,8 @@
 
 #include "GameManager.hpp"
 #include "Components/Transform.hpp"
+#include "Components/PointLight.hpp"
+#include "Components/DirectionalLight.hpp"
 
 namespace simpleGL
 {
@@ -78,9 +80,13 @@ namespace simpleGL
     {
         // Select shader program for the draw call
         m_pShader->Use();
-        m_pShader->SetInt("objectMaterial._diffuseMap", 0);
-        m_pShader->SetInt("objectMaterial._specularMap", 1);
-        m_pShader->SetInt("objectMaterial._emissionMap", 2);
+
+        // Pass data from lights to shaders
+        PointLight::UseAll(*m_pShader);
+        DirectionalLight::UseAll(*m_pShader);
+
+        // Also inform shader of camera position
+        GameManager::GetWindow().mainCam->Use(*m_pShader);
 
         // Assign correct texture to correct unit
         for (TexUnitMap::const_iterator it=m_pTextureMap.begin(); it!=m_pTextureMap.end(); ++it)
@@ -88,24 +94,30 @@ namespace simpleGL
             it->second->Use(it->first);
         }
 
+        // Pass matrix to vertex shader
         // Model to World and World to Model
-        m_pShader->SetMat4("_modelM", _transform.GetModelMatrix());
+        m_pShader->SetMat4("_modelM_", _transform.GetModelMatrix());
         glm::mat4 modelInv = glm::inverse(_transform.GetModelMatrix());
-        m_pShader->SetMat4("_modelInvM", modelInv);
+        m_pShader->SetMat4("_modelInvM_", modelInv);
 
         // Normal matrix in world space
-        m_pShader->SetMat3("_normalM", glm::mat3(glm::transpose(modelInv)));
+        m_pShader->SetMat3("_normalM_", glm::mat3(glm::transpose(modelInv)));
+
 
         // View and projection matrix
-        m_pShader->SetMat4("_viewM", GameManager::GetWindow().GetViewMatrix());
-        m_pShader->SetMat4("_projectionM", GameManager::GetWindow().GetProjectionMatrix());
+        m_pShader->SetMat4("_viewM_", GameManager::GetWindow().GetViewMatrix());
+        m_pShader->SetMat4("_projectionM_", GameManager::GetWindow().GetProjectionMatrix());
 
         // Pass object color informations
-        m_pShader->SetVec3("objectMaterial.diffuse", m_diffuse);
-        m_pShader->SetVec3("objectMaterial.specular", m_specular);
-        m_pShader->SetVec3("objectMaterial.emission", m_emission);
-        m_pShader->SetFloat("objectMaterial.shininess", m_shininess);
-        m_pShader->SetFloat("objectMaterial.glossiness", m_glossiness);
+        m_pShader->SetInt("_objectMaterial_._diffuseMap", 0);
+        m_pShader->SetInt("_objectMaterial_._specularMap", 1);
+        m_pShader->SetInt("_objectMaterial_._emissionMap", 2);
+
+        m_pShader->SetVec3("_objectMaterial_.diffuse", m_diffuse);
+        m_pShader->SetVec3("_objectMaterial_.specular", m_specular);
+        m_pShader->SetVec3("_objectMaterial_.emission", m_emission);
+        m_pShader->SetFloat("_objectMaterial_.shininess", m_shininess);
+        m_pShader->SetFloat("_objectMaterial_.glossiness", m_glossiness);
     }
 
     void Material::LinkDiffuseMap(Texture* _pTexture)

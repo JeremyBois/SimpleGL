@@ -52,7 +52,7 @@ namespace simpleGL
         float     GetNear() const;
         float     GetFar() const;
 
-        void Use(Shader* _shader) const;
+        void Use(const Shader& _shader) const;
     };
 }
 

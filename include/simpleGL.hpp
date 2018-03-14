@@ -12,6 +12,8 @@
 #include "Components/ShapeRenderer.hpp"
 #include "Components/CameraDebug.hpp"
 #include "Components/Light.hpp"
+#include "Components/DirectionalLight.hpp"
+#include "Components/PointLight.hpp"
 
 // Interface prototype
 #include "Interface/IScene.hpp"

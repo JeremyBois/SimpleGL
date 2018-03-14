@@ -24,7 +24,7 @@ namespace simpleGL
 
         inline unsigned int GetID() {return m_id;}
         inline void SetActive(bool _state) {m_isActive = _state;}
-        inline bool IsActive() {return m_isActive;}
+        inline bool IsActive() const {return m_isActive;}
     };
 }
 #endif

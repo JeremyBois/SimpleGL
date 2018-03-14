@@ -7,11 +7,11 @@ layout (location = 2) in vec2 aTexCoord;
 layout (location = 3) in vec3 aNormal;
 
 
-uniform mat4 _modelM;
-uniform mat4 _modelInvM;
-uniform mat4 _viewM;
-uniform mat4 _projectionM;
-uniform mat3 _normalM;
+uniform mat4 _modelM_;
+uniform mat4 _modelInvM_;
+uniform mat4 _viewM_;
+uniform mat4 _projectionM_;
+uniform mat3 _normalM_;
 
 
 // Out
@@ -24,17 +24,17 @@ void main()
     vec4 localPos = vec4(aPos, 1.0);
 
     // Vertex final position
-    gl_Position = _projectionM * _viewM * _modelM * localPos;
+    gl_Position = _projectionM_ * _viewM_ * _modelM_ * localPos;
 
     // Vertex position in world space for light calculations
-    FragWorldPos = vec3(_modelM * localPos);
+    FragWorldPos = vec3(_modelM_ * localPos);
 
     // Normals must also be transformed with rotation and scale but not position
     // Also a non-uniform scale can make normals not normals anymore so
-    // a Normal matrix must be used in place of ModelMatrix (_modelM)
+    // a Normal matrix must be used in place of ModelMatrix (_modelM_)
     // http://www.lighthouse3d.com/tutorials/glsl-12-tutorial/the-normal-matrix/
-    // normalM = transpose(_modelM⁻¹)
-    Normal = normalize(_normalM * aNormal);
+    // normalM = transpose(_modelM_⁻¹)
+    Normal = normalize(_normalM_ * aNormal);
 
     TexCoords = aTexCoord;
 }

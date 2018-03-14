@@ -6,14 +6,14 @@
 #include "Components/Component.hpp"
 #include "OpenGL/Texture.hpp"
 
-
 #include "glm.hpp"
 
 namespace simpleGL
 {
     class Shader;
 
-    /// Abstract class for every component attached to a Node.
+    /// Create a base light similar to a point light without any attenuation
+    /// with distance.
     class SIMPLEGL_API Light: public Component
     {
     protected:
@@ -22,6 +22,8 @@ namespace simpleGL
         Texture* m_pDiffuseMap;
         Texture* m_pSpecularMap;
         Texture* m_pDefaultMap;
+
+        int m_shaderIndex;
 
     public:
         Light();
@@ -39,10 +41,10 @@ namespace simpleGL
         // Set light in properties inside the shader
         virtual void Use(const Shader& _shader) const;
 
-        virtual bool Init() {};
-        virtual bool Draw() {};
-        virtual bool Update() {};
-        virtual bool Quit() {};
+        virtual bool Init() {return true;}
+        virtual bool Draw();
+        virtual bool Update() {return true;}
+        virtual bool Quit() {return true;}
 
         virtual Light* Clone() {return new Light(*this);}
     };

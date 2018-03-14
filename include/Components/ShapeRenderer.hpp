@@ -25,9 +25,10 @@ namespace simpleGL
         void LinkMaterial(Material* _material);
 
         virtual bool Draw();
-        virtual bool Init() {};
-        virtual bool Update(){};
-        virtual bool Quit(){};
+        virtual bool Init() {return true;}
+        virtual bool Update(){return true;}
+        virtual bool Quit(){return true;}
+
         virtual Component* Clone();
     };
 }

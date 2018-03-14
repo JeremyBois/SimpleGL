@@ -8,13 +8,14 @@
 class LightShadowScene: public simpleGL::IScene
 {
 private:
-    simpleGL::Node*         m_pNodes[12];
+    simpleGL::Node*         m_pNodes[13];
     simpleGL::Cuboid*       m_pCuboid;
 
     simpleGL::CameraDebug*   m_pCam;
 
     // Light
-    simpleGL::Light*    m_pLight;
+    simpleGL::DirectionalLight*    m_pDirLight;
+    simpleGL::PointLight*          m_pPointLight;
     simpleGL::Cuboid*   m_lightShape;
 
     static double s_lastX, s_lastY;

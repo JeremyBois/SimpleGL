@@ -22,10 +22,10 @@ namespace simpleGL
         virtual void Pitch(float degrees);
         virtual void Roll(float degrees);
 
-        virtual bool Draw() {};
-        virtual bool Init() {};
-        virtual bool Update(){};
-        virtual bool Quit(){};
+        virtual bool Draw() {return true;}
+        virtual bool Init() {return true;}
+        virtual bool Update(){return true;}
+        virtual bool Quit(){return true;}
         virtual Component* Clone() {return new CameraDebug(*this);};
     };
 }

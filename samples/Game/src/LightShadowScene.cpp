@@ -74,17 +74,21 @@ bool LightShadowScene::OnInit()
     m_pCam->LookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 
 
-    // Add light
+    // Add directional Light
     m_pNodes[11] = container->CreateNode();
-    m_pNodes[11]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 2.0f));
-    m_pLight = m_pNodes[11]->AddComponent<GL::Light>();
+    m_pNodes[11]->GetTransform().SetPosition(glm::vec3(0.5f, 1.0f, 5.5f));
+    m_pDirLight = m_pNodes[11]->AddComponent<GL::DirectionalLight>();
     temp = m_pNodes[11]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_lightShape);
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
 
-    // Apply light to cubeMat
-    m_pLight->Use(cubeMat->GetShader());
-
+    // Add Point light
+    m_pNodes[12] = container->CreateNode();
+    m_pNodes[12]->GetTransform().SetPosition(glm::vec3(-2.0f, -0.5f, -1.5f));
+    m_pPointLight = m_pNodes[12]->AddComponent<GL::PointLight>();
+    temp = m_pNodes[12]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_lightShape);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
@@ -101,19 +105,15 @@ bool LightShadowScene::OnUpdate()
 {
     GL::Material* cubeMat = Game::GetDataMgr().GetMaterial("BoxLight");
 
-    // Call to update camera position for light calculation
-    m_pCam->Use(&cubeMat->GetShader());
-
     // Change light color with time
     glm::vec3 lightColor;
-    lightColor.x = sin(glfwGetTime() * 2.0f * 0.5f);
-    lightColor.y = sin(glfwGetTime() * 0.7f * 0.5f);
-    lightColor.z = sin(glfwGetTime() * 1.3f * 0.5f);
+    lightColor.x = sin(glfwGetTime() * 2.0f) / 2.0f + 0.5f;
+    lightColor.y = sin(glfwGetTime() * 0.7f) / 2.0f + 0.5f;
+    lightColor.z = sin(glfwGetTime() * 1.3f) / 2.0f + 0.5f;
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
     glm::vec3 ambientColor = diffuseColor * glm::vec3(0.3f); // low influence
-    m_pLight->SetDiffuse(diffuseColor);
-    m_pLight->SetAmbient(ambientColor);
-    m_pLight->Use(cubeMat->GetShader());
+    m_pDirLight->SetDiffuse(diffuseColor);
+    m_pDirLight->SetAmbient(ambientColor);
 }
 
 bool LightShadowScene::OnQuit()
