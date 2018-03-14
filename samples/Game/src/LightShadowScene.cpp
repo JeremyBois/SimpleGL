@@ -132,7 +132,11 @@ void LightShadowScene::OnRender()
 // @TODO Replace with set
 void LightShadowScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
 {
-
+    if (_key == GLFW_KEY_1 && _action == GLFW_PRESS)
+    {
+        Game::GetSceneMgr().Change(new StartingScene());
+        return;
+    }
 }
 
 void LightShadowScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos)
@@ -163,12 +167,6 @@ void LightShadowScene::ProcessInput()
     GL::Camera* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
-
-    if (window.GetKey(GLFW_KEY_1) == GLFW_PRESS)
-    {
-        Game::GetSceneMgr().Change(new StartingScene());
-        return;
-    }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {

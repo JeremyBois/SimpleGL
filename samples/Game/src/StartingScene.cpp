@@ -159,6 +159,12 @@ void StartingScene::OnRender()
 // @TODO Replace with set
 void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
 {
+    if (_key == GLFW_KEY_2 && _action == GLFW_PRESS)
+    {
+        Game::GetSceneMgr().Change(new LightShadowScene());
+        return;
+    }
+
     // Change wrap mode
     if (_key == GLFW_KEY_W && _action == GLFW_PRESS)
     {
@@ -272,12 +278,6 @@ void StartingScene::ProcessInput()
     GL::Camera* mainCam = Game::GetWindow().mainCam;
 
     float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
-
-    if (window.GetKey(GLFW_KEY_2) == GLFW_PRESS)
-    {
-        Game::GetSceneMgr().Change(new LightShadowScene());
-        return;
-    }
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {
