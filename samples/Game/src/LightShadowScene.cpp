@@ -4,7 +4,7 @@
 #include "math.h"
 #include "glm.hpp"
 
-// #include "gtx/string_cast.hpp" // For debug
+#include "gtx/string_cast.hpp" // For debug
 
 namespace GL = simpleGL;
 typedef GL::GameManager Game;
@@ -72,6 +72,12 @@ bool LightShadowScene::OnInit()
     m_pCam = m_pNodes[10]->AddComponent<GL::CameraDebug>();
     m_pNodes[10]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 5.0f));
     m_pCam->LookAt(glm::vec3(0.0f, 0.0f, -3.0f));
+    // Add Spot light attached to the camera
+    m_pSpotLight = m_pNodes[10]->AddComponent<GL::SpotLight>();
+
+
+    cout << glm::to_string(m_pSpotLight->GetTransform().GetLook()) << endl;
+
 
 
     // Add directional Light

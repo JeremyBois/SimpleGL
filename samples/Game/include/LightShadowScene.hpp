@@ -16,7 +16,8 @@ private:
     // Light
     simpleGL::DirectionalLight*    m_pDirLight;
     simpleGL::PointLight*          m_pPointLight;
-    simpleGL::Cuboid*   m_lightShape;
+    simpleGL::SpotLight*           m_pSpotLight;
+    simpleGL::Cuboid*              m_lightShape;
 
     static double s_lastX, s_lastY;
 

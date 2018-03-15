@@ -1,8 +1,9 @@
 #version 330 core
 
 // Limit the number of light to compute
-#define MAX_POINT_LIGHTS 4
 #define MAX_DIR_LIGHTS 2
+#define MAX_POINT_LIGHTS 4
+#define MAX_SPOT_LIGHTS 4
 
 
 // Container for a object color description
@@ -43,6 +44,23 @@ struct PointLight
 };
 
 
+// Container for a spot light
+struct SpotLight
+{
+    vec3  worldPosition;
+    vec3  worldDirection;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float cutOff;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+
 // Container for a directional light object
 struct DirLight
 {
@@ -54,17 +72,26 @@ struct DirLight
 };
 
 
+
+
 // In
 in vec3 Normal;
 in vec3 FragWorldPos;
 in vec2 TexCoords;
 
 
-// Directional + Point
+// Directional lights
 uniform DirLight   _dirLights_[MAX_DIR_LIGHTS];
+uniform int        _DirLightCount_;
+
+// Point lights
 uniform PointLight _pointLights_[MAX_POINT_LIGHTS];
 uniform int        _PointLightCount_;
-uniform int        _DirLightCount_;
+
+// SpotLights
+uniform SpotLight  _spotLights_[MAX_SPOT_LIGHTS];
+uniform int        _SpotLightCount_;
+
 
 uniform vec3 _viewWorldPos_;
 uniform Material _objectMaterial_;
@@ -78,6 +105,7 @@ out vec4 FragColor;
 // Prototypes
 vec3 ComputeDirLight(DirLight _light, vec3 _normal, vec3 _viewDir);
 vec3 ComputePointLight(PointLight _pointLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir);
+vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir);
 
 
 
@@ -89,22 +117,29 @@ void main()
 
     vec3 fragFinalColor = vec3(0.0f, 0.0, 0.0);
 
-    // Compute directional lights influence
-    int dirMax = min(MAX_DIR_LIGHTS, _DirLightCount_);
-    for(int i = 0; i < dirMax; i++)
+    // // Compute directional lights influence
+    // int dirMax = min(MAX_DIR_LIGHTS, _DirLightCount_);
+    // for(int i = 0; i < dirMax; i++)
+    // {
+    //     fragFinalColor += ComputeDirLight(_dirLights_[i], Normal, viewDir);;
+    // }
+
+    // // Compute point lights influence
+    // int pointsMax = min(MAX_POINT_LIGHTS, _PointLightCount_);
+    // for(int i = 0; i < pointsMax; i++)
+    // {
+    //     fragFinalColor += ComputePointLight(_pointLights_[i], Normal, FragWorldPos, viewDir);
+    // }
+
+    // Compute spot lights influence
+    int spotsMax = min(MAX_SPOT_LIGHTS, _SpotLightCount_);
+    for(int i = 0; i < spotsMax; i++)
     {
-        fragFinalColor += ComputeDirLight(_dirLights_[i], Normal, viewDir);;
+        fragFinalColor += ComputeSpotLight(_spotLights_[i], Normal, FragWorldPos, viewDir);
     }
 
-    // Compute point lights influence
-    int pointsMax = min(MAX_POINT_LIGHTS, _PointLightCount_);
-    for(int i = 0; i < pointsMax; i++)
-    {
-        fragFinalColor += ComputePointLight(_pointLights_[i], Normal, FragWorldPos, viewDir);
-    }
-
-    // Compute emission
-    fragFinalColor += _objectMaterial_.emission * texture(_objectMaterial_._emissionMap, TexCoords).rgb;
+    // // Compute emission
+    // fragFinalColor += _objectMaterial_.emission * texture(_objectMaterial_._emissionMap, TexCoords).rgb;
 
 
     // Gamma correction
@@ -172,4 +207,49 @@ vec3 ComputePointLight(PointLight _pointLight, vec3 _normal, vec3 _fragWorldPos,
 
 
     return (ambient + diffuse + specular);
+}
+
+
+vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir)
+{
+    // Compute ambient
+    vec3 ambient = _spotLight.ambient * _objectMaterial_.diffuse *
+                   vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
+
+    vec3 lightDir = normalize(_spotLight.worldPosition - _fragWorldPos);
+
+    // Cos of angle used to check if frag inside the light area or not
+    // Negate the angle to get direction toward the light
+    float cosTheta = dot(lightDir, normalize(-_spotLight.worldDirection));
+
+    // > because cos is close to 1.0 when angle is close to 0.0
+    if(cosTheta > _spotLight.cutOff)
+    {
+        // Compute diffuse
+        float diffStrength = max(dot(_normal, lightDir), 0.0);
+        vec3 diffuse = _spotLight.diffuse * diffStrength * _objectMaterial_.diffuse *
+                       vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
+
+        // Compute specular (Blinh - Phong equations)
+        vec3 halfVector = normalize(lightDir + _viewDir);
+        float specStrength = pow(max(dot(_normal, halfVector), 0.0), _objectMaterial_.shininess);
+        // Specular comes from _spotLight color not material
+        vec3 specular = _spotLight.specular * _objectMaterial_.glossiness * specStrength *
+                        vec3(texture(_objectMaterial_._specularMap, TexCoords));
+
+        // Attenuation
+        float distance    = length(_spotLight.worldPosition - _fragWorldPos);
+        float attenuation = 1.0 / (_spotLight.constant + _spotLight.linear * distance +
+                                   _spotLight.quadratic * (distance * distance));
+
+        // Remove attenuation on ambiant to avoid a darker area inside that outside
+        // at large distance
+        diffuse  *= attenuation;
+        specular *= attenuation;
+
+
+        return (ambient + diffuse + specular);
+    }
+
+    return ambient;
 }

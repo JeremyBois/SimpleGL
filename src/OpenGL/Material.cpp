@@ -4,6 +4,7 @@
 #include "Components/Transform.hpp"
 #include "Components/PointLight.hpp"
 #include "Components/DirectionalLight.hpp"
+#include "Components/SpotLight.hpp"
 
 namespace simpleGL
 {
@@ -84,6 +85,7 @@ namespace simpleGL
         // Pass data from lights to shaders
         PointLight::UseAll(*m_pShader);
         DirectionalLight::UseAll(*m_pShader);
+        SpotLight::UseAll(*m_pShader);
 
         // Also inform shader of camera position
         GameManager::GetWindow().mainCam->Use(*m_pShader);
