@@ -12,39 +12,39 @@ namespace simpleGL
     /// Rotation around the Y world axis
     void CameraDebug::Yaw(float _degrees)
     {
-        Rotate(_degrees, GetTransform().GetUp());
+        Rotate(_degrees, GetUp());
     }
 
     /// Rotation around the X world axis
     void CameraDebug::Pitch(float _degrees)
     {
-        Rotate(_degrees, GetTransform().GetRight());
+        Rotate(_degrees, GetRight());
     }
 
     /// Rotation around the Z world axis
     void CameraDebug::Roll(float _degrees)
     {
-        Rotate(_degrees, GetTransform().GetLook());
+        Rotate(_degrees, GetLook());
     }
 
     void CameraDebug::Strafe(float _units)
     {
         Transform* pTransform = &m_pNode->GetTransform();
         pTransform->SetPosition(pTransform->GetPosition() +
-                                GetTransform().GetRight() * _units);
+                                GetRight() * _units);
     }
 
     void CameraDebug::Fly(float _units)
     {
         Transform* pTransform = &m_pNode->GetTransform();
         pTransform->SetPosition(pTransform->GetPosition() +
-                                GetTransform().GetUp() * _units);
+                                GetUp() * _units);
     }
 
     void CameraDebug::Walk(float _units)
     {
         Transform* pTransform = &m_pNode->GetTransform();
         pTransform->SetPosition(pTransform->GetPosition() +
-                                GetTransform().GetLook() * _units);
+                                GetLook() * _units);
     }
 }
