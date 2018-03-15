@@ -24,6 +24,15 @@ namespace simpleGL
         PointLight();
         virtual ~PointLight();
 
+        // Coefficients
+        float GetConstCoef() const {return m_constCoef;}
+        float GetLinearCoef() const {return m_linearCoef;}
+        float GetQuadraticCoef() const {return m_quadraticCoef;}
+
+        void SetAmbient(float _constCoef) {m_constCoef = _constCoef;}
+        void SetDiffuse(float _linearCoef) {m_linearCoef = _linearCoef;}
+        void SetSpecular(float _quadraticCoef) {m_quadraticCoef = _quadraticCoef;}
+
         // Set light in properties inside the shader
         virtual void Use(const Shader& _shader, int _lightIndex=0) const;
         virtual PointLight* Clone() {return new PointLight(*this);}
