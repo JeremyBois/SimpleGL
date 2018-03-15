@@ -106,6 +106,13 @@ void main()
     // Compute emission
     fragFinalColor += _objectMaterial_.emission * texture(_objectMaterial_._emissionMap, TexCoords).rgb;
 
+
+    // Gamma correction
+    float gamma = 2.2;
+    fragFinalColor = pow(fragFinalColor, vec3(1.0 / gamma));
+
+
+    // Pass final color of pixel
     FragColor = vec4(fragFinalColor, 1.0f);
 }
 

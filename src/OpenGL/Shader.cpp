@@ -149,7 +149,7 @@ namespace simpleGL
             if(!success)
             {
                 glGetShaderInfoLog(shader, infoSizeMax, NULL, infoLog);
-                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog <<
+                std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog <<
                 "\n -- --------------------------------------------------- -- " << std::endl;
             }
         }
@@ -159,7 +159,7 @@ namespace simpleGL
             if(!success)
             {
                 glGetProgramInfoLog(shader, infoSizeMax, NULL, infoLog);
-                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog <<
+                std::cerr << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog <<
                 "\n -- --------------------------------------------------- -- " << std::endl;
             }
         }

@@ -14,8 +14,9 @@ namespace simpleGL
 
     PointLight::PointLight()
         // http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
-        : m_constCoef(1.0f), m_linearCoef(0.22f), m_quadraticCoef(0.2f)
+        : m_constCoef(1.0f), m_linearCoef(0.14f), m_quadraticCoef(0.07f)
     {
+        m_diffuse = glm::vec3(0.6f, 0.6f, 0.6f);
         PointLightContainer.push_back(this);
     }
 

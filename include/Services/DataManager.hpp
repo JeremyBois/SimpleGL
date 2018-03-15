@@ -21,7 +21,7 @@ namespace simpleGL
         virtual Shader*  CreateShader(const std::string _name, const std::string _vertexPath,
                                       const std::string _fragPath, bool _overrideIfExist=false);
         virtual Texture* CreateTexture(const std::string _name, const std::string _path,
-                                       bool _hasAlpha=false, bool _reverseY=false, bool _overrideIfExist=false);
+                                       bool _reverseY=false, bool _correctGamma=false, bool _overrideIfExist=false);
         virtual Material* CreateMaterial(const std::string _name, const std::string _shaderName,
                                          bool _overrideIfExist=false);
 

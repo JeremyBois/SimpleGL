@@ -40,16 +40,12 @@ namespace simpleGL
         glTexParameteri(GL_TEXTURE_2D, _param, _value);
     }
 
-    void Texture::Load(std::string _path, bool _hasAlpha, bool _reverseY)
+    /// _correctGamma should be set to true when you want OpenGl to applied correction
+    /// on the texture colors (assume texture in sRGB which is usually the case)
+    void Texture::Load(std::string _path, bool _reverseY, bool _correctGamma)
     {
         glGenTextures(1, &m_texID);
         glBindTexture(GL_TEXTURE_2D, m_texID);
-
-        // Default wrapping and filtering
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         if (_reverseY)
         {
@@ -65,16 +61,45 @@ namespace simpleGL
                                         &m_nbChannels, 0);
         if (data)
         {
-            GLenum format = _hasAlpha ? GL_RGBA : GL_RGB;
-            glTexImage2D(GL_TEXTURE_2D, 0, format,
+            // Assign correct format based on number of channels and gamma correction
+            GLenum internalformat;
+            GLenum format;
+
+            if (m_nbChannels == 1)
+            {
+                internalformat = format = GL_RED;
+            }
+            else if (m_nbChannels == 3)
+            {
+                internalformat = _correctGamma ? GL_SRGB : GL_RGB;
+                format = GL_RGB;
+            }
+            else if (m_nbChannels == 4)
+            {
+                internalformat = _correctGamma ? GL_SRGB_ALPHA : GL_RGBA;
+                format = GL_RGBA;
+            }
+            else
+            {
+                std::cerr << "ERROR::TEXTURE::FAILED TO SELECT FORMAT" << std::endl;
+            }
+
+
+            glTexImage2D(GL_TEXTURE_2D, 0, internalformat,
                          m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
 
             // Construct mipmap
             glGenerateMipmap(GL_TEXTURE_2D);
+
+            // Default wrapping and filtering
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
         else
         {
-            std::cout << "ERROR::TEXTURE::FAILED TO LOAD TEXTURE" << std::endl;
+            std::cerr << "ERROR::TEXTURE::FAILED TO LOAD TEXTURE" << std::endl;
         }
         stbi_image_free(data);
     }

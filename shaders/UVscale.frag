@@ -16,4 +16,8 @@ void main()
 
     // Multiplication then alpha blending
     FragColor = mix(vertexColor * t0, t1, 0.01 * t1.a);
+
+    // Gamma correction
+    float gamma = 2.2;
+    FragColor.rgb = pow(FragColor.rgb, vec3(1.0 / gamma));
 }

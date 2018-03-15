@@ -63,12 +63,12 @@ void ChangeWorkingDirectory(const std::string& _path, const std::string& _toAdd)
 void LoadData()
 {
     // Load textures
-    Game::GetDataMgr().CreateTexture("Wall", "data/images/wall.jpg");
-    Game::GetDataMgr().CreateTexture("Container", "data/images/container.jpg", false, true);
+    Game::GetDataMgr().CreateTexture("Wall", "data/images/wall.jpg", false, true);
+    Game::GetDataMgr().CreateTexture("Container", "data/images/container.jpg", true, true);
     Game::GetDataMgr().CreateTexture("Awesomeface", "data/images/awesomeface.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerDiffuseMap", "data/images/container2_diffuse.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerSpecularMap", "data/images/container2_specular.png", true, true);
-    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", false, true);
+    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", true, true);
 
 
     // Load shaders

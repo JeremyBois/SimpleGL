@@ -27,18 +27,18 @@ namespace simpleGL
     }
 
     Texture* DataManager::CreateTexture(const std::string _name, const std::string _path,
-                                        bool _hasAlpha, bool _reverseY, bool _overrideIfExist)
+                                        bool _reverseY, bool _correctGamma, bool _overrideIfExist)
     {
         if (_overrideIfExist)
         {
-            m_textures[_name] = std::unique_ptr<Texture>(new Texture(_path, _hasAlpha, _reverseY));
+            m_textures[_name] = std::unique_ptr<Texture>(new Texture(_path, _reverseY, _correctGamma));
             return m_textures[_name].get();
         }
 
         TexContainerIt it = m_textures.find(_name);
         if (it == m_textures.end())
         {
-            m_textures.emplace(_name, std::unique_ptr<Texture>(new Texture(_path, _hasAlpha, _reverseY)));
+            m_textures.emplace(_name, std::unique_ptr<Texture>(new Texture(_path, _reverseY, _correctGamma)));
             return m_textures[_name].get();
         }
 

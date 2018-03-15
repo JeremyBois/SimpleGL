@@ -16,9 +16,9 @@ namespace simpleGL
 
         m_pUserKeyCallback = nullptr;
 
-        m_clearColor[0] = 0.2f;
-        m_clearColor[1] = 0.2f;
-        m_clearColor[2] = 0.2f;
+        m_clearColor[0] = 0.1f;
+        m_clearColor[1] = 0.1f;
+        m_clearColor[2] = 0.1f;
         m_clearColor[3] = 1.0f;
 
         mainCam = nullptr;
