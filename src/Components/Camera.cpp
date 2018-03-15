@@ -6,7 +6,8 @@
 #include "gtc/matrix_access.hpp"
 
 
-// #include "gtx/string_cast.hpp"
+#include "gtx/string_cast.hpp"
+
 
 namespace simpleGL
 {
@@ -92,6 +93,8 @@ namespace simpleGL
         // Avoid conversion radians --> degrees --> radians
         float angle = acos(glm::dot(-Transform::ZAxis, look));
         pTransform->SetRotation(glm::quat(rotationAxis * angle));
+
+        cout << glm::to_string(look) << endl;
 
         // // Debug show similar result (difference from floating point errors ???)
         // cout << glm::to_string(glm::lookAt(pTransform->GetPosition(), _target, Transform::YAxis)) << endl << endl;

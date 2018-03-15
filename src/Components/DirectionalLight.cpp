@@ -11,6 +11,7 @@ namespace simpleGL
 
     DirectionalLight::DirectionalLight()
     {
+        m_diffuse = glm::vec3(0.3f, 0.3f, 0.3f);
         DirLightContainer.push_back(this);
     }
 
@@ -40,7 +41,7 @@ namespace simpleGL
             _shader.SetVec3("_dirLights_[" + std::to_string(_lightIndex) + "].diffuse", m_diffuse);
             _shader.SetVec3("_dirLights_[" + std::to_string(_lightIndex) + "].specular", m_specular);
             // Pass direction
-            _shader.SetVec3("_dirLights_[" + std::to_string(_lightIndex) + "].direction", GetTransform().GetLook());
+            _shader.SetVec3("_dirLights_[" + std::to_string(_lightIndex) + "].direction", -GetTransform().GetLook());
         }
     }
 
