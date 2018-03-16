@@ -75,11 +75,6 @@ bool LightShadowScene::OnInit()
     // Add Spot light attached to the camera
     m_pSpotLight = m_pNodes[10]->AddComponent<GL::SpotLight>();
 
-
-    cout << glm::to_string(m_pSpotLight->GetTransform().GetLook()) << endl;
-
-
-
     // Add directional Light
     m_pNodes[11] = container->CreateNode();
     m_pNodes[11]->GetTransform().SetPosition(glm::vec3(0.5f, 1.0f, 5.5f));
@@ -157,8 +152,8 @@ void LightShadowScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos,
     yoffset *= sensitivity;
 
     // Update main camera
-    Game::GetWindow().mainCam->Yaw(xoffset);
-    Game::GetWindow().mainCam->Pitch(yoffset);
+    Game::GetWindow().mainCam->Yaw(-xoffset);
+    Game::GetWindow().mainCam->Pitch(-yoffset);
 }
 
 void LightShadowScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
@@ -184,10 +179,10 @@ void LightShadowScene::ProcessInput()
     }
     if (window.GetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        mainCam->Strafe(-cameraSpeed);
+        mainCam->Strafe(cameraSpeed);
     }
     if (window.GetKey(GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        mainCam->Strafe(cameraSpeed);
+        mainCam->Strafe(-cameraSpeed);
     }
 }

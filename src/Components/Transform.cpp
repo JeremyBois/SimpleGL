@@ -13,14 +13,12 @@ namespace simpleGL
 
 
     Transform::Transform()
-        : m_right(glm::vec3(1.0f, 0.0f, 0.0f)), m_up(glm::vec3(0.0f, 1.0f, 0.0f)),
-          m_look(glm::vec3(0.0f, 0.0f, 1.0f))
     {
-        // Identity
-        m_localToWorld = glm::mat4(1.0f);
-
         // Default values for scale should be 1.0f not 0.0f
         m_scale = glm::vec3(1.0f);
+
+        // Init model matrix and axes basis
+        SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
     }
 
     Transform::~Transform()
@@ -64,9 +62,9 @@ namespace simpleGL
 
         // Camera local basis
         // GLM access is M[col][row] (Section 5.6 of the GLSL reference)
-        m_right = glm::column(rotationM, 0);
-        m_up = glm::column(rotationM, 1);
-        m_look = glm::column(rotationM, 2);
+        m_right = -glm::column(rotationM, 0);
+        m_up = -glm::column(rotationM, 1);
+        m_look = -glm::column(rotationM, 2);
 
         ConstructModelMatrix();
     }

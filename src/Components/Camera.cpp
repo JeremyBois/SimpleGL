@@ -6,7 +6,7 @@
 #include "gtc/matrix_access.hpp"
 
 
-#include "gtx/string_cast.hpp"
+// #include "gtx/string_cast.hpp"
 
 
 namespace simpleGL
@@ -38,7 +38,7 @@ namespace simpleGL
     {
         // In view space camera look is reversed
         // https://gamedev.stackexchange.com/questions/65677/quaternion-lookat-for-camera
-        return -GetTransform().GetLook();
+        return GetTransform().GetLook();
     }
 
     glm::vec3 Camera::GetUp() const
@@ -96,11 +96,16 @@ namespace simpleGL
         float angle = acos(glm::dot(-Transform::ZAxis, look));
         pTransform->SetRotation(glm::quat(rotationAxis * angle));
 
-        cout << "Correct : " << glm::to_string(look) << endl;
+        // glm::vec3 right = glm::normalize(glm::cross(Transform::YAxis, look));
+        // glm::vec3 up = glm::normalize(glm::cross(right, look));
 
-        // Debug show similar result (difference from floating point errors ???)
-        cout << glm::to_string(glm::lookAt(pTransform->GetPosition(), _target, Transform::YAxis)) << endl << endl;
-        cout << glm::to_string(GetViewMatrix()) << endl;
+        // cout << "Correct : " << glm::to_string(right) << endl;
+        // cout << "Correct : " << glm::to_string(up) << endl;
+        // cout << "Correct : " << glm::to_string(look) << endl;
+
+        // // Debug show similar result (difference from floating point errors ???)
+        // cout << "Correct: " << glm::to_string(glm::lookAt(pTransform->GetPosition(), _target, Transform::YAxis)) << endl << endl;
+        // cout << "View: "<< glm::to_string(GetViewMatrix()) << endl;
     }
 
     /// Positive rotations are counterclockwise.

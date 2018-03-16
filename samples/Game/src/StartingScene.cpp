@@ -4,7 +4,7 @@
 #include "math.h"
 #include "glm.hpp"
 
-// #include "gtx/string_cast.hpp" // For debug
+#include "gtx/string_cast.hpp" // For debug
 
 namespace GL = simpleGL;
 typedef GL::GameManager Game;
@@ -122,6 +122,7 @@ bool StartingScene::OnInit()
     // Add camera
     m_pCam = m_pNodes[4]->AddComponent<GL::CameraDebug>();
     m_pCam->Pitch(-30.0f);
+
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
@@ -262,8 +263,8 @@ void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, do
     yoffset *= sensitivity;
 
     // Update main camera
-    Game::GetWindow().mainCam->Yaw(xoffset);
-    Game::GetWindow().mainCam->Pitch(yoffset);
+    Game::GetWindow().mainCam->Yaw(-xoffset);
+    Game::GetWindow().mainCam->Pitch(-yoffset);
 }
 
 void StartingScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
@@ -289,11 +290,11 @@ void StartingScene::ProcessInput()
     }
     if (window.GetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        mainCam->Strafe(-cameraSpeed);
+        mainCam->Strafe(cameraSpeed);
     }
     if (window.GetKey(GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        mainCam->Strafe(cameraSpeed);
+        mainCam->Strafe(-cameraSpeed);
     }
 
     if (window.GetKey(GLFW_KEY_PAGE_UP) == GLFW_PRESS)

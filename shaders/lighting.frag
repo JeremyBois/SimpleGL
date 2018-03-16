@@ -117,19 +117,19 @@ void main()
 
     vec3 fragFinalColor = vec3(0.0f, 0.0, 0.0);
 
-    // // Compute directional lights influence
-    // int dirMax = min(MAX_DIR_LIGHTS, _DirLightCount_);
-    // for(int i = 0; i < dirMax; i++)
-    // {
-    //     fragFinalColor += ComputeDirLight(_dirLights_[i], Normal, viewDir);;
-    // }
+    // Compute directional lights influence
+    int dirMax = min(MAX_DIR_LIGHTS, _DirLightCount_);
+    for(int i = 0; i < dirMax; i++)
+    {
+        fragFinalColor += ComputeDirLight(_dirLights_[i], Normal, viewDir);;
+    }
 
-    // // Compute point lights influence
-    // int pointsMax = min(MAX_POINT_LIGHTS, _PointLightCount_);
-    // for(int i = 0; i < pointsMax; i++)
-    // {
-    //     fragFinalColor += ComputePointLight(_pointLights_[i], Normal, FragWorldPos, viewDir);
-    // }
+    // Compute point lights influence
+    int pointsMax = min(MAX_POINT_LIGHTS, _PointLightCount_);
+    for(int i = 0; i < pointsMax; i++)
+    {
+        fragFinalColor += ComputePointLight(_pointLights_[i], Normal, FragWorldPos, viewDir);
+    }
 
     // Compute spot lights influence
     int spotsMax = min(MAX_SPOT_LIGHTS, _SpotLightCount_);
@@ -138,8 +138,8 @@ void main()
         fragFinalColor += ComputeSpotLight(_spotLights_[i], Normal, FragWorldPos, viewDir);
     }
 
-    // // Compute emission
-    // fragFinalColor += _objectMaterial_.emission * texture(_objectMaterial_._emissionMap, TexCoords).rgb;
+    // Compute emission
+    fragFinalColor += _objectMaterial_.emission * texture(_objectMaterial_._emissionMap, TexCoords).rgb;
 
 
     // Gamma correction

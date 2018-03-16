@@ -51,7 +51,7 @@ namespace simpleGL
             // Pass position
             _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldPosition", GetTransform().GetPosition());
             // @TODO Front need to be negate ...
-            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldDirection", -GetTransform().GetLook());
+            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldDirection", GetTransform().GetLook());
 
             // Pass attenuation parameters
             _shader.SetFloat("_spotLights_[" + std::to_string(_lightIndex) + "].constant", m_constCoef);
