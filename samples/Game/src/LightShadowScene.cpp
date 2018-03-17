@@ -17,6 +17,12 @@ LightShadowScene::LightShadowScene()
 {
     m_pCuboid = new GL::Cuboid();
     m_lightShape = new GL::Cuboid();
+    m_pPlane = new GL::Plane();
+
+    // Create shapes
+    m_pCuboid->Create(0.5f, 0.5f, 0.5f);
+    m_lightShape->Create(0.1f, 0.1f, 0.1f);
+    m_pPlane->Create(20, 20);
 }
 
 LightShadowScene::~LightShadowScene()
@@ -29,10 +35,6 @@ bool LightShadowScene::OnInit()
 {
     auto* container = new GL::NodeManager();
     GL::GameManager::AttachNodeMgr(container);
-
-    // Create a field of boxes
-    m_pCuboid->Create(0.5f, 0.5f, 0.5f);
-    m_lightShape->Create(0.1f, 0.1f, 0.1f);
 
     GL::Material* cubeMat = Game::GetDataMgr().GetMaterial("BoxLight");
 
@@ -63,15 +65,18 @@ bool LightShadowScene::OnInit()
         temp->LinkShape(m_pCuboid);
         temp->LinkMaterial(cubeMat);
     }
-    // Add cube color
+    // Set cube color
+    cubeMat->SetAmbiant(glm::vec3(0.2f, 0.2f, 0.2f));
     cubeMat->SetDiffuse(glm::vec3(1.0f, 0.5f, 0.31f));
-    cubeMat->SetSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
+    cubeMat->SetShininess(64.0f);
+    cubeMat->SetGlossiness(5.0f);
 
     // Add camera
     m_pNodes[10] = container->CreateNode();
     m_pCam = m_pNodes[10]->AddComponent<GL::CameraDebug>();
     m_pNodes[10]->GetTransform().SetPosition(glm::vec3(-2.0f, 1.0f, 5.0f));
     m_pCam->LookAt(glm::vec3(0.0f, 0.0f, -3.0f));
+
     // Add Spot light attached to the camera
     m_pSpotLight = m_pNodes[10]->AddComponent<GL::SpotLight>();
 
@@ -90,6 +95,14 @@ bool LightShadowScene::OnInit()
     temp = m_pNodes[12]->AddComponent<GL::ShapeRenderer>();
     temp->LinkShape(m_lightShape);
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
+
+    // Add floor
+    m_pNodes[13] = container->CreateNode();
+    m_pNodes[13]->GetTransform().SetPosition(glm::vec3(0.0f, 5.0f, -5.0f));
+    m_pNodes[13]->GetTransform().SetRotationX(-90.0f);
+    temp = m_pNodes[13]->AddComponent<GL::ShapeRenderer>();
+    temp->LinkShape(m_pPlane);
+    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Floor"));
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);
@@ -112,9 +125,7 @@ bool LightShadowScene::OnUpdate()
     lightColor.y = sin(glfwGetTime() * 0.7f) / 2.0f + 0.5f;
     lightColor.z = sin(glfwGetTime() * 1.3f) / 2.0f + 0.5f;
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
-    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.3f); // low influence
-    m_pDirLight->SetDiffuse(diffuseColor);
-    m_pDirLight->SetAmbient(ambientColor);
+    m_pDirLight->SetColor(diffuseColor);
 }
 
 bool LightShadowScene::OnQuit()

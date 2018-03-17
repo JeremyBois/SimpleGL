@@ -14,10 +14,10 @@ namespace simpleGL
 
     /// Create a base light similar to a point light without any attenuation
     /// with distance.
-    class SIMPLEGL_API Light: public Component
+    class SIMPLEGL_LOCAL Light: public Component
     {
     protected:
-        glm::vec3 m_ambient, m_diffuse, m_specular;
+        glm::vec3 m_color;
 
         Texture* m_pDiffuseMap;
         Texture* m_pSpecularMap;
@@ -30,13 +30,9 @@ namespace simpleGL
         virtual ~Light() = default;
 
         // Color
-        virtual glm::vec3 GetAmbient() const {return m_ambient;}
-        virtual glm::vec3 GetDiffuse() const {return m_diffuse;}
-        virtual glm::vec3 GetSpecular() const {return m_specular;}
+        virtual glm::vec3 GetColor() const {return m_color;}
 
-        virtual void SetAmbient(glm::vec3 _ambient) {m_ambient = _ambient;}
-        virtual void SetDiffuse(glm::vec3 _diffuse) {m_diffuse = _diffuse;}
-        virtual void SetSpecular(glm::vec3 _specular) {m_specular = _specular;}
+        virtual void SetColor(glm::vec3 _ambient) {m_color = _ambient;}
 
         // Set light in properties inside the shader
         virtual void Use(const Shader& _shader) const;

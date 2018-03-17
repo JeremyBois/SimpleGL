@@ -70,6 +70,8 @@ void LoadData()
     Game::GetDataMgr().CreateTexture("ContainerSpecularMap", "data/images/container2_specular.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", true, true);
 
+    // Floor
+    Game::GetDataMgr().CreateTexture("Floor", "data/images/floor.jpg", false, true);
 
     // Load shaders
     GL::Shader* shaderPtr;
@@ -118,4 +120,7 @@ void LoadData()
     pMat->LinkSpecularMap(Game::GetDataMgr().GetTexture("ContainerSpecularMap"));
     pMat->LinkEmissionMap(Game::GetDataMgr().GetTexture("ContainerEmissionMap"));
     pMat->SetEmission(glm::vec3(0.3f, 0.3f, 0.3f));
+
+    pMat = Game::GetDataMgr().CreateMaterial("Floor", "Default");
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Floor"), GL_TEXTURE3);
 }

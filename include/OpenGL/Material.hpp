@@ -31,7 +31,7 @@ namespace simpleGL
         const GLenum m_emissionID = GL_TEXTURE2;
 
         // Colors
-        glm::vec3 m_diffuse, m_specular, m_emission;
+        glm::vec3 m_ambiant, m_diffuse, m_emission;
         float m_shininess, m_glossiness;
 
 
@@ -63,13 +63,13 @@ namespace simpleGL
 
 
         // Color
+        inline glm::vec3 GetAmbiant() const {return m_ambiant;}
         inline glm::vec3 GetDiffuse() const {return m_diffuse;}
-        inline glm::vec3 GetSpecular() const {return m_specular;}
         inline float     GetShininess() const {return m_shininess;}
         inline float     GetGlossiness() const {return m_glossiness;}
 
+        inline void SetAmbiant(glm::vec3 _ambiant) {m_ambiant = _ambiant;}
         inline void SetDiffuse(glm::vec3 _diffuse) {m_diffuse = _diffuse;}
-        inline void SetSpecular(glm::vec3 _specular) {m_specular = _specular;}
         inline void SetEmission(glm::vec3 _emission) {m_emission = _emission;}
         inline void SetShininess(float _shininess) {m_shininess = _shininess;}
         inline void SetGlossiness(float _glossiness) {m_glossiness = _glossiness;}

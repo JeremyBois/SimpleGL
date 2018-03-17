@@ -17,7 +17,7 @@ namespace simpleGL
         : m_constCoef(1.0f), m_linearCoef(0.09f), m_quadraticCoef(0.032f),
           m_cutOffAngle(12.5f), m_outerCutOffAngle(18.5f)
     {
-        m_diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
+        m_color = glm::vec3(0.8f, 0.8f, 0.8f);
         SpotLightContainer.push_back(this);
     }
 
@@ -44,9 +44,7 @@ namespace simpleGL
             // Pass data to shader
             _shader.Use();
             // Pass color to shader
-            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].ambient", m_ambient);
-            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].diffuse", m_diffuse);
-            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].specular", m_specular);
+            _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].color", m_color);
 
             // Pass position
             _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldPosition", GetTransform().GetPosition());

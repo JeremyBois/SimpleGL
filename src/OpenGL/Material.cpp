@@ -9,8 +9,8 @@
 namespace simpleGL
 {
     Material::Material()
-        : m_diffuse(glm::vec3(1.0f, 1.0f, 1.0f)), m_emission(glm::vec3(0.0f, 0.0f, 0.0f)),
-          m_specular(glm::vec3(1.0f, 1.0f, 1.0f)), m_shininess(32.0f), m_glossiness(1.0f)
+        : m_ambiant(glm::vec3(1.0f, 1.0f, 1.0f)), m_diffuse(glm::vec3(1.0f, 1.0f, 1.0f)), m_emission(glm::vec3(0.0f, 0.0f, 0.0f)),
+          m_shininess(32.0f), m_glossiness(1.0f)
     {
         // Default shader
         m_baseShader = Shader("shaders/basic.vert",
@@ -115,8 +115,8 @@ namespace simpleGL
         m_pShader->SetInt("_objectMaterial_._specularMap", 1);
         m_pShader->SetInt("_objectMaterial_._emissionMap", 2);
 
+        m_pShader->SetVec3("_objectMaterial_.ambiant", m_ambiant);
         m_pShader->SetVec3("_objectMaterial_.diffuse", m_diffuse);
-        m_pShader->SetVec3("_objectMaterial_.specular", m_specular);
         m_pShader->SetVec3("_objectMaterial_.emission", m_emission);
         m_pShader->SetFloat("_objectMaterial_.shininess", m_shininess);
         m_pShader->SetFloat("_objectMaterial_.glossiness", m_glossiness);

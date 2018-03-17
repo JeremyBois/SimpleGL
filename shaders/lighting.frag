@@ -9,9 +9,8 @@
 // Container for a object color description
 struct Material
 {
-    vec3 ambiant;
+    vec3 ambient;
     vec3 diffuse;
-    vec3 specular;
     vec3 emission;
 
     float shininess;
@@ -27,18 +26,14 @@ struct Light
 {
     vec3 worldPosition;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 color;
 };
 
 struct PointLight
 {
     vec3 worldPosition;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 color;
 
     float constant;
     float linear;
@@ -52,9 +47,7 @@ struct SpotLight
     vec3  worldPosition;
     vec3  worldDirection;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 color;
 
     float cutOff;
     float outerCutOff;
@@ -69,9 +62,7 @@ struct DirLight
 {
     vec3 direction;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 color;
 };
 
 
@@ -159,22 +150,22 @@ void main()
 vec3 ComputeDirLight(DirLight _dirLight, vec3 _normal, vec3 _viewDir)
 {
     // Compute ambient
-    vec3 ambient = _dirLight.ambient * _objectMaterial_.diffuse *
+    vec3 ambient = _dirLight.color * _objectMaterial_.ambient *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute diffuse using light direction reversed
     // ---> Direction to light
-    vec3 lightDir = normalize(-_dirLight.direction);
-    float diffStrength = max(dot(_normal, lightDir), 0.0);
-    vec3 diffuse = _dirLight.diffuse * diffStrength * _objectMaterial_.diffuse *
+    vec3 lightDirection = normalize(-_dirLight.direction);
+    float diffStrength = max(dot(_normal, lightDirection), 0.0);
+    vec3 diffuse = _dirLight.color * _objectMaterial_.diffuse * diffStrength *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute specular (Blinh - Phong equations)
-    vec3 halfVector = normalize(lightDir + _viewDir);
+    vec3 halfVector = normalize(lightDirection + _viewDir);
     float specStrength = pow(max(dot(_normal, halfVector), 0.0), _objectMaterial_.shininess);
-    // Specular comes from _dirLight color not material
-    vec3 specular = _dirLight.specular * _objectMaterial_.glossiness * specStrength *
-                    vec3(texture(_objectMaterial_._specularMap, TexCoords));
+    // Specular material
+    vec3 specular = _dirLight.color * _objectMaterial_.glossiness *
+                    specStrength * vec3(texture(_objectMaterial_._specularMap, TexCoords));
 
     return (ambient + diffuse + specular);
 }
@@ -184,21 +175,21 @@ vec3 ComputePointLight(PointLight _pointLight, vec3 _normal, vec3 _fragWorldPos,
 {
 
     // Compute ambient
-    vec3 ambient = _pointLight.ambient * _objectMaterial_.diffuse *
+    vec3 ambient = _pointLight.color * _objectMaterial_.ambient *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute diffuse
-    vec3 lightDir = normalize(_pointLight.worldPosition - _fragWorldPos);
-    float diffStrength = max(dot(_normal, lightDir), 0.0);
-    vec3 diffuse = _pointLight.diffuse * diffStrength * _objectMaterial_.diffuse *
+    vec3 lightDirection = normalize(_pointLight.worldPosition - _fragWorldPos);
+    float diffStrength = max(dot(_normal, lightDirection), 0.0);
+    vec3 diffuse = _pointLight.color * _objectMaterial_.diffuse * diffStrength *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute specular (Blinh - Phong equations)
-    vec3 halfVector = normalize(lightDir + _viewDir);
+    vec3 halfVector = normalize(lightDirection + _viewDir);
     float specStrength = pow(max(dot(_normal, halfVector), 0.0), _objectMaterial_.shininess);
-    // Specular comes from _pointLight color not material
-    vec3 specular = _pointLight.specular * _objectMaterial_.glossiness * specStrength *
-                    vec3(texture(_objectMaterial_._specularMap, TexCoords));
+    // Specular color comes from light not material
+    vec3 specular = _pointLight.color * _objectMaterial_.glossiness *
+                    specStrength * vec3(texture(_objectMaterial_._specularMap, TexCoords));
 
     // Attenuation
     float distance    = length(_pointLight.worldPosition - _fragWorldPos);
@@ -221,29 +212,29 @@ vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, ve
                                _spotLight.quadratic * (distance * distance));
 
     // Compute ambient
-    vec3 ambient = _spotLight.ambient * _objectMaterial_.diffuse *
+    vec3 ambient = _spotLight.color * _objectMaterial_.ambient *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
     ambient *= attenuation;
 
     // Cos of angle used to check if frag inside the light area or not
     // Negate the angle to get direction toward the light
-    vec3 lightDir = normalize(_spotLight.worldPosition - _fragWorldPos);
-    float cosTheta = dot(lightDir, normalize(-_spotLight.worldDirection));
+    vec3 lightDirection = normalize(_spotLight.worldPosition - _fragWorldPos);
+    float cosTheta = dot(lightDirection, normalize(-_spotLight.worldDirection));
 
     // > because cos is close to 1.0 when angle is close to 0.0
     if(cosTheta > _spotLight.outerCutOff)
     {
         // Compute diffuse
-        float diffStrength = max(dot(_normal, lightDir), 0.0);
-        vec3 diffuse = _spotLight.diffuse * diffStrength * _objectMaterial_.diffuse *
+        float diffStrength = max(dot(_normal, lightDirection), 0.0);
+        vec3 diffuse = _spotLight.color * _objectMaterial_.diffuse * diffStrength *
                        vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
         // Compute specular (Blinh - Phong equations)
-        vec3 halfVector = normalize(lightDir + _viewDir);
+        vec3 halfVector = normalize(lightDirection + _viewDir);
         float specStrength = pow(max(dot(_normal, halfVector), 0.0), _objectMaterial_.shininess);
-        // Specular comes from _spotLight color not material
-        vec3 specular = _spotLight.specular * _objectMaterial_.glossiness * specStrength *
-                        vec3(texture(_objectMaterial_._specularMap, TexCoords));
+        // Specular color comes from light not material
+        vec3 specular = _spotLight.color * _objectMaterial_.glossiness *
+                        specStrength * vec3(texture(_objectMaterial_._specularMap, TexCoords));
 
         float epsilon   = _spotLight.cutOff - _spotLight.outerCutOff;
         float intensity = clamp((cosTheta - _spotLight.outerCutOff) / epsilon, 0.0, 1.0);

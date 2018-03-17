@@ -16,7 +16,7 @@ namespace simpleGL
         // http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
         : m_constCoef(1.0f), m_linearCoef(0.14f), m_quadraticCoef(0.07f)
     {
-        m_diffuse = glm::vec3(0.6f, 0.6f, 0.6f);
+        m_color = glm::vec3(0.6f, 0.6f, 0.6f);
         PointLightContainer.push_back(this);
     }
 
@@ -43,9 +43,7 @@ namespace simpleGL
             // Pass data to shader
             _shader.Use();
             // Pass color to shader
-            _shader.SetVec3("_pointLights_[" + std::to_string(_lightIndex) + "].ambient", m_ambient);
-            _shader.SetVec3("_pointLights_[" + std::to_string(_lightIndex) + "].diffuse", m_diffuse);
-            _shader.SetVec3("_pointLights_[" + std::to_string(_lightIndex) + "].specular", m_specular);
+            _shader.SetVec3("_pointLights_[" + std::to_string(_lightIndex) + "].color", m_color);
 
             // Pass position
             _shader.SetVec3("_pointLights_[" + std::to_string(_lightIndex) + "].worldPosition", GetTransform().GetPosition());
