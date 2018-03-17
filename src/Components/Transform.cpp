@@ -60,7 +60,11 @@ namespace simpleGL
         // of world space, as seen from camera space, not the basis vectors of camera space
         glm::mat3 rotationM = glm::mat3_cast(m_orientation);
 
-        // Camera local basis
+        // The rows of rotationM represent the coordinates in the original space of
+        // unit vectors along the coordinate axes of the rotated space
+        // The columns of rotationM represent the coordinates in the rotated space of
+        // unit vectors along the axes of the original space.
+        // http://www.fastgraph.com/makegames/3drotation/
         // GLM access is M[col][row] (Section 5.6 of the GLSL reference)
         m_right = -glm::column(rotationM, 0);
         m_up = -glm::column(rotationM, 1);

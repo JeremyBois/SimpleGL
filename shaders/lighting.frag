@@ -9,9 +9,11 @@
 // Container for a object color description
 struct Material
 {
+    vec3 ambiant;
     vec3 diffuse;
     vec3 specular;
     vec3 emission;
+
     float shininess;
     float glossiness;
 
@@ -55,6 +57,7 @@ struct SpotLight
     vec3 specular;
 
     float cutOff;
+    float outerCutOff;
     float constant;
     float linear;
     float quadratic;
@@ -103,7 +106,7 @@ out vec4 FragColor;
 
 
 // Prototypes
-vec3 ComputeDirLight(DirLight _light, vec3 _normal, vec3 _viewDir);
+vec3 ComputeDirLight(DirLight _dirLight, vec3 _normal, vec3 _viewDir);
 vec3 ComputePointLight(PointLight _pointLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir);
 vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir);
 
@@ -153,24 +156,24 @@ void main()
 
 
 
-vec3 ComputeDirLight(DirLight _light, vec3 _normal, vec3 _viewDir)
+vec3 ComputeDirLight(DirLight _dirLight, vec3 _normal, vec3 _viewDir)
 {
     // Compute ambient
-    vec3 ambient = _light.ambient * _objectMaterial_.diffuse *
+    vec3 ambient = _dirLight.ambient * _objectMaterial_.diffuse *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute diffuse using light direction reversed
     // ---> Direction to light
-    vec3 lightDir = normalize(-_light.direction);
+    vec3 lightDir = normalize(-_dirLight.direction);
     float diffStrength = max(dot(_normal, lightDir), 0.0);
-    vec3 diffuse = _light.diffuse * diffStrength * _objectMaterial_.diffuse *
+    vec3 diffuse = _dirLight.diffuse * diffStrength * _objectMaterial_.diffuse *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
 
     // Compute specular (Blinh - Phong equations)
     vec3 halfVector = normalize(lightDir + _viewDir);
     float specStrength = pow(max(dot(_normal, halfVector), 0.0), _objectMaterial_.shininess);
-    // Specular comes from _light color not material
-    vec3 specular = _light.specular * _objectMaterial_.glossiness * specStrength *
+    // Specular comes from _dirLight color not material
+    vec3 specular = _dirLight.specular * _objectMaterial_.glossiness * specStrength *
                     vec3(texture(_objectMaterial_._specularMap, TexCoords));
 
     return (ambient + diffuse + specular);
@@ -212,18 +215,23 @@ vec3 ComputePointLight(PointLight _pointLight, vec3 _normal, vec3 _fragWorldPos,
 
 vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, vec3 _viewDir)
 {
+    // Attenuation
+    float distance    = length(_spotLight.worldPosition - _fragWorldPos);
+    float attenuation = 1.0 / (_spotLight.constant + _spotLight.linear * distance +
+                               _spotLight.quadratic * (distance * distance));
+
     // Compute ambient
     vec3 ambient = _spotLight.ambient * _objectMaterial_.diffuse *
                    vec3(texture(_objectMaterial_._diffuseMap, TexCoords));
-
-    vec3 lightDir = normalize(_spotLight.worldPosition - _fragWorldPos);
+    ambient *= attenuation;
 
     // Cos of angle used to check if frag inside the light area or not
     // Negate the angle to get direction toward the light
+    vec3 lightDir = normalize(_spotLight.worldPosition - _fragWorldPos);
     float cosTheta = dot(lightDir, normalize(-_spotLight.worldDirection));
 
     // > because cos is close to 1.0 when angle is close to 0.0
-    if(cosTheta > _spotLight.cutOff)
+    if(cosTheta > _spotLight.outerCutOff)
     {
         // Compute diffuse
         float diffStrength = max(dot(_normal, lightDir), 0.0);
@@ -237,15 +245,12 @@ vec3 ComputeSpotLight(SpotLight _spotLight, vec3 _normal, vec3 _fragWorldPos, ve
         vec3 specular = _spotLight.specular * _objectMaterial_.glossiness * specStrength *
                         vec3(texture(_objectMaterial_._specularMap, TexCoords));
 
-        // Attenuation
-        float distance    = length(_spotLight.worldPosition - _fragWorldPos);
-        float attenuation = 1.0 / (_spotLight.constant + _spotLight.linear * distance +
-                                   _spotLight.quadratic * (distance * distance));
+        float epsilon   = _spotLight.cutOff - _spotLight.outerCutOff;
+        float intensity = clamp((cosTheta - _spotLight.outerCutOff) / epsilon, 0.0, 1.0);
 
-        // Remove attenuation on ambiant to avoid a darker area inside that outside
-        // at large distance
-        diffuse  *= attenuation;
-        specular *= attenuation;
+        // Ambiant should not be influenced by intensity
+        diffuse  *= (intensity * attenuation);
+        specular *= (intensity * attenuation);
 
 
         return (ambient + diffuse + specular);

@@ -19,7 +19,7 @@ namespace simpleGL
         static std::vector<SpotLight*> SpotLightContainer;
 
         float m_constCoef, m_linearCoef, m_quadraticCoef;
-        float m_cuttOffangle;
+        float m_cutOffAngle, m_outerCutOffAngle;
 
     public:
         SpotLight();
@@ -37,12 +37,15 @@ namespace simpleGL
         void SetSpecular(float _quadraticCoef) {m_quadraticCoef = _quadraticCoef;}
 
         // Angles
-        float GetCutOffAngle() const {return m_cuttOffangle;}
+        float GetInnerAngle() const {return m_cutOffAngle;}
+        float GetOuterAngle() const {return m_outerCutOffAngle;}
 
-        void SetCutOffAngle(float _degrees) {m_cuttOffangle = _degrees;}
+        void SetInnerAngle(float _degrees) {m_cutOffAngle = _degrees;}
+        void SetOuterAngle(float _degrees) {m_outerCutOffAngle = _degrees;}
 
         // Set light in properties inside the shader
         virtual void Use(const Shader& _shader, int _lightIndex=0) const;
+
         virtual SpotLight* Clone() {return new SpotLight(*this);}
 
         static void UseAll(const Shader& _shader);

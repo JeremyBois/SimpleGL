@@ -15,7 +15,7 @@ namespace simpleGL
     SpotLight::SpotLight()
         // http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
         : m_constCoef(1.0f), m_linearCoef(0.09f), m_quadraticCoef(0.032f),
-          m_cuttOffangle(12.5f)
+          m_cutOffAngle(12.5f), m_outerCutOffAngle(18.5f)
     {
         m_diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
         SpotLightContainer.push_back(this);
@@ -50,7 +50,6 @@ namespace simpleGL
 
             // Pass position
             _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldPosition", GetTransform().GetPosition());
-            // @TODO Front need to be negate ...
             _shader.SetVec3("_spotLights_[" + std::to_string(_lightIndex) + "].worldDirection", GetTransform().GetLook());
 
             // Pass attenuation parameters
@@ -62,8 +61,9 @@ namespace simpleGL
             // In the fragment shader we compute the dot product between the LightDir (lightPos - fragPos)
             // and the SpotDir using normalized vector --> Get cos(angle)
             _shader.SetFloat("_spotLights_[" + std::to_string(_lightIndex) + "].cutOff",
-                             glm::cos(glm::radians(m_cuttOffangle)));
-
+                             glm::cos(glm::radians(m_cutOffAngle)));
+            _shader.SetFloat("_spotLights_[" + std::to_string(_lightIndex) + "].outerCutOff",
+                             glm::cos(glm::radians(m_outerCutOffAngle)));
         }
     }
 
