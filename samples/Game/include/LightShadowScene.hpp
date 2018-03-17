@@ -10,9 +10,9 @@ class LightShadowScene: public simpleGL::IScene
 private:
     simpleGL::Node*         m_pNodes[14];
     simpleGL::Cuboid*       m_pCuboid;
-    // simpleGL::Plane*        m_pPlane;
+    simpleGL::Plane*        m_pPlane;
 
-    simpleGL::CameraDebug*   m_pCam;
+    simpleGL::CameraFPS*   m_pCam;
 
     // Light
     simpleGL::DirectionalLight*    m_pDirLight;

@@ -71,7 +71,9 @@ void LoadData()
     Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", true, true);
 
     // Floor
-    Game::GetDataMgr().CreateTexture("Floor", "data/images/floor.jpg", false, true);
+    GL::Texture* tempT = Game::GetDataMgr().CreateTexture("Floor", "data/images/floor.jpg", false, true);
+    tempT->Set(GL_TEXTURE_WRAP_S, GL_REPEAT);
+    tempT->Set(GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Load shaders
     GL::Shader* shaderPtr;
@@ -121,6 +123,6 @@ void LoadData()
     pMat->LinkEmissionMap(Game::GetDataMgr().GetTexture("ContainerEmissionMap"));
     pMat->SetEmission(glm::vec3(0.3f, 0.3f, 0.3f));
 
-    pMat = Game::GetDataMgr().CreateMaterial("Floor", "Default");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Floor"), GL_TEXTURE3);
+    pMat = Game::GetDataMgr().CreateMaterial("Floor", "WithAmbiantLight");
+    pMat->LinkDiffuseMap(Game::GetDataMgr().GetTexture("Floor"));
 }

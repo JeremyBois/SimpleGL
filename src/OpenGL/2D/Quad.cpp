@@ -20,7 +20,7 @@ namespace simpleGL
         float halfWidth  = _width / 2.0f;
         float halfHeight = _height / 2.0f;
 
-        // Counter clockwise
+        // Counter clockwise (top left - bottom left - bottom right - top right)
         glm::vec2 tempVertices[] =
         {
             {-halfWidth, halfHeight},

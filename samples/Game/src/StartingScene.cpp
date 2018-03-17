@@ -121,7 +121,7 @@ bool StartingScene::OnInit()
 
     // Add camera
     m_pCam = m_pNodes[4]->AddComponent<GL::CameraDebug>();
-    m_pCam->Pitch(-30.0f);
+    m_pCam->Pitch(30.0f);
 
 
     // Add callback for key events
