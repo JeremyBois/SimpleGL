@@ -17,12 +17,12 @@ LightShadowScene::LightShadowScene()
 {
     m_pCuboid = new GL::Cuboid();
     m_lightShape = new GL::Cuboid();
-    m_pPlane = new GL::Plane();
+    // m_pPlane = new GL::Plane();
 
     // Create shapes
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
     m_lightShape->Create(0.1f, 0.1f, 0.1f);
-    m_pPlane->Create(20, 20);
+    // m_pPlane->Create(20, 20);
 }
 
 LightShadowScene::~LightShadowScene()
@@ -96,13 +96,13 @@ bool LightShadowScene::OnInit()
     temp->LinkShape(m_lightShape);
     temp->LinkMaterial(Game::GetDataMgr().GetMaterial("LightGizmo"));
 
-    // Add floor
-    m_pNodes[13] = container->CreateNode();
-    m_pNodes[13]->GetTransform().SetPosition(glm::vec3(0.0f, 5.0f, -5.0f));
-    m_pNodes[13]->GetTransform().SetRotationX(-90.0f);
-    temp = m_pNodes[13]->AddComponent<GL::ShapeRenderer>();
-    temp->LinkShape(m_pPlane);
-    temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Floor"));
+    // // Add floor
+    // m_pNodes[13] = container->CreateNode();
+    // m_pNodes[13]->GetTransform().SetPosition(glm::vec3(0.0f, 5.0f, -5.0f));
+    // m_pNodes[13]->GetTransform().SetRotationX(-90.0f);
+    // temp = m_pNodes[13]->AddComponent<GL::ShapeRenderer>();
+    // temp->LinkShape(m_pPlane);
+    // temp->LinkMaterial(Game::GetDataMgr().GetMaterial("Floor"));
 
     // Add callback for key events
     Game::GetWindow().AttachKeyEventCallback(MyKeyEventHandler);

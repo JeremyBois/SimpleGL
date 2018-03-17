@@ -4,6 +4,7 @@
 
 ## Shapes
 
+    - Add plane with index buffer using one big strip (degenerate triangles) [Help](https://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips#5920190)
 
 ## Window
 
