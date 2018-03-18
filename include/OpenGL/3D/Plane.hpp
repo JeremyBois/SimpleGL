@@ -15,11 +15,11 @@ namespace simpleGL
         // Index buffer object (EBO)
         unsigned int m_VAO, m_VBO, m_EBO;
 
-        int m_sizeVerticesData;
+        int m_sizeVertices;
         int m_sizeIndex;
         int m_nbRows, m_nbCols;
 
-        float*        m_pVerticesData;
+        Vertex3D*     m_pVerticesData;
         unsigned int* m_pIndices;
 
         void  SendData();

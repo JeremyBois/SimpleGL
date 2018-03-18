@@ -15,11 +15,9 @@ namespace simpleGL
         // Vertex buffer object (VBO)
         unsigned int m_VAO, m_VBO;
 
-        // Total size of the buffer
-        static const int SizeData = 288;
         static const int SizeVertices = 24;
 
-        float m_verticesData[SizeData];
+        Vertex3D m_verticesData[SizeVertices];
 
         void SendData();
 

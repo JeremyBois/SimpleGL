@@ -31,7 +31,7 @@ namespace simpleGL
     {
         // Take account for data stored inside each vertices
         // and total number of vertices
-        m_sizeVerticesData = (_nbCols * _nbRows) * SizeVerticeData;
+        m_sizeVertices = (_nbCols * _nbRows);
     }
 
     void  Plane::ComputeIndexSize(int _nbCols, int _nbRows)
@@ -64,31 +64,24 @@ namespace simpleGL
         glm::vec3 halfSize =  glm::vec3(_width / 2.0f, 0.0f, _depth / (float)2.0f);
 
         // Create vertices and populate them
-        m_pVerticesData = new float[m_sizeVerticesData];
+        m_pVerticesData = new Vertex3D[m_sizeVertices];
         int vIndex = 0;
         for (int row = 0; row < _nbRows; row++)
         {
             for (int col = 0; col < _nbCols; col++)
             {
                 // Set position at plane centered
-                m_pVerticesData[vIndex++] = offset.x * col - halfSize.x;
-                m_pVerticesData[vIndex++] = 0.0f;  // No variation on height
-                m_pVerticesData[vIndex++] = offset.z * row - halfSize.z;
+                m_pVerticesData[vIndex].Position = glm::vec3(offset.x * col - halfSize.x,
+                                                             0.0f,
+                                                             offset.z * row - halfSize.z);
 
-                // Set color
-                m_pVerticesData[vIndex++] = 1.0f;
-                m_pVerticesData[vIndex++] = 1.0f;
-                m_pVerticesData[vIndex++] = 1.0f;
-                m_pVerticesData[vIndex++] = 1.0f;
+                m_pVerticesData[vIndex].Color = glm::vec4(1.0f);
+                m_pVerticesData[vIndex].UV = glm::vec2(col / (float)(_nbCols - 1),
+                                                       1 - row / (float)(_nbRows - 1));
 
-                // Set UV
-                m_pVerticesData[vIndex++] = col / (float)(_nbCols - 1);
-                m_pVerticesData[vIndex++] = 1 - row / (float)(_nbRows - 1);
+                m_pVerticesData[vIndex].Normals = glm::vec3(0.0f, 1.0f, 0.0f);
 
-                // Set normals
-                m_pVerticesData[vIndex++] = 0.0f;
-                m_pVerticesData[vIndex++] = 1.0f;
-                m_pVerticesData[vIndex++] = 0.0f;
+                vIndex++;
             }
         }
 
@@ -120,9 +113,10 @@ namespace simpleGL
 
         // // Debug
         // cout << "Offset: " << glm::to_string(offset) << endl;
-        // cout << "Vertice count: " << (_nbCols * _nbRows) << endl;
+        // cout << "Vertice count: " << vIndex << endl;
+        // cout << "Vertice size: " << m_sizeVertices << endl;
         // cout << "Vertice data size: " << SizeVerticeData << endl;
-        // cout << "Data size: " << m_sizeVerticesData << endl;
+        // cout << "Data size: " << m_sizeVertices * SizeVerticeData << endl;
         // cout << "Index size: " << m_sizeIndex << endl;
         // cout << "Index count: " << iIndex << endl;
         // DebugVertices();
@@ -141,15 +135,10 @@ namespace simpleGL
         {
             for (int col = 0; col < m_nbCols; col++)
             {
-                // Offset array to change only UV
-                vIndex += baseOffset;
-
                 // Set UV
-                m_pVerticesData[vIndex++] = col / (float)(m_nbCols - 1);
-                m_pVerticesData[vIndex++] = 1 - row / (float)(m_nbRows - 1);
-
-                // OffSet normals
-                vIndex += SizeNormals;
+                m_pVerticesData[vIndex].UV = glm::vec2(col / (float)(m_nbCols - 1),
+                                                       1 - row / (float)(m_nbRows - 1));
+                vIndex++;
             }
         }
 
@@ -165,17 +154,11 @@ namespace simpleGL
         {
             for (int col = 0; col < m_nbCols; col++)
             {
-                // Offset array to change only UV
-                vIndex += baseOffset;
-
                 // Set UV
-                m_pVerticesData[vIndex++] = uv.x;
-                m_pVerticesData[vIndex++] = uv.y;
+                m_pVerticesData[vIndex].UV = uv;
 
                 uv.x += 1.0f;
-
-                // OffSet normals
-                vIndex += SizeNormals;
+                vIndex++;
             }
             uv.x = 0;
             uv.y -= 1.0f;
@@ -188,18 +171,18 @@ namespace simpleGL
     {
         for (int i = 0; i < m_sizeIndex; ++i)
         {
-            cout << m_pIndices[i] << " ";
+            cout << m_pIndices[i]<< " ";
         }
         cout << endl;
     }
 
     void Plane::DebugVertices()
     {
-        for (int i = 0; i < m_sizeVerticesData; i = i + 3)
+        for (int i = 0; i < m_sizeVertices; i++)
         {
-            cout << m_pVerticesData[i] << " ";
-            cout << m_pVerticesData[i + 1] << " ";
-            cout << m_pVerticesData[i + 2] << " ";
+            cout << m_pVerticesData[i].Position.x << " ";
+            cout << m_pVerticesData[i].Position.y << " ";
+            cout << m_pVerticesData[i].Position.z << " ";
             cout << "\t";
         }
         cout << endl;
@@ -211,7 +194,7 @@ namespace simpleGL
         // Store inside the first VAO
         glBindVertexArray(m_VAO);
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferData(GL_ARRAY_BUFFER, m_sizeVerticesData * sizeof(m_pVerticesData), m_pVerticesData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, m_sizeVertices * sizeof(Vertex3D), m_pVerticesData, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_sizeIndex * sizeof(m_pIndices), m_pIndices, GL_STATIC_DRAW);

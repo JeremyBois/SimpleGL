@@ -89,23 +89,10 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[tempShift + 0] = positions[i].x;
-            m_verticesData[tempShift + 1] = positions[i].y;
-            m_verticesData[tempShift + 2] = positions[i].z;
-
-            // Default to white color
-            m_verticesData[SizePos + tempShift + 0] = 1.0f;
-            m_verticesData[SizePos + tempShift + 1] = 1.0f;
-            m_verticesData[SizePos + tempShift + 2] = 1.0f;
-            m_verticesData[SizePos + tempShift + 3] = 1.0f;
-
-            // ST
+            m_verticesData[i].Position = positions[i];
+            m_verticesData[i].Color = glm::vec4(1.0f);
             int uvInd = i % 4;
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = faceUV[uvInd].x;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = faceUV[uvInd].y;
+            m_verticesData[i].UV = faceUV[uvInd];
 
             // Normals
             // On a same face normals are the same for each vertices
@@ -114,9 +101,7 @@ namespace simpleGL
             {
                 normalInd += 1;
             }
-            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 0] = faceNormals[normalInd].x;
-            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 1] = faceNormals[normalInd].y;
-            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 2] = faceNormals[normalInd].z;
+            m_verticesData[i].Normals = faceNormals[normalInd];
         }
 
         SendData();
@@ -129,11 +114,7 @@ namespace simpleGL
     {
         for (int i = 0; i < SizeVertices - 1; ++i)
         {
-            // Just update UV
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = _uvMap[i].x;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = _uvMap[i].y;
+            m_verticesData[i].UV = _uvMap[i];
         }
 
         SendData();
