@@ -4,8 +4,6 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Shape2D.hpp"
 
-#include "OpenGL/Texture.hpp"
-
 
 namespace simpleGL
 {
@@ -17,10 +15,9 @@ namespace simpleGL
         // Vertex buffer object (VBO)
         unsigned int m_VAO, m_VBO;
 
-        static const int SizeData = 36;
         static const int SizeVertices = 4;
 
-        float m_verticesData[SizeData];
+        Vertex2D m_verticesData[SizeVertices];
 
         void SendData();
 

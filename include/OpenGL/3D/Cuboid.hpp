@@ -4,8 +4,6 @@
 #include "simpleGL_macro.hpp"  // Needed for macro definition
 #include "Shape3D.hpp"
 
-#include "OpenGL/Texture.hpp"
-
 
 namespace simpleGL
 {

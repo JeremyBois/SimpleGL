@@ -21,16 +21,16 @@ namespace simpleGL
         float halfHeight = _height / 2.0f;
 
         // Counter clockwise (top left - bottom left - bottom right - top right)
-        glm::vec2 tempVertices[] =
+        glm::vec3 tempVertices[] =
         {
-            {-halfWidth, halfHeight},
-            {-halfWidth, -halfHeight},
-            {halfWidth, -halfHeight},
-            {halfWidth, halfHeight}
+            {-halfWidth, halfHeight, 0.0f},
+            {-halfWidth, -halfHeight, 0.0f},
+            {halfWidth, -halfHeight, 0.0f},
+            {halfWidth, halfHeight, 0.0f}
         };
 
 
-        glm::vec2 tempST[] =
+        glm::vec2 tempUV[] =
         {
             {0.0f, 1.0f},
             {0.0f, 0.0f},
@@ -41,22 +41,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[tempShift + 0] = tempVertices[i].x;
-            m_verticesData[tempShift + 1] = tempVertices[i].y;
-            m_verticesData[tempShift + 2] = 0.0f;
-
-            // Default to white color
-            m_verticesData[SizePos + tempShift + 0] = 1.0f;
-            m_verticesData[SizePos + tempShift + 1] = 1.0f;
-            m_verticesData[SizePos + tempShift + 2] = 1.0f;
-            m_verticesData[SizePos + tempShift + 3] = 1.0f;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempST[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempST[i].t;
+            m_verticesData[i].Position = tempVertices[i];
+            m_verticesData[i].Color = glm::vec4(1.0f);
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();
@@ -70,16 +57,16 @@ namespace simpleGL
         float halfHeight = _height / 2.0f;
 
         // Counter clockwise
-        glm::vec2 tempVertices[] =
+        glm::vec3 tempVertices[] =
         {
-            {-halfWidth, halfHeight},
-            {-halfWidth, -halfHeight},
-            {halfWidth, -halfHeight},
-            {halfWidth, halfHeight}
+            {-halfWidth, halfHeight, 0.0f},
+            {-halfWidth, -halfHeight, 0.0f},
+            {halfWidth, -halfHeight, 0.0f},
+            {halfWidth, halfHeight, 0.0f}
         };
 
 
-        glm::vec2 tempST[] =
+        glm::vec2 tempUV[] =
         {
             {0.0f, 1.0f},
             {0.0f, 0.0f},
@@ -90,21 +77,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-            m_verticesData[tempShift + 0] = tempVertices[i].x;
-            m_verticesData[tempShift + 1] = tempVertices[i].y;
-            m_verticesData[tempShift + 2] = 0.0f;
-
-            // Color
-            m_verticesData[SizePos + tempShift + 0] = _colors[i].r;
-            m_verticesData[SizePos + tempShift + 1] = _colors[i].g;
-            m_verticesData[SizePos + tempShift + 2] = _colors[i].b;
-            m_verticesData[SizePos + tempShift + 3] = _colors[i].a;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempST[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempST[i].t;
+            m_verticesData[i].Position = tempVertices[i];
+            m_verticesData[i].Color = _colors[i];
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();

@@ -37,22 +37,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[tempShift + 0] = tempPos[i].x;
-            m_verticesData[tempShift + 1] = tempPos[i].y;
-            m_verticesData[tempShift + 2] = tempPos[i].z;
-
-            // Default to white color
-            m_verticesData[SizePos + tempShift + 0] = 1.0f;
-            m_verticesData[SizePos + tempShift + 1] = 1.0f;
-            m_verticesData[SizePos + tempShift + 2] = 1.0f;
-            m_verticesData[SizePos + tempShift + 3] = 1.0f;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempUV[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempUV[i].t;
+            m_verticesData[i].Position = tempPos[i];
+            m_verticesData[i].Color = glm::vec4(1.0f);
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();
@@ -81,22 +68,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[tempShift + 0] = tempPos[i].x;
-            m_verticesData[tempShift + 1] = tempPos[i].y;
-            m_verticesData[tempShift + 2] = tempPos[i].z;
-
-            // Default to white color
-            m_verticesData[SizePos + tempShift + 0] = _colors[i].r;
-            m_verticesData[SizePos + tempShift + 1] = _colors[i].g;
-            m_verticesData[SizePos + tempShift + 2] = _colors[i].b;
-            m_verticesData[SizePos + tempShift + 3] = _colors[i].a;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempUV[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempUV[i].t;
+            m_verticesData[i].Position = tempPos[i];
+            m_verticesData[i].Color = _colors[i];
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();
@@ -115,22 +89,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-
-            m_verticesData[tempShift + 0] = _pos[i].x;
-            m_verticesData[tempShift + 1] = _pos[i].y;
-            m_verticesData[tempShift + 2] = _pos[i].z;
-
-            // Default to white color
-            m_verticesData[SizePos + tempShift + 0] = 1.0f;
-            m_verticesData[SizePos + tempShift + 1] = 1.0f;
-            m_verticesData[SizePos + tempShift + 2] = 1.0f;
-            m_verticesData[SizePos + tempShift + 3] = 1.0f;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempUV[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempUV[i].t;
+            m_verticesData[i].Position = _pos[i];
+            m_verticesData[i].Color = glm::vec4(1.0f);
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();
@@ -150,21 +111,9 @@ namespace simpleGL
         // Construct the array (pos + color + ST)
         for (int i = 0; i < SizeVertices; ++i)
         {
-            // Pos
-            int tempShift = (i * SizeVerticeData);
-            m_verticesData[tempShift + 0] = _pos[i].x;
-            m_verticesData[tempShift + 1] = _pos[i].y;
-            m_verticesData[tempShift + 2] = _pos[i].z;
-
-            // Color
-            m_verticesData[SizePos + tempShift + 0] = _colors[i].r;
-            m_verticesData[SizePos + tempShift + 1] = _colors[i].g;
-            m_verticesData[SizePos + tempShift + 2] = _colors[i].b;
-            m_verticesData[SizePos + tempShift + 3] = _colors[i].a;
-
-            // ST
-            m_verticesData[SizePos + SizeColor + tempShift + 0] = tempUV[i].s;
-            m_verticesData[SizePos + SizeColor + tempShift + 1] = tempUV[i].t;
+            m_verticesData[i].Position = _pos[i];
+            m_verticesData[i].Color = glm::vec4(1.0f);
+            m_verticesData[i].UV = tempUV[i];
         }
 
         SendData();
