@@ -22,7 +22,7 @@ LightShadowScene::LightShadowScene()
     // Create shapes
     m_pCuboid->Create(0.5f, 0.5f, 0.5f);
     m_lightShape->Create(0.1f, 0.1f, 0.1f);
-    m_pPlane->Create(40.0f, 80.0f, 8, 16);
+    m_pPlane->Create(40.0f, 80.0f, 8, 16, 2.0f);
     m_pPlane->SetUnclampedUV();
 }
 

@@ -23,17 +23,19 @@ namespace simpleGL
         unsigned int* m_pIndices;
 
         void  SendData();
-        void  ComputeDataSize(int _nbCols, int _nbRows);
+        void  ComputeVerticesSize(int _nbCols, int _nbRows);
         void  ComputeIndexSize(int _nbCols, int _nbRows);
+        void  ComputeNormals();
 
-        void  DebugVertices();
+        void  DebugVerticesPos();
+        void  DebugVerticesNormals();
         void  DebugIndex();
 
     public:
         Plane();
         virtual ~Plane();
 
-        void Create(float _width, float _height, int _nbCols, int _nbRows);
+        void Create(float _width, float _height, int _nbCols, int _nbRows, float _maxHeight=0.0f);
         void SetClampedUV();
         void SetUnclampedUV();
 
