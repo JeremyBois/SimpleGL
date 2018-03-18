@@ -10,6 +10,9 @@ namespace simpleGL
     class SIMPLEGL_LOCAL Shape2D: public Shape
     {
     public:
+        static const int SizeVerticeData = 9;
+
+
         Shape2D() = default;
         virtual ~Shape2D() = default;
     };

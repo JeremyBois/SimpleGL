@@ -18,11 +18,6 @@ namespace simpleGL
         int m_sizeVerticesData;
         int m_sizeIndex;
         int m_nbRows, m_nbCols;
-        static const int m_sizeVerticeData = 12;
-        static const int m_sizePos = 3;
-        static const int m_sizeColor = 4;
-        static const int m_sizeUV = 2;
-        static const int m_sizeNormals = 3;
 
         float*        m_pVerticesData;
         unsigned int* m_pIndices;

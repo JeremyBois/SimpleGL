@@ -31,7 +31,7 @@ namespace simpleGL
     {
         // Take account for data stored inside each vertices
         // and total number of vertices
-        m_sizeVerticesData = (_nbCols * _nbRows) * m_sizeVerticeData;
+        m_sizeVerticesData = (_nbCols * _nbRows) * SizeVerticeData;
     }
 
     void  Plane::ComputeIndexSize(int _nbCols, int _nbRows)
@@ -70,7 +70,7 @@ namespace simpleGL
         {
             for (int col = 0; col < _nbCols; col++)
             {
-                // Set position at plane center
+                // Set position at plane centered
                 m_pVerticesData[vIndex++] = offset.x * col - halfSize.x;
                 m_pVerticesData[vIndex++] = 0.0f;  // No variation on height
                 m_pVerticesData[vIndex++] = offset.z * row - halfSize.z;
@@ -121,7 +121,7 @@ namespace simpleGL
         // // Debug
         // cout << "Offset: " << glm::to_string(offset) << endl;
         // cout << "Vertice count: " << (_nbCols * _nbRows) << endl;
-        // cout << "Vertice data size: " << m_sizeVerticeData << endl;
+        // cout << "Vertice data size: " << SizeVerticeData << endl;
         // cout << "Data size: " << m_sizeVerticesData << endl;
         // cout << "Index size: " << m_sizeIndex << endl;
         // cout << "Index count: " << iIndex << endl;
@@ -135,7 +135,7 @@ namespace simpleGL
 
     void Plane::SetClampedUV()
     {
-        int baseOffset = m_sizePos + m_sizeColor;
+        int baseOffset = SizePos + SizeColor;
         int vIndex = 0;
         for (int row = 0; row < m_nbRows; row++)
         {
@@ -149,7 +149,7 @@ namespace simpleGL
                 m_pVerticesData[vIndex++] = 1 - row / (float)(m_nbRows - 1);
 
                 // OffSet normals
-                vIndex += m_sizeNormals;
+                vIndex += SizeNormals;
             }
         }
 
@@ -158,7 +158,7 @@ namespace simpleGL
 
     void Plane::SetUnclampedUV()
     {
-        int baseOffset = m_sizePos + m_sizeColor;
+        int baseOffset = SizePos + SizeColor;
         glm::vec2 uv = glm::vec2(0, m_nbRows);
         int vIndex = 0;
         for (int row = 0; row < m_nbRows; row++)
@@ -175,7 +175,7 @@ namespace simpleGL
                 uv.x += 1.0f;
 
                 // OffSet normals
-                vIndex += m_sizeNormals;
+                vIndex += SizeNormals;
             }
             uv.x = 0;
             uv.y -= 1.0f;
@@ -217,27 +217,27 @@ namespace simpleGL
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_sizeIndex * sizeof(m_pIndices), m_pIndices, GL_STATIC_DRAW);
 
         // Position
-        glVertexAttribPointer(0, m_sizePos, GL_FLOAT, GL_FALSE,
-                              m_sizeVerticeData * sizeof(float),
+        glVertexAttribPointer(0, SizePos, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
                               (void*)0);
         glEnableVertexAttribArray(0);
 
         // Color
-        glVertexAttribPointer(1, m_sizeColor, GL_FLOAT, GL_FALSE,
-                              m_sizeVerticeData * sizeof(float),
-                              (void*)(m_sizePos * sizeof(float)));
+        glVertexAttribPointer(1, SizeColor, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
+                              (void*)(SizePos * sizeof(float)));
         glEnableVertexAttribArray(1);
 
         // UV
-        glVertexAttribPointer(2, m_sizeUV, GL_FLOAT, GL_FALSE,
-                              m_sizeVerticeData * sizeof(float),
-                              (void*)((m_sizePos + m_sizeColor) * sizeof(float)));
+        glVertexAttribPointer(2, SizeUV, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
+                              (void*)((SizePos + SizeColor) * sizeof(float)));
         glEnableVertexAttribArray(2);
 
         // Normals
-        glVertexAttribPointer(3, m_sizeUV, GL_FLOAT, GL_FALSE,
-                              m_sizeVerticeData * sizeof(float),
-                              (void*)((m_sizePos + m_sizeColor + m_sizeUV) * sizeof(float)));
+        glVertexAttribPointer(3, SizeUV, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
+                              (void*)((SizePos + SizeColor + SizeUV) * sizeof(float)));
         glEnableVertexAttribArray(3);
     }
 

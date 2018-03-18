@@ -18,15 +18,10 @@ namespace simpleGL
         unsigned int m_VAO, m_VBO;
 
         // Total size of the buffer
-        static const int m_sizeData = 288;
+        static const int SizeData = 288;
+        static const int SizeVertices = 24;
 
-        static const int m_sizeVertices = 24;
-        static const int m_sizePos = 3;
-        static const int m_sizeColor = 4;
-        static const int m_sizeUV = 2;
-        static const int m_sizeNormals = 3;
-
-        float m_vertices[m_sizeData];
+        float m_verticesData[SizeData];
 
         void SendData();
 
@@ -35,7 +30,7 @@ namespace simpleGL
         virtual ~Cuboid();
 
         void Create(float _width, float _height, float _depth);
-        void SetUV(const glm::vec2 _uvMap[m_sizeVertices]);
+        void SetUV(const glm::vec2 _uvMap[SizeVertices]);
 
         virtual void Draw();
     };

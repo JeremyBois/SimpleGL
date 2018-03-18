@@ -17,13 +17,10 @@ namespace simpleGL
         // Vertex buffer object (VBO)
         unsigned int m_VAO, m_VBO;
 
-        static const int m_sizeData = 27;
-        static const int m_sizeVertices = 3;
-        static const int m_sizePos = 3;
-        static const int m_sizeColor = 4;
-        static const int m_sizeUV = 2;
+        static const int SizeData = 27;
+        static const int SizeVertices = 3;
 
-        float m_vertices[m_sizeData];
+        float m_verticesData[SizeData];
 
         void SendData();
 
@@ -31,11 +28,11 @@ namespace simpleGL
         Triangle();
         virtual ~Triangle();
 
-        void Create(glm::vec3 _pos[m_sizeVertices], glm::vec4 _colors[m_sizeVertices]);
-        void Create(glm::vec3 _pos[m_sizeVertices]);
+        void Create(glm::vec3 _pos[SizeVertices], glm::vec4 _colors[SizeVertices]);
+        void Create(glm::vec3 _pos[SizeVertices]);
 
         void Create(float _base, float _height);
-        void Create(float _base, float _height, glm::vec4 _colors[m_sizeVertices]);
+        void Create(float _base, float _height, glm::vec4 _colors[SizeVertices]);
 
         virtual void Draw();
     };

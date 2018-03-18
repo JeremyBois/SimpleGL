@@ -10,6 +10,11 @@ namespace simpleGL
     class SIMPLEGL_API Shape: public GameObject
     {
     public:
+        static const int SizePos = 3;
+        static const int SizeColor = 4;
+        static const int SizeUV = 2;
+
+
         Shape() = default;
         virtual ~Shape() = default;
 

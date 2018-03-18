@@ -10,6 +10,9 @@ namespace simpleGL
     class SIMPLEGL_LOCAL Shape3D: public Shape
     {
     public:
+        static const int SizeNormals = 3;
+        static const int SizeVerticeData = 12;
+
         Shape3D() = default;
         virtual ~Shape3D() = default;
     };

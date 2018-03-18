@@ -84,29 +84,28 @@ namespace simpleGL
             {0.0f, -1.0f, 0.0f}
         };
 
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
         int normalInd = -1;
 
         // Construct the array (pos + color + ST)
-        for (int i = 0; i < m_sizeVertices; ++i)
+        for (int i = 0; i < SizeVertices; ++i)
         {
             // Pos
-            int tempShift = (i * shiftV);
+            int tempShift = (i * SizeVerticeData);
 
-            m_vertices[tempShift + 0] = positions[i].x;
-            m_vertices[tempShift + 1] = positions[i].y;
-            m_vertices[tempShift + 2] = positions[i].z;
+            m_verticesData[tempShift + 0] = positions[i].x;
+            m_verticesData[tempShift + 1] = positions[i].y;
+            m_verticesData[tempShift + 2] = positions[i].z;
 
             // Default to white color
-            m_vertices[m_sizePos + tempShift + 0] = 1.0f;
-            m_vertices[m_sizePos + tempShift + 1] = 1.0f;
-            m_vertices[m_sizePos + tempShift + 2] = 1.0f;
-            m_vertices[m_sizePos + tempShift + 3] = 1.0f;
+            m_verticesData[SizePos + tempShift + 0] = 1.0f;
+            m_verticesData[SizePos + tempShift + 1] = 1.0f;
+            m_verticesData[SizePos + tempShift + 2] = 1.0f;
+            m_verticesData[SizePos + tempShift + 3] = 1.0f;
 
             // ST
             int uvInd = i % 4;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = faceUV[uvInd].x;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = faceUV[uvInd].y;
+            m_verticesData[SizePos + SizeColor + tempShift + 0] = faceUV[uvInd].x;
+            m_verticesData[SizePos + SizeColor + tempShift + 1] = faceUV[uvInd].y;
 
             // Normals
             // On a same face normals are the same for each vertices
@@ -115,9 +114,9 @@ namespace simpleGL
             {
                 normalInd += 1;
             }
-            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 0] = faceNormals[normalInd].x;
-            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 1] = faceNormals[normalInd].y;
-            m_vertices[m_sizePos + m_sizeColor + m_sizeUV + tempShift + 2] = faceNormals[normalInd].z;
+            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 0] = faceNormals[normalInd].x;
+            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 1] = faceNormals[normalInd].y;
+            m_verticesData[SizePos + SizeColor + SizeUV + tempShift + 2] = faceNormals[normalInd].z;
         }
 
         SendData();
@@ -126,17 +125,15 @@ namespace simpleGL
     /// Change UV mapping
     /// Counter clockwise definition of vertices using triangles strips
     /// Top left - Bottom left - top right - bottom right
-    void Cuboid::SetUV(const glm::vec2 _uvMap[m_sizeVertices])
+    void Cuboid::SetUV(const glm::vec2 _uvMap[SizeVertices])
     {
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
-
-        for (int i = 0; i < m_sizeVertices - 1; ++i)
+        for (int i = 0; i < SizeVertices - 1; ++i)
         {
             // Just update UV
-            int tempShift = (i * shiftV);
+            int tempShift = (i * SizeVerticeData);
 
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 0] = _uvMap[i].x;
-            m_vertices[m_sizePos + m_sizeColor + tempShift + 1] = _uvMap[i].y;
+            m_verticesData[SizePos + SizeColor + tempShift + 0] = _uvMap[i].x;
+            m_verticesData[SizePos + SizeColor + tempShift + 1] = _uvMap[i].y;
         }
 
         SendData();
@@ -144,35 +141,33 @@ namespace simpleGL
 
     void Cuboid::SendData()
     {
-        int shiftV = m_sizePos + m_sizeColor + m_sizeUV + m_sizeNormals;
-
         // Store inside the first VAO
         glBindVertexArray(m_VAO);
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), m_vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(m_verticesData), m_verticesData, GL_STATIC_DRAW);
 
         // Position
-        glVertexAttribPointer(0, m_sizePos, GL_FLOAT, GL_FALSE,
-                              shiftV * sizeof(float),
+        glVertexAttribPointer(0, SizePos, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
                               (void*)0);
         glEnableVertexAttribArray(0);
 
         // Color
-        glVertexAttribPointer(1, m_sizeColor, GL_FLOAT, GL_FALSE,
-                             shiftV * sizeof(float),
-                             (void*)(m_sizePos * sizeof(float)));
+        glVertexAttribPointer(1, SizeColor, GL_FLOAT, GL_FALSE,
+                             SizeVerticeData * sizeof(float),
+                             (void*)(SizePos * sizeof(float)));
         glEnableVertexAttribArray(1);
 
         // Texture
-        glVertexAttribPointer(2, m_sizeUV, GL_FLOAT, GL_FALSE,
-                              shiftV * sizeof(float),
-                              (void*)((m_sizePos + m_sizeColor) * sizeof(float)));
+        glVertexAttribPointer(2, SizeUV, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
+                              (void*)((SizePos + SizeColor) * sizeof(float)));
         glEnableVertexAttribArray(2);
 
         // Normals
-        glVertexAttribPointer(3, m_sizeNormals, GL_FLOAT, GL_FALSE,
-                              shiftV * sizeof(float),
-                              (void*)((m_sizePos + m_sizeColor + m_sizeUV) * sizeof(float)));
+        glVertexAttribPointer(3, SizeNormals, GL_FLOAT, GL_FALSE,
+                              SizeVerticeData * sizeof(float),
+                              (void*)((SizePos + SizeColor + SizeUV) * sizeof(float)));
         glEnableVertexAttribArray(3);
     }
 
@@ -184,7 +179,7 @@ namespace simpleGL
         // One strip per face
         for (int i = 0; i < 6; ++i)
         {
-            glDrawArrays(GL_TRIANGLE_STRIP, i * (m_sizeVertices / 6), m_sizeVertices / 6);
+            glDrawArrays(GL_TRIANGLE_STRIP, i * (SizeVertices / 6), SizeVertices / 6);
         }
     }
 }
