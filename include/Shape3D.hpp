@@ -13,7 +13,6 @@ namespace simpleGL
     {
     public:
         static const int SizeNormals = 3;
-        static const int SizeVerticeData = 12;
 
         struct Vertex3D
         {

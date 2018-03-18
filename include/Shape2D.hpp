@@ -12,8 +12,6 @@ namespace simpleGL
     class SIMPLEGL_LOCAL Shape2D: public Shape
     {
     public:
-        static const int SizeVerticeData = 9;
-
         struct Vertex2D
         {
             glm::vec3 Position;

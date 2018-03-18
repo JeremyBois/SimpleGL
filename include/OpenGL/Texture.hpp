@@ -27,8 +27,8 @@ namespace simpleGL
         inline int GetWidth() const {return m_width;}
         inline int GetHeight() const {return m_height;}
         inline int GetNbrChannels() const {return m_nbChannels;}
-        void Get(GLenum _param, GLint* _container);
-        void Get(GLenum _param, GLfloat* _container);
+        void       Get(GLenum _param, GLint* _container);
+        void       Get(GLenum _param, GLfloat* _container);
 
         // Setter
         void Load(std::string _path, bool _hasAlpha=false, bool _reverseY=false);

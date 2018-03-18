@@ -1,10 +1,10 @@
 # TODO
 
-**Last update 2018-03-14**
+**Last update 2018-03-18**
 
 ## Shapes
 
-    - Add plane with index buffer using one big strip (degenerate triangles) [Help](https://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips#5920190)
+    - [Faster way to compute normals for plane](https://tinyurl.com/yb9ac6dq)
 
 ## Window
 

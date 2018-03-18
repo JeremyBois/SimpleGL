@@ -289,26 +289,26 @@ namespace simpleGL
 
         // Position
         glVertexAttribPointer(0, SizePos, GL_FLOAT, GL_FALSE,
-                              SizeVerticeData * sizeof(float),
+                              sizeof(Vertex3D),
                               (void*)0);
         glEnableVertexAttribArray(0);
 
         // Color
         glVertexAttribPointer(1, SizeColor, GL_FLOAT, GL_FALSE,
-                              SizeVerticeData * sizeof(float),
-                              (void*)(SizePos * sizeof(float)));
+                              sizeof(Vertex3D),
+                              (void*)(offsetof(Vertex3D, Color)));
         glEnableVertexAttribArray(1);
 
         // UV
         glVertexAttribPointer(2, SizeUV, GL_FLOAT, GL_FALSE,
-                              SizeVerticeData * sizeof(float),
-                              (void*)((SizePos + SizeColor) * sizeof(float)));
+                              sizeof(Vertex3D),
+                              (void*)(offsetof(Vertex3D, UV)));
         glEnableVertexAttribArray(2);
 
         // Normals
         glVertexAttribPointer(3, SizeUV, GL_FLOAT, GL_FALSE,
-                              SizeVerticeData * sizeof(float),
-                              (void*)((SizePos + SizeColor + SizeUV) * sizeof(float)));
+                              sizeof(Vertex3D),
+                              (void*)(offsetof(Vertex3D, Normals)));
         glEnableVertexAttribArray(3);
     }
 
