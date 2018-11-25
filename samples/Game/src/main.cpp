@@ -2,6 +2,7 @@
 #include "StartingScene.hpp"
 #include "LightShadowScene.hpp"
 
+
 // Handle Windows and Linux environments
 #ifdef __unix__
     #include <unistd.h>

@@ -6,7 +6,9 @@
 
 namespace simpleGL
 {
-    // Can be used to construct and draw a triangle
+    // Represent a 3D plane constructed with an indexed triangle strip representation
+    /// for memory efficiency and require only one draw call thanks to degenerated
+    /// triangles.
     class SIMPLEGL_API Plane: public Shape3D
     {
     private:

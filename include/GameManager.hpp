@@ -22,9 +22,9 @@ namespace simpleGL
     typedef std::unique_ptr<ISceneManager> ISceneMgrPtr;
     typedef std::unique_ptr<IDataManager>  IDataMgrPtr;
 
-    // Service locator to provide a global access for different stuff
-    // Only Window is an internal service and must be created explicitly using Init().
-    // Other can be provide but are not required.
+    /// Service locator to provide a global access for different stuff
+    /// Only Window is an internal service and must be created explicitly using Init().
+    /// Other can be provide but are not required.
     class SIMPLEGL_API GameManager
     {
     private:

@@ -9,7 +9,7 @@
 
 namespace simpleGL
 {
-    // Life cycle is controlled by a node not here --> raw pointer used.
+    /// Interface for LightManager implementations.
     typedef std::unordered_map<std::string, Light*> LightContainer;
     typedef LightContainer::iterator LightContainerIt;
     typedef LightContainer::const_iterator LightContainerConstIt;

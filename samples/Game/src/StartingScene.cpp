@@ -133,6 +133,8 @@ bool StartingScene::OnInit()
 
     // Add callback for Mouse Scroll
     Game::GetWindow().AttachScrollEventCallback(MyScrollEventHandler);
+
+    return true;
 }
 
 bool StartingScene::OnUpdate()
@@ -142,6 +144,8 @@ bool StartingScene::OnUpdate()
     // Rotate
     float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
     m_pNodes[0]->GetTransform().SetRotationZ(rotation);
+
+    return true;
 }
 
 bool StartingScene::OnQuit()

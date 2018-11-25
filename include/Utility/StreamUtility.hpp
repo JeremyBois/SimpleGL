@@ -5,7 +5,7 @@
 
 namespace simpleGL
 {
-    // Collection of function to manipulate stream and files.
+    /// Collection of function to manipulate stream and files.
     class SIMPLEGL_LOCAL StreamUtility
     {
     private:

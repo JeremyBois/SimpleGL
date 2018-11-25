@@ -9,12 +9,12 @@ namespace simpleGL
 {
     class Node;
 
-    // Placeholder for the Node manager
+    /// Placeholder for the Node manager (Null pattern).
     class SIMPLEGL_LOCAL NullNodeManager: public INodeManager
     {
     public:
         virtual void AddNode(Node* _pNode, Node* _pParent) {};
-        virtual Node* CreateNode(Node* _pParent=nullptr) {};
+        virtual Node* CreateNode(Node* _pParent=nullptr) { return nullptr;};
 
         virtual void Init() {};
         virtual void Render() {};

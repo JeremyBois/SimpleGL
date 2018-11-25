@@ -14,7 +14,8 @@ namespace simpleGL
 {
     typedef std::map<GLenum, Texture*> TexUnitMap;
 
-    // Abstract class for any shape
+    /// A material is a container used to store information about shaders, textures,
+    /// and colors parameters.
     class SIMPLEGL_API Material: public GameObject
     {
     protected:

@@ -17,7 +17,11 @@ namespace simpleGL
         m_width = GameManager::GetWindow().GetWidth();
         m_height = GameManager::GetWindow().GetHeight();
 
-        // Each new camera become the new main
+        // Set as main camera only if its the first added to a scene
+        if (nullptr != GameManager::GetWindow().mainCam)
+        {
+            return;
+        }
         GameManager::GetWindow().mainCam = this;
     }
 

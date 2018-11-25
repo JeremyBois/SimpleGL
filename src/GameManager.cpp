@@ -22,6 +22,9 @@ namespace simpleGL
         // Null pattern
         s_pNodeService = INodeMgrPtr(new NullNodeManager());
         s_pSceneService = ISceneMgrPtr(new NullSceneManager());
+
+        // Init random once
+        srand(glfwGetTime());
     }
 
     void GameManager::DetachNodeMgr()

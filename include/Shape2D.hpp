@@ -8,7 +8,7 @@
 
 namespace simpleGL
 {
-    // Abstract class for any 2D shapes
+    /// Abstract class for any 2D shapes
     class SIMPLEGL_LOCAL Shape2D: public Shape
     {
     public:

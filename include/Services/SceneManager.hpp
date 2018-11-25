@@ -8,7 +8,7 @@
 
 namespace simpleGL
 {
-    // Basic interface the manager must implement
+    /// Basic scene manager as a FSM.
     class SIMPLEGL_API SceneManager: public ISceneManager
     {
     protected:

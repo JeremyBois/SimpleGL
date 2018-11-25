@@ -9,7 +9,7 @@
 
 namespace simpleGL
 {
-    // Encapsulate a shader program (vertex and fragment shader).
+    /// Abstraction of an Image (texture).
     class SIMPLEGL_API Texture: public GameObject
     {
     private:

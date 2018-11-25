@@ -26,6 +26,8 @@ namespace simpleGL
         m_pNode = _pNode;
         // Give back ownership to the node
         m_pNode->EmplaceBack(this);
+
+        return true;
     }
 
     const Transform& Component::GetTransform() const

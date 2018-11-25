@@ -36,10 +36,10 @@ namespace simpleGL
 
     void  Plane::ComputeIndexSize(int _nbCols, int _nbRows)
     {
-        // Add two vertice between each rows to preserve winding
-        // and draw the whole plane in one draw call
+        // Add two vertice between each rows to preserve winding order
+        // and draw the whole plane in one draw call.
         // Added vertices will create (2 * 2) degenerate triangles (no area)
-        // and will be removed in the rendering pipeline
+        // then removed in the rendering pipeline
         // This technique is called stitching (https://tinyurl.com/ycnmttu6)
         m_sizeIndex = (_nbCols * _nbRows) + (_nbRows - 2) * (2 + _nbCols);
     }
@@ -121,8 +121,6 @@ namespace simpleGL
         // Define offset
         glm::vec3 offset = glm::vec3(_width / (float)_nbCols, 0.0f, _depth / (float)_nbRows);
         glm::vec3 halfSize =  glm::vec3(_width / 2.0f, 0.0f, _depth / (float)2.0f);
-
-        srand(glfwGetTime());
 
         // Create vertices and populate them
         m_pVerticesData = new Vertex3D[m_sizeVertices];

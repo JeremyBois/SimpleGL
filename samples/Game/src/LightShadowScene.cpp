@@ -113,6 +113,8 @@ bool LightShadowScene::OnInit()
 
     // Add callback for Mouse Scroll
     Game::GetWindow().AttachScrollEventCallback(MyScrollEventHandler);
+
+    return true;
 }
 
 bool LightShadowScene::OnUpdate()
@@ -126,6 +128,8 @@ bool LightShadowScene::OnUpdate()
     lightColor.z = sin(glfwGetTime() * 1.3f) / 2.0f + 0.5f;
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
     m_pDirLight->SetColor(diffuseColor);
+
+    return true;
 }
 
 bool LightShadowScene::OnQuit()

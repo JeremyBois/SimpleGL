@@ -9,17 +9,17 @@ namespace simpleGL
 {
     class IScene;
 
-    // Basic interface the manager must implement
+    /// Placeholder for the Scene manager (Null pattern).
     class SIMPLEGL_LOCAL NullSceneManager: public ISceneManager
     {
     public:
-        virtual bool Init() {}
-        virtual bool Update() {}
-        virtual bool Quit() {}
+        virtual bool Init() {return true;}
+        virtual bool Update() {return true;}
+        virtual bool Quit() {return true;}
         virtual void Render() {}
 
         virtual void    Change(IScene* _pScene) {}
-        virtual IScene* GetCurrent() {}
+        virtual IScene* GetCurrent() {return nullptr;}
     };
 }
 #endif

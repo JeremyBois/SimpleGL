@@ -7,7 +7,7 @@
 
 namespace simpleGL
 {
-    // Can be used to construct and draw a triangle
+    // Represent a triangle
     class SIMPLEGL_API Triangle: public Shape2D
     {
     private:

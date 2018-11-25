@@ -21,6 +21,7 @@ namespace simpleGL
     bool SceneManager::Init()
     {
         m_pCurrent->OnInit();
+        return true;
     }
 
 
@@ -39,12 +40,15 @@ namespace simpleGL
         {
             ToPrevious();
         }
+
+        return true;
     }
 
 
     bool SceneManager::Quit()
     {
         m_pCurrent->OnQuit();
+        return true;
     }
 
 

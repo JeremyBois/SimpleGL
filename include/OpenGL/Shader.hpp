@@ -9,7 +9,7 @@
 
 namespace simpleGL
 {
-    // Encapsulate a shader program (vertex and fragment shader).
+    /// Encapsulate a shader program (vertex and fragment shader).
     class SIMPLEGL_API Shader: public GameObject
     {
     private:
@@ -26,7 +26,7 @@ namespace simpleGL
         void         Use() const;
         unsigned int ShaderID() const {return m_shaderID;}
 
-        // Unifrom functions
+        // Uniform functions
         void SetBool(const std::string &name, bool value) const;
         void SetInt(const std::string &name, int value) const;
 

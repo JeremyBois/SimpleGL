@@ -15,7 +15,7 @@ namespace simpleGL
         Tools(Tools const&) = delete;           // C++ 11
         void operator=(Tools const&) = delete;  // C++ 11
 
-        template<typename T> static void SafeDelete(T*& a) {delete a; a = nullptr;};
+        template<typename T> static void SafeDelete(T* &a) {delete a; a = nullptr;};
     };
 
     template<class Child, class Parent>

@@ -6,7 +6,7 @@
 
 namespace simpleGL
 {
-    // Abstract class for any shape
+    /// Abstract class for any shape
     class SIMPLEGL_API Shape: public GameObject
     {
     public:

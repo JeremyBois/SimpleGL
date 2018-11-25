@@ -7,7 +7,9 @@
 
 namespace simpleGL
 {
-    // Can be used to construct and draw a triangle
+    /// Represent a cuboid drawn using triangle strips.
+    /// Draws a series of triangles (three-sided polygons) using vertices
+    /// v0, v1, v2, then v2, v1, v3 (note the order), then v2, v3, v4, and so on.
     class SIMPLEGL_API Cuboid: public Shape3D
     {
     private:

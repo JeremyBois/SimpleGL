@@ -110,6 +110,8 @@ namespace simpleGL
             // Event pool (keyboard, mouse, ...)
             glfwPollEvents();
         }
+
+        return true;
     }
 
     bool Window::Quit()

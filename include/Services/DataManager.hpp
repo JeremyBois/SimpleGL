@@ -6,7 +6,7 @@
 
 namespace simpleGL
 {
-    /// Interface for DataManager implementations
+    /// Basic DataManager implementation to keep track of Shaders / Textures / Materials.
     class SIMPLEGL_API DataManager: public IDataManager
     {
     private:

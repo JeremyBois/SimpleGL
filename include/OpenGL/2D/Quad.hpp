@@ -7,7 +7,8 @@
 
 namespace simpleGL
 {
-    // Can be used to construct and draw a triangle
+    /// Represent a 2D Quad drawn with triangle fan (describes a set of connected
+    /// triangles that share one central vertex).
     class SIMPLEGL_API Quad: public Shape2D
     {
     private:

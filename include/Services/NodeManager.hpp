@@ -12,7 +12,7 @@ namespace simpleGL
     // @TODO see https://stackoverflow.com/questions/5319282/game-engines-what-are-scene-graphs#5319558
     // @TODO     https://en.wikipedia.org/wiki/Scene_graph)
 
-    // Implemenation of the Node manager interface
+    /// Implementation of the Node manager interface.
     class SIMPLEGL_API NodeManager: public INodeManager
     {
     private:
