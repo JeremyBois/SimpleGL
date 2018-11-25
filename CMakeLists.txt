@@ -25,7 +25,7 @@ project("Learning OpenGL")
 # Provide default build type (Debug)
 # ------------------------------------------------------------------------------
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message("Setting build type to 'Debug' as none was specified.")
+  message("*** Setting build type to 'Debug' as none was specified.")
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
@@ -52,15 +52,15 @@ endif()
 # # Specific flags based on operating system (old way / not recommanded)
 # # ------------------------------------------------------------------------------
 # if (UNIX)
-#   message(status " *** Setting GCC flags")
+#   message("*** Setting GCC flags")
 #   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -Wall -Wextra")
 #   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O -Wall -Wextra -fexceptions -pedantic -g -Wno-unused-parameter")
 # else()
-#   message(status " *** Setting MSVC flags")
+#   message("*** Setting MSVC flags")
 #   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHc-")
 # endif()
-# message(status " *** CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-# message(status " *** CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+# message("*** CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+# message("*** CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 
 
 
@@ -68,16 +68,28 @@ endif()
 # ------------------------------------------------------------------------------
 # Open GL from system
 # ------------------------------------------------------------------------------
+
+if (UNIX)
+    if(NOT DEFINED OpenGL_GL_PREFERENCE)
+        set(OpenGL_GL_PREFERENCE "GLVND")
+    elseif(NOT OpenGL_GL_PREFERENCE MATCHES "^(GLVND|LEGACY)$")
+          message(FATAL_ERROR
+            "OpenGL_GL_PREFERENCE value '${OpenGL_GL_PREFERENCE}' not recognized.  "
+            "Allowed values are 'GLVND' only ('LEGACY' is not allowed)."
+            )
+    endif()
+endif()
+
+
 find_package(OpenGL
     3.3
     REQUIRED
 )
 if(OPENGL_FOUND)
-    message(status " *** OPENGL: ${OPENGL_gl_LIBRARY}")
+    message("*** OPENGL: ${OPENGL_opengl_LIBRARY}")
 else()
     message(FATAL_ERROR "OPENGL 3.3 library not found - required for GLFW")
 endif()
-
 
 # ------------------------------------------------------------------------------
 # GLFW
@@ -85,7 +97,7 @@ endif()
 # See https://github.com/PixarAnimationStudios/OpenSubdiv/blob/master/cmake/FindGLFW.cmake
 # ------------------------------------------------------------------------------
 if (UNIX)
-    message(status " *** Checking for Linux required files for GLFW.")
+    message("*** Checking for Linux required files for GLFW.")
     find_package(PkgConfig REQUIRED)
     find_package(Threads REQUIRED)
     find_package(X11 REQUIRED)
@@ -116,10 +128,27 @@ if (UNIX)
 endif()
 
 pkg_search_module(GLFW REQUIRED glfw3)
-message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
+message("*** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 
 
+# ------------------------------------------------------------------------------
+# Assimp
+# ------------------------------------------------------------------------------
+# # ASSIMP search path
+# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_CURRENT_LIST_DIR}/assimp/)
 
+if(UNIX)
+    pkg_search_module(ASSIMP REQUIRED assimp)
+else()
+    find_package(assimp REQUIRED)
+endif()
+if(NOT ASSIMP_FOUND)
+    message(FATAL_ERROR "Assimp library not found - required for model loading")
+else()
+    set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY})
+    set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
+    message("*** Assimp library found: ${ASSIMP_LIBRARIES}")
+endif()
 
 
 
@@ -166,7 +195,7 @@ message(status " *** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 
 
 # target_link_libraries(SimpleGL
-#     ${OPENGL_gl_LIBRARY}
+#     ${OPENGL_opengl_LIBRARY}
 #     ${GLFW_x11_LIBRARY}
 #     ${GLFW_LIBRARIES}
 # )
@@ -191,7 +220,7 @@ if (BUILD_SHARED_LIBS)
     set (LIB_TYPE SHARED)  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
     set (MY_LIB_NAME SimpleGL_Shared)
 endif (BUILD_SHARED_LIBS)
-message(status " *** Library will be build as: ${OPENGL_gl_LIBRARY}")
+message("*** Library will be build as: ${OPENGL_opengl_LIBRARY}")
 
 
 file(
@@ -219,6 +248,7 @@ if (BUILD_SHARED_LIBS)
         PRIVATE BEFORE ${PROJECT_SOURCE_DIR}/include
         PRIVATE
             ${GLFW_INCLUDE_DIRS}
+            ${ASSIMP_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
@@ -232,12 +262,14 @@ if (BUILD_SHARED_LIBS)
         SIMPLEGL_SHARED_EXPORTS="USED"
     )
 
+
 else()
     # Static library
     target_include_directories(${MY_LIB_NAME}
         PUBLIC BEFORE ${PROJECT_SOURCE_DIR}/include
         PUBLIC
             ${GLFW_INCLUDE_DIRS}
+            ${ASSIMP_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
@@ -250,12 +282,15 @@ set_target_properties(${MY_LIB_NAME}
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}"
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
 )
 
 target_link_libraries(${MY_LIB_NAME}
-    ${OPENGL_gl_LIBRARY}
+    ${OPENGL_opengl_LIBRARY}
     ${GLFW_x11_LIBRARY}
     ${GLFW_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
 )
 
 # Read only alias
@@ -281,11 +316,12 @@ add_executable(
 # See https://cmake.org/pipermail/cmake/2016-May/063400.html
 if (BUILD_SHARED_LIBS)
     # Shared lib need to know includes directories
-    message(status " *** Using shared library: GLFW, GLAD, stb_image, and SimpleGl headers will be included.")
+    message("*** Using shared library: GLFW, GLAD, stb_image, and SimpleGl headers will be included.")
     target_include_directories(OpenGl-Game
         PRIVATE
             ${PROJECT_SOURCE_DIR}/include
             ${GLFW_INCLUDE_DIRS}
+            ${ASSIMP_INCLUDE_DIRS}
             ${PROJECT_SOURCE_DIR}/extern/KHR
             ${PROJECT_SOURCE_DIR}/extern/GLAD/include
             ${PROJECT_SOURCE_DIR}/extern/STB/include
@@ -309,11 +345,11 @@ endif()
 set_target_properties(OpenGl-Game
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/samples/Game/bin/${CMAKE_BUILD_TYPE}"
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
 )
 
 # Using dynamic or static lib based on previous flag (see ${MY_LIB_NAME})
 target_link_libraries(OpenGl-Game
     PRIVATE OpenGL::lib
 )
-
-
