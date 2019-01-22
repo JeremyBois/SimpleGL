@@ -1,6 +1,6 @@
 
 #include "Services/SceneManager.hpp"
-
+#include "GameManager.hpp"
 
 namespace simpleGL
 {
@@ -60,6 +60,9 @@ namespace simpleGL
 
     void SceneManager::ToNext()
     {
+        // Make sure camera pointer is reset
+        GameManager::GetWindow().mainCam = nullptr;
+
         if (m_pCurrent)
         {
             m_pCurrent->OnQuit();
@@ -75,6 +78,9 @@ namespace simpleGL
 
     void SceneManager::ToPrevious()
     {
+        // Make sure camera pointer is reset
+        GameManager::GetWindow().mainCam = nullptr;
+
         m_pCurrent->OnQuit();
         m_pPrevious->OnInit();
 
