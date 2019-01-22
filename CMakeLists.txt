@@ -8,6 +8,7 @@
 # https://cmake.org/Wiki/CMake_FAQ#What_is_an_.22out-of-source.22_build.3F
 # ------------------------------------------------------------------------------
 # cd build/ && cmake .. -G "Unix Makefiles"
+# cd build/ && cmake .. -G "MinGW Makefiles" -DCMAKE_SH=CMAKE_SH-NOTFOUND
 
 
 # ------------------------------------------------------------------------------
@@ -16,13 +17,12 @@
 # Specify the minimum version for CMake
 cmake_minimum_required(VERSION 2.8)
 
-# Project's name --> Set PROJECT_NAME variable
+# Project's name*** Set PROJECT_NAME variable
 project("Learning OpenGL")
 
 
-
 # ------------------------------------------------------------------------------
-# Provide default build type (Debug)
+# Provide default
 # ------------------------------------------------------------------------------
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message("*** Setting build type to 'Debug' as none was specified.")
@@ -33,19 +33,58 @@ endif()
 
 # Use clang if None exists
 if(NOT CMAKE_C_COMPILER AND NOT CMAKE_CONFIGURATION_TYPES)
-  message("Setting C compiler to 'clang' as none was specified.")
+  message("*** Setting C compiler to 'clang' as none was specified.")
   set(CMAKE_C_COMPILER clang CACHE STRING "Choose the compiler." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_C_COMPILER PROPERTY STRINGS "clang" "gcc")
+  set_property(CACHE CMAKE_C_COMPILER PROPERTY STRINGS "clang" "gcc" "MSVC")
 endif()
 
 # Use clang++ if None exists
 if(NOT CMAKE_CXX_COMPILER AND NOT CMAKE_CONFIGURATION_TYPES)
-  message("Setting C++ compiler to 'clang++' as none was specified.")
+  message("*** Setting C++ compiler to 'clang++' as none was specified.")
   set(CMAKE_CXX_COMPILER clang++ CACHE STRING "Choose the compiler." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_CXX_COMPILER PROPERTY STRINGS "clang++" "gcc++")
+  set_property(CACHE CMAKE_CXX_COMPILER PROPERTY STRINGS "clang++" "gcc++" "MSVC")
 endif()
+
+# GLFW3
+if(NOT GLFW_LOCATION AND NOT CMAKE_CONFIGURATION_TYPES)
+  message("*** Setting default location to find GLFW.")
+  set(GLFW_LOCATION "C:/Program Files (x86)/GLFW/" CACHE STRING "Choose GLFW location." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE GLFW_LOCATION PROPERTY STRINGS)
+endif()
+
+# ASSIMP
+if(NOT ASSIMP_LOCATION AND NOT CMAKE_CONFIGURATION_TYPES)
+  message("*** Setting default location to find ASSIMP.")
+  set(ASSIMP_LOCATION "C:/Program Files (x86)/Assimp/" CACHE STRING "Choose ASSIMP location." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE ASSIMP_LOCATION PROPERTY STRINGS)
+endif()
+
+
+# # Informations (Debug)
+# message("Your C++ compiler supports these C++ features:")
+# foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
+#     message("${i}")
+# endforeach()
+
+# message("Your CMake version supports these C++ features:")
+# get_property(known_features GLOBAL PROPERTY CMAKE_CXX_KNOWN_FEATURES)
+# foreach(i ${known_features})
+#     message("${i}")
+# endforeach()
+
+
+# Get lib version from header
+function(ParseGLFWVersion FILENAME VARNAME)
+        set(PATTERN "^#define ${VARNAME}.*$")
+        file(STRINGS "${GLFW_INCLUDE_DIR}/${FILENAME}" TMP REGEX ${PATTERN})
+        string(REGEX MATCHALL "[0-9]+" TMP ${TMP})
+        set(${VARNAME} ${TMP} PARENT_SCOPE)
+endfunction()
+
 
 
 # # ------------------------------------------------------------------------------
@@ -78,18 +117,22 @@ if (UNIX)
             "Allowed values are 'GLVND' only ('LEGACY' is not allowed)."
             )
     endif()
+
+    find_package(OpenGL
+        3.3
+        REQUIRED
+    )
+else()
+    find_package(OpenGL REQUIRED)
 endif()
 
-
-find_package(OpenGL
-    3.3
-    REQUIRED
-)
+# Status message
 if(OPENGL_FOUND)
-    message("*** OPENGL: ${OPENGL_opengl_LIBRARY}")
+    message("*** Found GLFW")
+    message("     OPENGL Library:  ${OPENGL_LIBRARIES}")
 else()
     message(FATAL_ERROR "OPENGL 3.3 library not found - required for GLFW")
-endif()
+endif(OPENGL_FOUND)
 
 # ------------------------------------------------------------------------------
 # GLFW
@@ -125,10 +168,61 @@ if (UNIX)
     list(APPEND GLFW_x11_LIBRARY "${X11_Xrandr_LIB}" "${X11_Xxf86vm_LIB}" "${X11_Xcursor_LIB}"
                                  "${X11_Xinerama_LIB}" "${X11_Xi_LIB}" "${X11_LIBRARIES}"
                                  "${CMAKE_THREAD_LIBS_INIT}" -lrt -ldl)
-endif()
 
-pkg_search_module(GLFW REQUIRED glfw3)
-message("*** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
+    pkg_search_module(GLFW REQUIRED glfw3)
+# WIN32
+else(UNIX)
+    # Look after headers
+    find_path( GLFW_INCLUDE_DIR
+        NAMES
+            GLFW/glfw3.h
+        HINTS
+            "${GLFW_LOCATION}/include"
+            "$ENV{GLFW_LOCATION}/include"
+        PATHS
+            "$ENV{PROGRAMFILES}/GLFW/include"
+            "$ENV{PROGRAMFILES}/GLFW/include"
+        DOC
+            "The GLFW3 includes directory"
+        )
+    # Look after lib
+    find_library(GLFW_LIBRARY
+            NAMES
+                glfw3
+            HINTS
+                "${GLFW_LOCATION}/lib"
+                "$ENV{GLFW_LOCATION}/lib"
+            PATHS
+                "$ENV{PROGRAMFILES}/GLFW/lib"
+            DOC
+                "The GLFW3 library directory"
+        )
+
+    # Assume first that package is not found
+    set( GLFW_FOUND "NO" )
+
+    if(GLFW_LIBRARY)
+        set( GLFW_LIBRARIES "${GLFW_LIBRARY}")
+        set( GLFW_INCLUDE_DIRS "${GLFW_INCLUDE_DIR}")
+        set( GLFW_FOUND "YES" )
+    endif(GLFW_LIBRARY)
+
+endif(UNIX)
+
+if(NOT GLFW_FOUND)
+    message(FATAL_ERROR "GLFW3 library not found")
+else()
+    message("*** Found GLFW ${glfw3_VERSION}")
+    message("     GLFW Library: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
+    message("     GLFW Headers: ${GLFW_INCLUDE_DIRS}")
+
+    # Populate versions for GLFW
+    if(EXISTS "${GLFW_INCLUDE_DIRS}/GLFW/glfw3.h")
+        ParseGLFWVersion(GLFW/glfw3.h GLFW_VERSION_MAJOR)
+        ParseGLFWVersion(GLFW/glfw3.h GLFW_VERSION_MINOR)
+        ParseGLFWVersion(GLFW/glfw3.h GLFW_VERSION_REVISION)
+    endif()
+endif()
 
 
 # ------------------------------------------------------------------------------
@@ -139,16 +233,59 @@ message("*** GLFW: ${GLFW_LIBRARIES} ${GLFW_x11_LIBRARY}")
 
 if(UNIX)
     pkg_search_module(ASSIMP REQUIRED assimp)
-else()
-    find_package(assimp REQUIRED)
-endif()
-if(NOT ASSIMP_FOUND)
-    message(FATAL_ERROR "Assimp library not found - required for model loading")
-else()
+
     set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY})
     set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
-    message("*** Assimp library found: ${ASSIMP_LIBRARIES}")
+
+else(UNIX)
+    # Look after headers
+    find_path( ASSIMP_INCLUDE_DIR
+        NAMES
+            assimp/postprocess.h
+            assimp/scene.h
+            assimp/version.h
+            assimp/config.h
+            assimp/cimport.h
+        HINTS
+            "${ASSIMP_LOCATION}/include"
+            "$ENV{ASSIMP_LOCATION}/include"
+        PATHS
+            "$ENV{PROGRAMFILES}/Assimp/include"
+        DOC
+            "The ASSIMP includes directory"
+        )
+    # Look after lib
+    find_library( ASSIMP_LIBRARY
+            NAMES
+                libassimp
+            HINTS
+                "${ASSIMP_LOCATION}/lib"
+                "$ENV{ASSIMP_LOCATION}/lib"
+            PATHS
+                "$ENV{PROGRAMFILES}/Assimp/lib"
+            DOC
+                "The ASSIMP library directory"
+        )
+
+    # Assume first that package is not found
+    set( ASSIMP_FOUND "NO" )
+
+    if(ASSIMP_LIBRARY)
+        set( ASSIMP_LIBRARIES "${ASSIMP_LIBRARY}")
+        set( ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
+        set( ASSIMP_FOUND "YES" )
+    endif(ASSIMP_LIBRARY)
+
+endif(UNIX)
+
+if(NOT ASSIMP_FOUND)
+    message(FATAL_ERROR "ASSIMP library not found - required for model loading")
+else()
+    message("*** Found ASSIMP")
+    message("     ASSIMP Library: ${ASSIMP_LIBRARIES}")
+    message("     ASSIMP Headers: ${ASSIMP_INCLUDE_DIRS}")
 endif()
+
 
 
 
@@ -157,7 +294,7 @@ endif()
 # # ------------------------------------------------------------------------------
 # file(
 #     GLOB
-#     binary_SOURCES
+#     library_SOURCES
 #     src/Interface/*
 #     src/Components/*
 #     src/Services/*
@@ -166,8 +303,8 @@ endif()
 #     src/OpenGL/3D/*
 #     src/Utility/*
 #     src/*
-#     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   // From GLAD
-#     ${PROJECT_SOURCE_DIR}/extern/STB/src/*    // From stb_image
+#     ${PROJECT_SOURCE_DIR}/extern/GLAD/src/*   #[[ From GLAD (http://glad.dav1d.de/) ]]
+#     ${PROJECT_SOURCE_DIR}/extern/STB/src/*    #[[ From stb_image (https://github.com/nothings/stb) ]]
 # )
 
 # add_executable(
@@ -195,9 +332,10 @@ endif()
 
 
 # target_link_libraries(SimpleGL
-#     ${OPENGL_opengl_LIBRARY}
+#     ${OPENGL_LIBRARIES}
 #     ${GLFW_x11_LIBRARY}
 #     ${GLFW_LIBRARIES}
+#     ${ASSIMP_LIBRARIES}
 # )
 
 # target_compile_definitions(SimpleGL
@@ -220,7 +358,7 @@ if (BUILD_SHARED_LIBS)
     set (LIB_TYPE SHARED)  # User wants to build Dynamic Libraries, so change the LIB_TYPE variable to CMake keyword 'SHARED'
     set (MY_LIB_NAME SimpleGL_Shared)
 endif (BUILD_SHARED_LIBS)
-message("*** Library will be build as: ${OPENGL_opengl_LIBRARY}")
+message("*** Library will be build as: ${LIB_TYPE}")
 
 
 file(
@@ -287,7 +425,7 @@ set_target_properties(${MY_LIB_NAME}
 )
 
 target_link_libraries(${MY_LIB_NAME}
-    ${OPENGL_opengl_LIBRARY}
+    ${OPENGL_LIBRARIES}
     ${GLFW_x11_LIBRARY}
     ${GLFW_LIBRARIES}
     ${ASSIMP_LIBRARIES}
@@ -353,3 +491,10 @@ set_target_properties(OpenGl-Game
 target_link_libraries(OpenGl-Game
     PRIVATE OpenGL::lib
 )
+
+
+# # Get all flags
+# get_cmake_property(_variableNames VARIABLES)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
