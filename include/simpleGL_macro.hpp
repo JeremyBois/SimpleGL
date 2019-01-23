@@ -1,19 +1,27 @@
 #ifndef __SIMPLEGLMACRO__HPP
 #define __SIMPLEGLMACRO__HPP
 
+
 // More at
 // https://cmake.org/Wiki/BuildingWinDLL
 // https://gcc.gnu.org/wiki/Visibility
 
 // Generic helper definitions for shared library support
 #if defined _WIN32 || defined __CYGWIN__
-    // Microsoft
-    #define SIMPLEGL_HELPER_DLL_IMPORT __declspec(dllimport)
-    #define SIMPLEGL_HELPER_DLL_EXPORT __declspec(dllexport)
-    #define SIMPLEGL_HELPER_DLL_LOCAL
+    #if defined __MINGW32__
+        // GCC
+        #define SIMPLEGL_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
+        #define SIMPLEGL_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
+        #define SIMPLEGL_HELPER_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
+    #else
+        // Microsoft
+        #define SIMPLEGL_HELPER_DLL_IMPORT __declspec(dllimport)
+        #define SIMPLEGL_HELPER_DLL_EXPORT __declspec(dllexport)
+        #define SIMPLEGL_HELPER_DLL_LOCAL
+    #endif
 #else
-    #if __GNUC__ >= 4
-        // Linux
+    #if defined __GNUC__ >= 4
+        // GCC
         #define SIMPLEGL_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
         #define SIMPLEGL_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
         #define SIMPLEGL_HELPER_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
@@ -52,8 +60,8 @@
 // Also include window.h if on windows
 #include <GLFW/glfw3.h>
 
-
 using std::cout;
 using std::endl;
+
 
 #endif
