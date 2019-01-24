@@ -4,7 +4,7 @@
 
 
 // Handle Windows and Linux environments
-#ifdef __unix__
+#if defined __unix__
     #include <unistd.h>
     #define __delimiter "/"
 #else
