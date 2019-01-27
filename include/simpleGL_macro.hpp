@@ -13,12 +13,14 @@
         #define SIMPLEGL_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
         #define SIMPLEGL_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
         #define SIMPLEGL_HELPER_DLL_LOCAL  __attribute__ ((visibility ("hidden")))
+        #define TEST_SHARED_WINDOWS "MINGW"
     #else
         // Microsoft
         #define SIMPLEGL_HELPER_DLL_IMPORT __declspec(dllimport)
         #define SIMPLEGL_HELPER_DLL_EXPORT __declspec(dllexport)
         #define SIMPLEGL_HELPER_DLL_LOCAL
-    #endif
+        #define TEST_SHARED_WINDOWS "WINDOWS"
+#endif
 #else
     #if defined __GNUC__ >= 4
         // GCC

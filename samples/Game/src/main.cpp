@@ -25,6 +25,11 @@ typedef GL::GameManager Game;
 
 int main(int argc, char** argv)
 {
+// #if defined _WIN32
+//     // Test defined flags
+//     cout << TEST_SHARED_WINDOWS << endl;
+// #endif
+
     ChangeWorkingDirectory(__FILE__, "../../../");
 
     // Test implementation of Game Manager / Window

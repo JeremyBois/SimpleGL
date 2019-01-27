@@ -1,8 +1,12 @@
-{
-	"folders":
-	[
-		{
-			"path": "."
-		}
-	]
-}
+  {
+    "folders":
+    [
+      {
+        "path": "."
+      }
+    ],
+      "settings":
+      {
+          "hide_default_completions": true
+      }
+  }
