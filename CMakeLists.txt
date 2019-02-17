@@ -225,66 +225,67 @@ else()
 endif()
 
 
-# # ------------------------------------------------------------------------------
-# # Assimp
-# # ------------------------------------------------------------------------------
-# # # ASSIMP search path
-# # set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_CURRENT_LIST_DIR}/assimp/)
+# ------------------------------------------------------------------------------
+# Assimp
+# ------------------------------------------------------------------------------
+# # ASSIMP search path
+# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_CURRENT_LIST_DIR}/assimp/)
 
-# if(UNIX)
-#     pkg_search_module(ASSIMP REQUIRED assimp)
+if(UNIX)
+    pkg_search_module(ASSIMP REQUIRED assimp)
 
-#     set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY})
-#     set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
+    set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY})
+    set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
 
-# else(UNIX)
-#     # Look after headers
-#     find_path( ASSIMP_INCLUDE_DIR
-#         NAMES
-#             assimp/postprocess.h
-#             assimp/scene.h
-#             assimp/version.h
-#             assimp/config.h
-#             assimp/cimport.h
-#         HINTS
-#             "${ASSIMP_LOCATION}/include"
-#             "$ENV{ASSIMP_LOCATION}/include"
-#         PATHS
-#             "$ENV{PROGRAMFILES}/Assimp/include"
-#         DOC
-#             "The ASSIMP includes directory"
-#         )
-#     # Look after lib
-#     find_library( ASSIMP_LIBRARY
-#             NAMES
-#                 libassimp
-#             HINTS
-#                 "${ASSIMP_LOCATION}/lib"
-#                 "$ENV{ASSIMP_LOCATION}/lib"
-#             PATHS
-#                 "$ENV{PROGRAMFILES}/Assimp/lib"
-#             DOC
-#                 "The ASSIMP library directory"
-#         )
+else(UNIX)
+    # Look after headers
+    find_path( ASSIMP_INCLUDE_DIR
+        NAMES
+            assimp/postprocess.h
+            assimp/scene.h
+            assimp/version.h
+            assimp/config.h
+            assimp/cimport.h
+        HINTS
+            "${ASSIMP_LOCATION}/include"
+            "$ENV{ASSIMP_LOCATION}/include"
+        PATHS
+            "$ENV{PROGRAMFILES}/Assimp/include"
+        DOC
+            "The ASSIMP includes directory"
+        )
+    # Look after lib
+    find_library( ASSIMP_LIBRARY
+            NAMES
+                libassimp
+                assimp-vc140-mt
+            HINTS
+                "${ASSIMP_LOCATION}/lib"
+                "$ENV{ASSIMP_LOCATION}/lib"
+            PATHS
+                "$ENV{PROGRAMFILES}/Assimp/lib"
+            DOC
+                "The ASSIMP library directory"
+        )
 
-#     # Assume first that package is not found
-#     set( ASSIMP_FOUND "NO" )
+    # Assume first that package is not found
+    set( ASSIMP_FOUND "NO" )
 
-#     if(ASSIMP_LIBRARY)
-#         set( ASSIMP_LIBRARIES "${ASSIMP_LIBRARY}")
-#         set( ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
-#         set( ASSIMP_FOUND "YES" )
-#     endif(ASSIMP_LIBRARY)
+    if(ASSIMP_LIBRARY)
+        set( ASSIMP_LIBRARIES "${ASSIMP_LIBRARY}")
+        set( ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
+        set( ASSIMP_FOUND "YES" )
+    endif(ASSIMP_LIBRARY)
 
-# endif(UNIX)
+endif(UNIX)
 
-# if(NOT ASSIMP_FOUND)
-#     message(FATAL_ERROR "ASSIMP library not found - required for model loading")
-# else()
-#     message("*** Found ASSIMP")
-#     message("     ASSIMP Library: ${ASSIMP_LIBRARIES}")
-#     message("     ASSIMP Headers: ${ASSIMP_INCLUDE_DIRS}")
-# endif()
+if(NOT ASSIMP_FOUND)
+    message(FATAL_ERROR "ASSIMP library not found - required for model loading")
+else()
+    message("*** Found ASSIMP")
+    message("     ASSIMP Library: ${ASSIMP_LIBRARIES}")
+    message("     ASSIMP Headers: ${ASSIMP_INCLUDE_DIRS}")
+endif()
 
 
 
