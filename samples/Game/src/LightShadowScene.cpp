@@ -123,9 +123,9 @@ bool LightShadowScene::OnUpdate()
 
     // Change light color with time
     glm::vec3 lightColor;
-    lightColor.x = sin(glfwGetTime() * 2.0f) / 2.0f + 0.5f;
-    lightColor.y = sin(glfwGetTime() * 0.7f) / 2.0f + 0.5f;
-    lightColor.z = sin(glfwGetTime() * 1.3f) / 2.0f + 0.5f;
+    lightColor.x = (float)sin(glfwGetTime() * 2.0) / 2.0f + 0.5f;
+    lightColor.y = (float)sin(glfwGetTime() * 0.7) / 2.0f + 0.5f;
+    lightColor.z = (float)sin(glfwGetTime() * 1.3) / 2.0f + 0.5f;
     glm::vec3 diffuseColor = lightColor   * glm::vec3(0.7f); // decrease the influence
     m_pDirLight->SetColor(diffuseColor);
 
@@ -157,8 +157,8 @@ void LightShadowScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _sca
 
 void LightShadowScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos)
 {
-    float xoffset = s_lastX - _xpos;
-    float yoffset = s_lastY - _ypos;  // Reversed since y-coordinates go from bottom to top
+    float xoffset = (float)(s_lastX - _xpos);
+    float yoffset = (float)(s_lastY - _ypos);  // Reversed since y-coordinates go from bottom to top
     s_lastX = _xpos;
     s_lastY = _ypos;
 
@@ -174,7 +174,7 @@ void LightShadowScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos,
 void LightShadowScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
 {
     GL::Camera* mainCam = Game::GetWindow().mainCam;
-    mainCam->SetFov(mainCam->GetFov() - _yoffset);
+    mainCam->SetFov(mainCam->GetFov() - (float)_yoffset);
 }
 
 void LightShadowScene::ProcessInput()
@@ -182,7 +182,7 @@ void LightShadowScene::ProcessInput()
     GL::Window window = Game::GetWindow();
     GL::Camera* mainCam = Game::GetWindow().mainCam;
 
-    float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
+    float cameraSpeed = (float)(2.5 * Game::GetWindow().GetDeltaTime());
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {

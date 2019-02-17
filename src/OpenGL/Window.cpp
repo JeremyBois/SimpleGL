@@ -63,7 +63,7 @@ namespace simpleGL
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
             std::cerr << "Failed to initialize GLAD" << std::endl;
-            return -1;
+            return false;
         }
 
         // Define the drawing area based on the window coordinates
@@ -91,7 +91,7 @@ namespace simpleGL
         while (!glfwWindowShouldClose(m_pWindow))
         {
             // Update DeltaTime since last frame
-            float currentFrame = glfwGetTime();
+            float currentFrame = (float)glfwGetTime();
             m_deltaTime = currentFrame - m_timeLastFrame;
             m_timeLastFrame = currentFrame;
 

@@ -71,10 +71,10 @@ namespace simpleGL
         virtual inline GLFWwindow&     GetGLFWwindow() const {return *m_pWindow;}
         virtual inline const glm::mat4 GetViewMatrix() const {return m_viewM;}
         virtual inline const glm::mat4 GetProjectionMatrix() const {return m_projM;}
-        virtual inline const float     GetWidth() const {return m_width;}
-        virtual inline const float     GetHeight() const {return m_height;}
+        virtual inline const unsigned int     GetWidth() const {return m_width;}
+        virtual inline const unsigned int     GetHeight() const {return m_height;}
 
-        virtual inline const float     GetTime() const {return glfwGetTime();}
+        virtual inline const double     GetTime() const {return glfwGetTime();}
         virtual inline const float     GetDeltaTime() const {return m_deltaTime;}
     };
 }

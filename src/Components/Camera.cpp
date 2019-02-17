@@ -5,6 +5,7 @@
 
 #include "gtc/matrix_access.hpp"
 
+#include <algorithm>
 
 // #include "gtx/string_cast.hpp"
 
@@ -14,8 +15,8 @@ namespace simpleGL
     Camera::Camera()
         : m_fov(45.0f), m_near(0.1f), m_far(100.0f)
     {
-        m_width = GameManager::GetWindow().GetWidth();
-        m_height = GameManager::GetWindow().GetHeight();
+        m_width = (float)GameManager::GetWindow().GetWidth();
+        m_height = (float)GameManager::GetWindow().GetHeight();
 
         // Set as main camera only if its the first added to a scene
         if (nullptr != GameManager::GetWindow().mainCam)

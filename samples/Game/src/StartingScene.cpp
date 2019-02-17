@@ -32,8 +32,8 @@ void StartingScene::ChangeGreenOverTime(GL::Shader& _shader)
 {
     float color[] = {0.0f, 1.0f, 0.0f, 1.0f};
 
-    float timeValue = glfwGetTime();
-    color[1] =  (std::sin(timeValue) / 2.0f) + 0.5f;
+    double timeValue = glfwGetTime();
+    color[1] =  (float)((std::sin(timeValue) / 2.0) + 0.5);
     _shader.Use();
     _shader.SetFloat4("ourColor", color);
 }
@@ -41,10 +41,10 @@ void StartingScene::ChangeGreenOverTime(GL::Shader& _shader)
 
 void StartingScene::ZoomUVOverTime(GL::Shader& _shader)
 {
-    float timeValue = glfwGetTime();
-    float scale = 5.0f * (std::sin(timeValue * 0.25f) / 2.0f + 0.5f);
+    double timeValue = glfwGetTime();
+    double scale = 5.0 * (std::sin(timeValue * 0.25) / 2.0 + 0.5);
     _shader.Use();
-    _shader.SetFloat("uvScale", scale);
+    _shader.SetFloat("uvScale", (float)scale);
 }
 
 
@@ -142,8 +142,8 @@ bool StartingScene::OnUpdate()
     ChangeGreenOverTime(*Game::GetDataMgr().GetShader("ColorFromProgram"));
 
     // Rotate
-    float rotation = 360 * (std::cos(glfwGetTime() * 0.5f) * 0.5f + 0.5f);
-    m_pNodes[0]->GetTransform().SetRotationZ(rotation);
+    double rotation = 360.0 * (std::cos(glfwGetTime() * 0.5) * 0.5 + 0.5);
+    m_pNodes[0]->GetTransform().SetRotationZ((float)rotation);
 
     return true;
 }
@@ -257,8 +257,8 @@ void StartingScene::MyKeyEventHandler(GLFWwindow* _window, int _key, int _scanco
 
 void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, double _ypos)
 {
-    float xoffset = s_lastX - _xpos;
-    float yoffset = s_lastY - _ypos;  // Reversed since y-coordinates go from bottom to top
+    float xoffset = (float)(s_lastX - _xpos);
+    float yoffset = (float)(s_lastY - _ypos);  // Reversed since y-coordinates go from bottom to top
     s_lastX = _xpos;
     s_lastY = _ypos;
 
@@ -274,7 +274,7 @@ void StartingScene::MyMousePosEventHandler(GLFWwindow* _window, double _xpos, do
 void StartingScene::MyScrollEventHandler(GLFWwindow* _window, double _xoffset, double _yoffset)
 {
     GL::Camera* mainCam = Game::GetWindow().mainCam;
-    mainCam->SetFov(mainCam->GetFov() - _yoffset);
+    mainCam->SetFov(mainCam->GetFov() - (float)_yoffset);
 }
 
 void StartingScene::ProcessInput()
@@ -282,7 +282,7 @@ void StartingScene::ProcessInput()
     GL::Window window = Game::GetWindow();
     GL::Camera* mainCam = Game::GetWindow().mainCam;
 
-    float cameraSpeed = 2.5 * Game::GetWindow().GetDeltaTime();
+    float cameraSpeed = (float)(2.5 * Game::GetWindow().GetDeltaTime());
 
     if (window.GetKey(GLFW_KEY_UP) == GLFW_PRESS)
     {

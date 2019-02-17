@@ -77,8 +77,8 @@ namespace simpleGL
             Derived_from<T, Component>();
 
             // Try to find it
-            unsigned int size = m_components.size();
-            for (int i = 0; i < size; ++i)
+            size_t size = m_components.size();
+            for (size_t i = 0; i < size; ++i)
             {
                 auto& componentRef = *m_components[i];
 

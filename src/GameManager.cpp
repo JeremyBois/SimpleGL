@@ -24,7 +24,7 @@ namespace simpleGL
         s_pSceneService = ISceneMgrPtr(new NullSceneManager());
 
         // Init random once
-        srand(glfwGetTime());
+        srand((uint32_t)glfwGetTime());
     }
 
     void GameManager::DetachNodeMgr()

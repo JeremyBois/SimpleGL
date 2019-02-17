@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) GDB-gui",
+            "name": "GDB Gui",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "gdbgui.exe",
@@ -16,7 +16,7 @@
             "externalConsole": false
         },
         {
-            "name": "(Windows) MSVC",
+            "name": "Studio Code",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "./samples/Game/bin/Debug/OpenGl-Game.exe",
