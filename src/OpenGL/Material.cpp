@@ -6,6 +6,10 @@
 #include "Components/DirectionalLight.hpp"
 #include "Components/SpotLight.hpp"
 
+
+// Exceptions
+#include <stdexcept>
+
 namespace simpleGL
 {
     Material::Material()
@@ -24,7 +28,12 @@ namespace simpleGL
 
     Material::~Material()
     {
-        m_pTextureMap.clear();
+        for (TexturesMapType::iterator it = m_texturesContainer.begin(); it != m_texturesContainer.end(); ++it)
+        {
+            it->second.clear();
+        }
+
+        m_texturesContainer.clear();
     }
 
     void Material::LinkShader(Shader* _pShader)
@@ -44,33 +53,46 @@ namespace simpleGL
 
     /// Link texture from 2 to ...
     /// 0 and 1 are reserved for lighting effect (diffuse and specular map).
-    void Material::LinkTexture(Texture* _pTexture, GLenum _unit)
+    void Material::LinkTexture(Texture* _pTexture, TextureType _texType)
     {
-        if (_unit != m_diffuseID && _unit != m_specularID && _unit != m_emissionID)
-        {
-            m_pTextureMap[_unit] = _pTexture;
-        }
+        // Create it if does not exists yet
+        m_texturesContainer[_texType].emplace_back(_pTexture);
     }
 
     Texture& Material::GetTexture(GLenum _unit) const
     {
-        return *(m_pTextureMap.at(_unit));
+        // return *(m_textureArray.at(_unit));
+
+        // Look in each type
+        for (TexturesMapType::const_iterator it = m_texturesContainer.begin(); it != m_texturesContainer.end(); ++it)
+        {
+            for (Texture* pTex: it->second)
+            {
+                if (pTex->GetID() == _unit)
+                {
+                    return *pTex;
+                }
+            }
+        }
+
+        throw std::out_of_range
+
+            // @TODO clean this
+            return *(m_texturesContainer.at(-1));
     }
 
     void Material::UnLinkTexture(GLenum _unit)
     {
-        if (_unit == m_diffuseID || _unit == m_specularID || _unit == m_emissionID)
-        {
-            m_pTextureMap[_unit] = m_pDefaultMap;
-        }
-        else
-        {
-            m_pTextureMap.erase(_unit);
-        }
+        // m_textureArray[_unit]
     }
     void Material::UnLinkAllTextures()
     {
-        m_pTextureMap.clear();
+        for (TexturesMapType::iterator it = m_texturesContainer.begin(); it != m_texturesContainer.end(); ++it)
+        {
+            it->second.clear();
+        }
+
+        m_texturesContainer.clear();
 
         m_pTextureMap[m_diffuseID] = m_pDefaultMap;
         m_pTextureMap[m_specularID] = m_pDefaultMap;
@@ -165,5 +187,38 @@ namespace simpleGL
     Texture& Material::GetEmissionMap() const
     {
         return *(m_pTextureMap.at(m_emissionID));
+    }
+
+    std::string Material::GetTextureTypeName(TextureType _texType) noexcept
+    {
+        switch (_texType)
+        {
+            case TextureType_NONE:
+                return "None";
+            case TextureType_DIFFUSE:
+                return "Diffuse";
+            case TextureType_SPECULAR:
+                return "Specular";
+            case TextureType_AMBIENT:
+                return "Ambient";
+            case TextureType_EMISSIVE:
+                return "Emissive";
+            case TextureType_HEIGHT:
+                return "Height";
+            case TextureType_NORMALS:
+                return "Normals";
+            case TextureType_SHININESS:
+                return "Shininess";
+            case TextureType_OPACITY:
+                return "Opacity";
+            case TextureType_DISPLACEMENT:
+                return "Displacement";
+            case TextureType_LIGHTMAP:
+                return "Lightmap";
+            case TextureType_REFLECTION:
+                return "Reflection";
+            case TextureType_UNKNOWN:
+                return "Unknown";
+        }
     }
 }

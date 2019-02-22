@@ -5,7 +5,6 @@
 
 namespace simpleGL
 {
-
     Texture::Texture(std::string _path, bool _hasAlpha, bool _reverseY)
     {
         Load(_path, _hasAlpha, _reverseY);
