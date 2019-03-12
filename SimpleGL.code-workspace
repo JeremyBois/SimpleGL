@@ -6,7 +6,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"utility": "cpp"
+			"utility": "cpp",
+			"xhash": "cpp",
+			"stdexcept": "cpp"
 		}
 	}
 }

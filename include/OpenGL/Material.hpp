@@ -38,6 +38,9 @@ class SIMPLEGL_API Material : public GameObject
     glm::vec3 m_ambiant, m_diffuse, m_emission;
     float m_shininess, m_glossiness;
 
+    // Texture counter
+    unsigned int m_textCount;
+
   public:
     Material();
     virtual ~Material();
@@ -48,21 +51,14 @@ class SIMPLEGL_API Material : public GameObject
     void UseDefaultShader();
 
     // Texture and texture mask
+    // Replace default if still used else add it
     void LinkTexture(Texture *_pTexture, TextureType texType);
     void LinkDiffuseMap(Texture *_pTexture);
     void LinkSpecularMap(Texture *_pTexture);
     void LinkEmissionMap(Texture *_pTexture);
-
-    // void UnLinkTexture(TextureType texType);
-    // void UnLinkDiffuseMap();
-    // void UnLinkSpecularMap();
-    // void UnLinkEmissionMap();
     void UnLinkAllTextures();
 
     Texture &GetTexture(GLenum _unit) const;
-    Texture &GetDiffuseMap() const;
-    Texture &GetSpecularMap() const;
-    Texture &GetEmissionMap() const;
 
     // Color
     inline glm::vec3 GetAmbiant() const { return m_ambiant; }

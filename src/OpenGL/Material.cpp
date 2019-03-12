@@ -7,8 +7,8 @@
 #include "Components/SpotLight.hpp"
 
 
-// Exceptions
-#include <stdexcept>
+#include <exception>
+
 
 namespace simpleGL
 {
@@ -51,21 +51,36 @@ namespace simpleGL
         m_pShader = &m_baseShader;
     }
 
-    /// Link texture from 2 to ...
-    /// 0 and 1 are reserved for lighting effect (diffuse and specular map).
     void Material::LinkTexture(Texture* _pTexture, TextureType _texType)
     {
-        // Create it if does not exists yet
+        // If default still in use replace it
+        switch (_texType)
+        {
+        case TextureType::TextureType_DIFFUSE:
+        case TextureType::TextureType_SPECULAR:
+        case TextureType::TextureType_EMISSIVE:
+            if (m_texturesContainer[_texType][0] == m_pDefaultMap)
+            {
+                // Then replace it
+                m_texturesContainer[_texType][0] = _pTexture;
+                return;
+            }
+        default:
+            break;
+        }
+
+        // Create it if default already replaced
         m_texturesContainer[_texType].emplace_back(_pTexture);
+
+        ++m_textCount;
     }
 
     Texture& Material::GetTexture(GLenum _unit) const
     {
-        // return *(m_textureArray.at(_unit));
-
         // Look in each type
         for (TexturesMapType::const_iterator it = m_texturesContainer.begin(); it != m_texturesContainer.end(); ++it)
         {
+            // Look in this type collection
             for (Texture* pTex: it->second)
             {
                 if (pTex->GetID() == _unit)
@@ -75,16 +90,10 @@ namespace simpleGL
             }
         }
 
-        throw std::out_of_range
-
-            // @TODO clean this
-            return *(m_texturesContainer.at(-1));
+        // @TODO Throw detailed exception
+        throw std::out_of_range(" <_unit> not assign for this material ");
     }
 
-    void Material::UnLinkTexture(GLenum _unit)
-    {
-        // m_textureArray[_unit]
-    }
     void Material::UnLinkAllTextures()
     {
         for (TexturesMapType::iterator it = m_texturesContainer.begin(); it != m_texturesContainer.end(); ++it)
@@ -94,9 +103,12 @@ namespace simpleGL
 
         m_texturesContainer.clear();
 
-        m_pTextureMap[m_diffuseID] = m_pDefaultMap;
-        m_pTextureMap[m_specularID] = m_pDefaultMap;
-        m_pTextureMap[m_emissionID] = m_pDefaultMap;
+        m_textCount = 0;
+
+        // Add default
+        m_texturesContainer[TextureType::TextureType_DIFFUSE].emplace_back(m_pDefaultMap);
+        m_texturesContainer[TextureType::TextureType_SPECULAR].emplace_back(m_pDefaultMap);
+        m_texturesContainer[TextureType::TextureType_EMISSIVE].emplace_back(m_pDefaultMap);
     }
 
     void Material::Use(const Transform& _transform)
@@ -113,9 +125,38 @@ namespace simpleGL
         GameManager::GetWindow().mainCam->Use(*m_pShader);
 
         // Assign correct texture to correct unit
-        for (TexUnitMap::const_iterator it=m_pTextureMap.begin(); it!=m_pTextureMap.end(); ++it)
+        unsigned int currentUnit = GL_TEXTURE0;
+
+        // Order defined by enum order
+        for (int enumID = TextureType_NONE; enumID != TextureType_LAST; enumID++)
         {
-            it->second->Use(it->first);
+            // Check if key exists
+            TextureType texType = static_cast<TextureType>(enumID);
+            if (m_texturesContainer.find(texType) != m_texturesContainer.end())
+            {
+                // Assign correct sampler to shader
+                switch (texType)
+                {
+                    case TextureType::TextureType_DIFFUSE :
+                        m_pShader->SetInt("_objectMaterial_._diffuseMap", currentUnit - GL_TEXTURE0);
+                        break;
+                    case TextureType::TextureType_SPECULAR:
+                        m_pShader->SetInt("_objectMaterial_._specularMap", currentUnit - GL_TEXTURE0);
+                        break;
+                    case TextureType::TextureType_EMISSIVE:
+                        m_pShader->SetInt("_objectMaterial_._emissionMap", currentUnit - GL_TEXTURE0);
+                        break;
+                    default:
+                        break;
+                }
+
+                // Look in this type collection
+                for (Texture *pTex : m_texturesContainer[texType])
+                {
+                    pTex->Use(currentUnit);
+                    ++currentUnit;
+                }
+            }
         }
 
         // Pass matrix to vertex shader
@@ -133,9 +174,10 @@ namespace simpleGL
         m_pShader->SetMat4("_projectionM_", GameManager::GetWindow().GetProjectionMatrix());
 
         // Pass object color informations
-        m_pShader->SetInt("_objectMaterial_._diffuseMap", 0);
-        m_pShader->SetInt("_objectMaterial_._specularMap", 1);
-        m_pShader->SetInt("_objectMaterial_._emissionMap", 2);
+        // @TODO NEED UPDATE TO BE GENERIC (IN loop)
+        // m_pShader->SetInt("_objectMaterial_._diffuseMap", 1);
+        // m_pShader->SetInt("_objectMaterial_._specularMap", 3);
+        // m_pShader->SetInt("_objectMaterial_._emissionMap", 4);
 
         m_pShader->SetVec3("_objectMaterial_.ambiant", m_ambiant);
         m_pShader->SetVec3("_objectMaterial_.diffuse", m_diffuse);
@@ -146,47 +188,17 @@ namespace simpleGL
 
     void Material::LinkDiffuseMap(Texture* _pTexture)
     {
-        m_pTextureMap[m_diffuseID] = _pTexture;
+        LinkTexture(_pTexture, TextureType::TextureType_DIFFUSE);
     }
 
     void Material::LinkSpecularMap(Texture* _pTexture)
     {
-        m_pTextureMap[m_specularID] = _pTexture;
+        LinkTexture(_pTexture, TextureType::TextureType_SPECULAR);
     }
 
     void Material::LinkEmissionMap(Texture* _pTexture)
     {
-        m_pTextureMap[m_emissionID] = _pTexture;
-    }
-
-    void Material::UnLinkDiffuseMap()
-    {
-        m_pTextureMap[m_diffuseID] = m_pDefaultMap;
-    }
-
-    void Material::UnLinkSpecularMap()
-    {
-        m_pTextureMap[m_specularID] = m_pDefaultMap;
-    }
-
-    void Material::UnLinkEmissionMap()
-    {
-        m_pTextureMap[m_emissionID] = m_pDefaultMap;
-    }
-
-    Texture& Material::GetDiffuseMap() const
-    {
-        return *(m_pTextureMap.at(m_diffuseID));
-    }
-
-    Texture& Material::GetSpecularMap() const
-    {
-        return *(m_pTextureMap.at(m_specularID));
-    }
-
-    Texture& Material::GetEmissionMap() const
-    {
-        return *(m_pTextureMap.at(m_emissionID));
+        LinkTexture(_pTexture, TextureType::TextureType_EMISSIVE);
     }
 
     std::string Material::GetTextureTypeName(TextureType _texType) noexcept

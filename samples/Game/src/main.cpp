@@ -107,7 +107,8 @@ void LoadData()
     // Load materials
     GL::Material* pMat;
     pMat = Game::GetDataMgr().CreateMaterial("Wall", "Default");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL_TEXTURE3);
+    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL_TEXTURE3);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL::TextureType::TextureType_NONE);
     Game::GetDataMgr().GetShader("Default")->Use();
     Game::GetDataMgr().GetShader("Default")->SetInt("tex0", 3);
     Game::GetDataMgr().GetShader("Default")->SetInt("tex1", 4);
@@ -115,13 +116,15 @@ void LoadData()
     Game::GetDataMgr().CreateMaterial("ColorFromProgram", "ColorFromProgram");
 
     pMat = Game::GetDataMgr().CreateMaterial("UV", "UVscale");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL_TEXTURE3);
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE4);
+    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL_TEXTURE3);
+    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE4);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL::TextureType::TextureType_NONE);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL::TextureType::TextureType_NONE);
 
     Game::GetDataMgr().CreateMaterial("ColorFromVertex", "ColorFromVertex");
 
     pMat = Game::GetDataMgr().CreateMaterial("Box", "Default");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE4);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL::TextureType::TextureType_NONE);
 
     pMat = Game::GetDataMgr().CreateMaterial("BoxLight", "WithAmbiantLight");
     pMat->LinkDiffuseMap(Game::GetDataMgr().GetTexture("ContainerDiffuseMap"));
