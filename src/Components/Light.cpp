@@ -28,7 +28,7 @@ namespace simpleGL
         }
     }
 
-    bool Light::Draw()
+    bool Light::Draw(Component *_pcomp)
     {
         if (IsActive())
         {

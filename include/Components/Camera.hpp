@@ -53,6 +53,8 @@ namespace simpleGL
         float     GetFar() const;
 
         void Use(const Shader& _shader) const;
+
+        virtual bool Draw(Component *_pcomp) { return true; }
     };
 }
 

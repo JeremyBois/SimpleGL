@@ -56,7 +56,7 @@ namespace simpleGL
         void SetRotation(const glm::vec3 _eulerAngles);
 
         virtual bool Init() {return true;}
-        virtual bool Draw() {return true;}
+        virtual bool Draw(Component *_pcomp) { return true; }
         virtual bool Update() {return true;}
         virtual bool Quit() {return true;}
 

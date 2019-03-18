@@ -30,7 +30,7 @@ namespace simpleGL
         void Create(float _width, float _height, float _depth);
         void SetUV(const glm::vec2 _uvMap[SizeVertices]);
 
-        virtual void Draw();
+        virtual void Draw(Component *_pcomp);
     };
 }
 #endif

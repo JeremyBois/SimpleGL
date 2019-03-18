@@ -21,7 +21,7 @@ namespace simpleGL
         virtual ~Component() = default;
 
         virtual bool Init() = 0;
-        virtual bool Draw() = 0;
+        virtual bool Draw(Component *_pcomp) = 0;
         virtual bool Update() = 0;
         virtual bool Quit() = 0;
 

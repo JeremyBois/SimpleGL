@@ -6,6 +6,9 @@
 
 namespace simpleGL
 {
+    class Component;
+
+
     /// Abstract class for any shape
     class SIMPLEGL_API Shape: public GameObject
     {
@@ -18,7 +21,7 @@ namespace simpleGL
         Shape() = default;
         virtual ~Shape() = default;
 
-        virtual void Draw() = 0;
+        virtual void Draw(Component *_pcomp) = 0;
     };
 }
 #endif

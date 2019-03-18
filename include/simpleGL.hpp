@@ -32,6 +32,9 @@
 // Shapes 3D
 #include "OpenGL/3D/Cuboid.hpp"
 #include "OpenGL/3D/Plane.hpp"
+// Models
+#include "OpenGL/Mesh.hpp"
+#include "OpenGL/Model.hpp"
 // Assets
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/Texture.hpp"

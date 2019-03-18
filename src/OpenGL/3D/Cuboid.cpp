@@ -155,7 +155,7 @@ namespace simpleGL
         glBindVertexArray(0);
     }
 
-    void Cuboid::Draw()
+    void Cuboid::Draw(Component *_pcomp)
     {
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);

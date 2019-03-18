@@ -22,7 +22,6 @@ namespace simpleGL
         virtual void Pitch(float degrees);
         virtual void Roll(float degrees);
 
-        virtual bool Draw() {return true;}
         virtual bool Init() {return true;}
         virtual bool Update(){return true;}
         virtual bool Quit(){return true;}

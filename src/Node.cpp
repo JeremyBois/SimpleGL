@@ -42,7 +42,7 @@ namespace simpleGL
             unsigned int objectCount = m_components.size();
             for (unsigned int i = 0; i < objectCount; ++i)
             {
-                m_components[i]->Draw();
+                m_components[i]->Draw(m_components[i].get());
             }
             return true;
         }

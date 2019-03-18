@@ -24,7 +24,7 @@ namespace simpleGL
         void LinkShape(Shape* _shape);
         void LinkMaterial(Material* _material);
 
-        virtual bool Draw();
+        virtual bool Draw(Component *_pcomp);
         virtual bool Init() {return true;}
         virtual bool Update(){return true;}
         virtual bool Quit(){return true;}

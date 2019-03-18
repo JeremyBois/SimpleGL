@@ -72,6 +72,10 @@ namespace simpleGL
         return pMat;
     }
 
+    Model *DataManager::CreateModel(const std::string _name, bool _overrideIfExist)
+    {
+        return nullptr;
+    }
 
     /// Raise out_of_range exception if Shader does not exists
     Shader*  DataManager::GetShader(const std::string _name) const
@@ -88,13 +92,19 @@ namespace simpleGL
     /// Raise out_of_range exception if material does not exists
     Material* DataManager::GetMaterial(const std::string _name) const
     {
-        return m_materials.at(_name).get();;
+        return m_materials.at(_name).get();
+    }
+
+    /// Raise out_of_range exception if material does not exists
+    Model *DataManager::GetModel(const std::string _name) const
+    {
+        return m_models.at(_name).get();
     }
 
     /// Populate container with basic stuff.
     bool DataManager::Init()
     {
-        // Default texture
+        // Default textures
         CreateTexture("White", "data/images/white.jpg");
         CreateTexture("Black", "data/images/black.jpg");
 

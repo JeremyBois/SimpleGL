@@ -38,8 +38,8 @@ namespace simpleGL
         virtual void Use(const Shader& _shader) const;
 
         virtual bool Init() {return true;}
-        virtual bool Draw();
-        virtual bool Update() {return true;}
+        virtual bool Draw(Component *_pcomp);
+        virtual bool Update() { return true; }
         virtual bool Quit() {return true;}
 
         virtual Light* Clone() {return new Light(*this);}

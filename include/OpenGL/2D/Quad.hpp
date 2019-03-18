@@ -29,7 +29,7 @@ namespace simpleGL
         void Create(float _width, float _height, glm::vec4 _colors[SizeVertices]);
         void Create(float _width, float _height);
 
-        virtual void Draw();
+        virtual void Draw(Component *_pcomp);
     };
 }
 #endif

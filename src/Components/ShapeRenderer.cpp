@@ -22,7 +22,7 @@ namespace simpleGL
         return shapeR;
     }
 
-    bool ShapeRenderer::Draw()
+    bool ShapeRenderer::Draw(Component* _pcomp)
     {
         if (!IsActive())
         {
@@ -32,7 +32,7 @@ namespace simpleGL
         if (m_pMaterial != nullptr && m_pShape != nullptr)
         {
             m_pMaterial->Use(*(GetParent().GetComponent<Transform>()));
-            m_pShape->Draw();
+            m_pShape->Draw(_pcomp);
             return true;
         }
         return false;

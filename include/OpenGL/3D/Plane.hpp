@@ -41,7 +41,7 @@ namespace simpleGL
         void SetClampedUV();
         void SetUnclampedUV();
 
-        virtual void Draw();
+        virtual void Draw(Component *_pcomp);
     };
 }
 #endif
