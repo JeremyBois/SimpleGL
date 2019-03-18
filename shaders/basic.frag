@@ -3,13 +3,22 @@
 in vec4 vertexColor;
 in vec2 texCoord;
 
-uniform sampler2D tex0;
+struct Material
+{
+    sampler2D _diffuseMap0;
+};
+// To be populated by Material class
+uniform Material _objectMaterial_;
+
 
 out vec4 FragColor;
 
+
+
+
 void main()
 {
-    vec4 t0 = texture2D(tex0, texCoord);
+    vec4 t0 = texture2D(_objectMaterial_._diffuseMap0, texCoord);
 
     // Multiplication
     FragColor = t0 * vertexColor;

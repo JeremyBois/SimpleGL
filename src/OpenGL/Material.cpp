@@ -22,7 +22,6 @@ namespace simpleGL
         m_pShader = &m_baseShader;
 
         // Default texture
-        m_pDefaultMap = GameManager::GetDataMgr().GetTexture("White");
         UnLinkAllTextures();
     }
 
@@ -57,22 +56,28 @@ namespace simpleGL
         switch (_texType)
         {
         case TextureType::TextureType_DIFFUSE:
-        case TextureType::TextureType_SPECULAR:
-        case TextureType::TextureType_EMISSIVE:
-            if (m_texturesContainer[_texType][0] == m_pDefaultMap)
+            if (m_texturesContainer[_texType][0] == GameManager::GetDataMgr().GetTexture("White"))
             {
                 // Then replace it
                 m_texturesContainer[_texType][0] = _pTexture;
                 return;
             }
+            break;
+        case TextureType::TextureType_SPECULAR:
+        case TextureType::TextureType_EMISSIVE:
+            if (m_texturesContainer[_texType][0] == GameManager::GetDataMgr().GetTexture("Black"))
+            {
+                // Then replace it
+                m_texturesContainer[_texType][0] = _pTexture;
+                return;
+            }
+            break;
         default:
             break;
         }
 
         // Create it if default already replaced
         m_texturesContainer[_texType].emplace_back(_pTexture);
-
-        ++m_textCount;
     }
 
     Texture& Material::GetTexture(GLenum _unit) const
@@ -103,18 +108,23 @@ namespace simpleGL
 
         m_texturesContainer.clear();
 
-        m_textCount = 0;
+        // Add defaults
+        Texture* map = GameManager::GetDataMgr().GetTexture("White");
 
-        // Add default
-        m_texturesContainer[TextureType::TextureType_DIFFUSE].emplace_back(m_pDefaultMap);
-        m_texturesContainer[TextureType::TextureType_SPECULAR].emplace_back(m_pDefaultMap);
-        m_texturesContainer[TextureType::TextureType_EMISSIVE].emplace_back(m_pDefaultMap);
+        m_texturesContainer[TextureType::TextureType_DIFFUSE].emplace_back(map);
+
+        map = GameManager::GetDataMgr().GetTexture("Black");
+        m_texturesContainer[TextureType::TextureType_SPECULAR].emplace_back(map);
+        m_texturesContainer[TextureType::TextureType_EMISSIVE].emplace_back(map);
     }
+
 
     void Material::Use(const Transform& _transform)
     {
         // Select shader program for the draw call
         m_pShader->Use();
+        // All shaders should have a material structure with this
+        std::string baseName = "_objectMaterial_.";
 
         // Pass data from lights to shaders
         PointLight::UseAll(*m_pShader);
@@ -132,32 +142,28 @@ namespace simpleGL
         {
             // Check if key exists
             TextureType texType = static_cast<TextureType>(enumID);
+
             if (m_texturesContainer.find(texType) != m_texturesContainer.end())
             {
-                // Assign correct sampler to shader
-                switch (texType)
-                {
-                    case TextureType::TextureType_DIFFUSE :
-                        m_pShader->SetInt("_objectMaterial_._diffuseMap", currentUnit - GL_TEXTURE0);
-                        break;
-                    case TextureType::TextureType_SPECULAR:
-                        m_pShader->SetInt("_objectMaterial_._specularMap", currentUnit - GL_TEXTURE0);
-                        break;
-                    case TextureType::TextureType_EMISSIVE:
-                        m_pShader->SetInt("_objectMaterial_._emissionMap", currentUnit - GL_TEXTURE0);
-                        break;
-                    default:
-                        break;
-                }
+                std::string name = baseName + GetTextureTypeName(texType);
 
                 // Look in this type collection
+                unsigned int texOfTypeIndex = 0;
                 for (Texture *pTex : m_texturesContainer[texType])
                 {
                     pTex->Use(currentUnit);
+
+                    m_pShader->SetInt(name + std::to_string(texOfTypeIndex), currentUnit - GL_TEXTURE0);
+
+                    // Units are always store in order starting at GL_TEXTURE0
                     ++currentUnit;
+                    ++texOfTypeIndex;
                 }
             }
         }
+
+        // Get back to first unit to avoid side effects
+        glActiveTexture(GL_TEXTURE0);
 
         // Pass matrix to vertex shader
         // Model to World and World to Model
@@ -168,16 +174,9 @@ namespace simpleGL
         // Normal matrix in world space
         m_pShader->SetMat3("_normalM_", glm::mat3(glm::transpose(modelInv)));
 
-
         // View and projection matrix
         m_pShader->SetMat4("_viewM_", GameManager::GetWindow().GetViewMatrix());
         m_pShader->SetMat4("_projectionM_", GameManager::GetWindow().GetProjectionMatrix());
-
-        // Pass object color informations
-        // @TODO NEED UPDATE TO BE GENERIC (IN loop)
-        // m_pShader->SetInt("_objectMaterial_._diffuseMap", 1);
-        // m_pShader->SetInt("_objectMaterial_._specularMap", 3);
-        // m_pShader->SetInt("_objectMaterial_._emissionMap", 4);
 
         m_pShader->SetVec3("_objectMaterial_.ambiant", m_ambiant);
         m_pShader->SetVec3("_objectMaterial_.diffuse", m_diffuse);
@@ -206,31 +205,33 @@ namespace simpleGL
         switch (_texType)
         {
             case TextureType_NONE:
-                return "None";
+                return "_noneMap";
             case TextureType_DIFFUSE:
-                return "Diffuse";
+                return "_diffuseMap";
             case TextureType_SPECULAR:
-                return "Specular";
+                return "_specularMap";
             case TextureType_AMBIENT:
-                return "Ambient";
+                return "_ambientMap";
             case TextureType_EMISSIVE:
-                return "Emissive";
+                return "_emissiveMap";
             case TextureType_HEIGHT:
-                return "Height";
+                return "_heightMap";
             case TextureType_NORMALS:
-                return "Normals";
+                return "_normalsMap";
             case TextureType_SHININESS:
-                return "Shininess";
+                return "_shininessMap";
             case TextureType_OPACITY:
-                return "Opacity";
+                return "_opacityMap";
             case TextureType_DISPLACEMENT:
-                return "Displacement";
+                return "_displacementMap";
             case TextureType_LIGHTMAP:
-                return "Lightmap";
+                return "_lightmapMap";
             case TextureType_REFLECTION:
-                return "Reflection";
+                return "_reflectionMap";
             case TextureType_UNKNOWN:
-                return "Unknown";
+                return "_unknownMap";
+            default:
+                return "_noneMap";
         }
     }
 }

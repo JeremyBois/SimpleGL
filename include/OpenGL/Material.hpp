@@ -32,14 +32,12 @@ class SIMPLEGL_API Material : public GameObject
     /// Will be used to construct variable name pass to shader
     TexturesMapType m_texturesContainer;
 
-    Texture *m_pDefaultMap;
-
     // Colors
     glm::vec3 m_ambiant, m_diffuse, m_emission;
     float m_shininess, m_glossiness;
 
     // Texture counter
-    unsigned int m_textCount;
+    // unsigned int m_textCount;
 
   public:
     Material();

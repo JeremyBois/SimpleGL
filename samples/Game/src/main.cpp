@@ -74,12 +74,13 @@ void LoadData()
     Game::GetDataMgr().CreateTexture("Awesomeface", "data/images/awesomeface.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerDiffuseMap", "data/images/container2_diffuse.png", true, true);
     Game::GetDataMgr().CreateTexture("ContainerSpecularMap", "data/images/container2_specular.png", true, true);
-    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/container2_emission.jpg", true, true);
+    Game::GetDataMgr().CreateTexture("ContainerEmissionMap", "data/images/matrix.jpg", true, true);
 
     // Floor
     GL::Texture* tempT = Game::GetDataMgr().CreateTexture("Floor", "data/images/floor.jpg", false, true);
     tempT->Set(GL_TEXTURE_WRAP_S, GL_REPEAT);
     tempT->Set(GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 
     // Load shaders
     GL::Shader* shaderPtr;
@@ -95,8 +96,6 @@ void LoadData()
                                                 "shaders/basic.vert", "shaders/UVscale.frag");
     shaderPtr->Use();
     shaderPtr->SetFloat("uvScale", 1.0f);
-    shaderPtr->SetInt("tex0", 3);
-    shaderPtr->SetInt("tex1", 4);
 
     shaderPtr = Game::GetDataMgr().CreateShader("ColorFromVertex",
                                                 "shaders/positionColor.vert", "shaders/colorFromVertex.frag");
@@ -107,30 +106,21 @@ void LoadData()
     // Load materials
     GL::Material* pMat;
     pMat = Game::GetDataMgr().CreateMaterial("Wall", "Default");
-    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL_TEXTURE3);
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL::TextureType::TextureType_NONE);
-    Game::GetDataMgr().GetShader("Default")->Use();
-    Game::GetDataMgr().GetShader("Default")->SetInt("tex0", 3);
-    Game::GetDataMgr().GetShader("Default")->SetInt("tex1", 4);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Wall"), GL::TextureType::TextureType_DIFFUSE);
 
     Game::GetDataMgr().CreateMaterial("ColorFromProgram", "ColorFromProgram");
 
     pMat = Game::GetDataMgr().CreateMaterial("UV", "UVscale");
-    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL_TEXTURE3);
-    // pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL_TEXTURE4);
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL::TextureType::TextureType_NONE);
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL::TextureType::TextureType_NONE);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Container"), GL::TextureType::TextureType_DIFFUSE);
+    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL::TextureType::TextureType_SPECULAR);
 
     Game::GetDataMgr().CreateMaterial("ColorFromVertex", "ColorFromVertex");
-
-    pMat = Game::GetDataMgr().CreateMaterial("Box", "Default");
-    pMat->LinkTexture(Game::GetDataMgr().GetTexture("Awesomeface"), GL::TextureType::TextureType_NONE);
 
     pMat = Game::GetDataMgr().CreateMaterial("BoxLight", "WithAmbiantLight");
     pMat->LinkDiffuseMap(Game::GetDataMgr().GetTexture("ContainerDiffuseMap"));
     pMat->LinkSpecularMap(Game::GetDataMgr().GetTexture("ContainerSpecularMap"));
     pMat->LinkEmissionMap(Game::GetDataMgr().GetTexture("ContainerEmissionMap"));
-    pMat->SetEmission(glm::vec3(0.3f, 0.3f, 0.3f));
+    pMat->SetEmission(glm::vec3(0.05f, 0.05f, 0.05f));
 
     pMat = Game::GetDataMgr().CreateMaterial("Floor", "WithAmbiantLight");
     pMat->LinkDiffuseMap(Game::GetDataMgr().GetTexture("Floor"));

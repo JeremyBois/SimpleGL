@@ -96,6 +96,7 @@ namespace simpleGL
     {
         // Default texture
         CreateTexture("White", "data/images/white.jpg");
+        CreateTexture("Black", "data/images/black.jpg");
 
         CreateShader("Default", "shaders/basic.vert", "shaders/basic.frag");
         CreateMaterial("Default", "Default");
