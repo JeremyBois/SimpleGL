@@ -297,17 +297,20 @@ namespace simpleGL
                               (void*)(offsetof(Vertex3D, Color)));
         glEnableVertexAttribArray(1);
 
-        // UV
+        // Texture
         glVertexAttribPointer(2, SizeUV, GL_FLOAT, GL_FALSE,
                               sizeof(Vertex3D),
                               (void*)(offsetof(Vertex3D, UV)));
         glEnableVertexAttribArray(2);
 
         // Normals
-        glVertexAttribPointer(3, SizeUV, GL_FLOAT, GL_FALSE,
+        glVertexAttribPointer(3, SizeNormals, GL_FLOAT, GL_FALSE,
                               sizeof(Vertex3D),
-                              (void*)(offsetof(Vertex3D, Normals)));
+                              (void *)(offsetof(Vertex3D, Normals)));
         glEnableVertexAttribArray(3);
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 
     void Plane::Draw()
@@ -315,5 +318,8 @@ namespace simpleGL
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawElements(GL_TRIANGLE_STRIP, m_sizeIndex, GL_UNSIGNED_INT, 0);
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 }

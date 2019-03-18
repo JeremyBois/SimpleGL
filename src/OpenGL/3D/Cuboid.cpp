@@ -150,6 +150,9 @@ namespace simpleGL
                               sizeof(Vertex3D),
                               (void*)(offsetof(Vertex3D, Normals)));
         glEnableVertexAttribArray(3);
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 
     void Cuboid::Draw()
@@ -162,5 +165,8 @@ namespace simpleGL
         {
             glDrawArrays(GL_TRIANGLE_STRIP, i * (SizeVertices / 6), SizeVertices / 6);
         }
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 }

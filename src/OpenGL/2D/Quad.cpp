@@ -109,6 +109,9 @@ namespace simpleGL
                               sizeof(Vertex2D),
                               (void*)(offsetof(Vertex2D, UV)));
         glEnableVertexAttribArray(2);
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 
     void Quad::Draw()
@@ -116,5 +119,8 @@ namespace simpleGL
         // Select VAO to use for passing object to GPU
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLE_FAN, 0, SizeVertices);
+
+        // Avoid side effects
+        glBindVertexArray(0);
     }
 }
