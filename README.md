@@ -1,6 +1,8 @@
-# Leaning OpenGl by implementing an engine
+***
 
-**Last update 2018-03-11**
+# Discontinued project for [TEFNOUT](https://github.com/JeremyBois/Tefnout)
+
+***
 
 ## Getting started
 
